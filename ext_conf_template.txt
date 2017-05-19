@@ -1,0 +1,2 @@
+# cat=basic/enable; type=boolean; label=Enable demo plugin
+enableDemoPlugin = 0
