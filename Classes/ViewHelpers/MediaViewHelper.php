@@ -16,7 +16,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('srcset', 'array', 'Image sizes that should be rendered.', false);
+        $this->registerArgument('srcset', 'mixed', 'Image sizes that should be rendered.', false);
         $this->registerArgument('sizes', 'string', 'Sizes query for responsive image.', false, '(min-width: %1$dpx) %1$dpx, 100vw');
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);

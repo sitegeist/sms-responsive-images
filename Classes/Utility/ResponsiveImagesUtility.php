@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ResponsiveImagesUtility implements SingletonInterface
 {
@@ -43,7 +44,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @param FileInterface $originalImage
      * @param FileInterface $fallbackImage
-     * @param array         $srcset
+     * @param array|string  $srcset
      * @param Area          $cropArea
      * @param Area          $focusArea
      * @param string        $sizesQuery
@@ -56,7 +57,7 @@ class ResponsiveImagesUtility implements SingletonInterface
     public function createImageTagWithSrcset(
         FileInterface $originalImage,
         FileInterface $fallbackImage,
-        array $srcset,
+        $srcset,
         Area $cropArea = null,
         Area $focusArea = null,
         string $sizesQuery = null,
@@ -202,7 +203,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @param  FileInterface $originalImage
      * @param  int           $defaultWidth
-     * @param  array         $srcset
+     * @param  array|string  $srcset
      * @param  string        $mediaQuery
      * @param  string        $sizesQuery
      * @param  Area          $cropArea
@@ -213,7 +214,7 @@ class ResponsiveImagesUtility implements SingletonInterface
     public function createPictureSourceTag(
         FileInterface $originalImage,
         int $defaultWidth,
-        array $srcset,
+        $srcset,
         string $mediaQuery = '',
         string $sizesQuery = '',
         Area $cropArea = null,
@@ -275,22 +276,28 @@ class ResponsiveImagesUtility implements SingletonInterface
      *   1: $srcset = [200, 400]
      *   2: $srcset = ['200w', '400w']
      *   3: $srcset = ['1x', '2x']
+     *   4: $srcset = '200, 400'
      *
      * Output:
-     *   1+2: ['200w' => 'path/to/image@200w.jpg', '400w' => 'path/to/image@200w.jpg']
+     *   1+2+4: ['200w' => 'path/to/image@200w.jpg', '400w' => 'path/to/image@200w.jpg']
      *   3: ['1x' => 'path/to/image@1x.jpg', '2x' => 'path/to/image@2x.jpg']
      *
      * @param  FileInterface  $image
      * @param  int            $defaultWidth
-     * @param  array          $srcset
+     * @param  array|string   $srcset
      * @param  Area           $cropArea
      * @param  bool           $absoluteUri
      *
      * @return array
      */
-    public function generateSrcsetImages(FileInterface $image, int $defaultWidth, array $srcset, Area $cropArea = null, bool $absoluteUri = false): array
+    public function generateSrcsetImages(FileInterface $image, int $defaultWidth, $srcset, Area $cropArea = null, bool $absoluteUri = false): array
     {
         $cropArea = $cropArea ?: Area::createEmpty();
+
+        // Convert srcset input to array
+        if (!is_array($srcset)) {
+            $srcset = GeneralUtility::trimExplode(',', $srcset);
+        }
 
         $images = [];
         foreach ($srcset as $widthDescriptor) {

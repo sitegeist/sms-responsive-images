@@ -144,6 +144,15 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 true,
                 ['200w' => 'http://domain.tld/image@200.jpg', '400w' => 'http://domain.tld/image@400.jpg', '600w' => 'http://domain.tld/image@600.jpg']
+            ],
+            // Test srcset input as string
+            'usingSrcsetString' => [
+                $this->mockFileObject(['width' => 1000]),
+                400,
+                '200, 400, 600',
+                null,
+                true,
+                ['200w' => 'http://domain.tld/image@200.jpg', '400w' => 'http://domain.tld/image@400.jpg', '600w' => 'http://domain.tld/image@600.jpg']
             ]
         ];
     }
