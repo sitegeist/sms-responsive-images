@@ -2,21 +2,27 @@
 defined('TYPO3_MODE') or die();
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-    $_EXTKEY,
-    'Configuration/TypoScript/base',
+    'sms_responsive_images',
+    'Configuration/TypoScript/base/',
     'Responsive Images'
 );
 
-if ($_EXTCONF['enableDemoPlugin']) {
+call_user_func(function () {
+    $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sms_responsive_images']);
+    if (empty($extConf['enableDemoPlugin'])) {
+        return;
+    }
+
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-        $_EXTKEY,
+        'sms_responsive_images',
         'ResponsiveImages',
         'ResponsiveImages'
     );
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-        $_EXTKEY,
-        'Configuration/TypoScript/demo',
-        'Responsive Images Demo'
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants(
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:sms_responsive_images/Configuration/TypoScript/demo/constants.ts">'
     );
-}
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup(
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:sms_responsive_images/Configuration/TypoScript/demo/setup.ts">'
+    );
+});
