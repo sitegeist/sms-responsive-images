@@ -19,10 +19,9 @@ call_user_func(function () {
         'ResponsiveImages'
     );
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:sms_responsive_images/Configuration/TypoScript/demo/constants.ts">'
-    );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:sms_responsive_images/Configuration/TypoScript/demo/setup.ts">'
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+        'sms_responsive_images',
+        'Configuration/TypoScript/demo/',
+        'Responsive Images (Demo)'
     );
 });

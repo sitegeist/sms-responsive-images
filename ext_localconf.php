@@ -10,14 +10,6 @@ call_user_func(function () {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'SMS.sms_responsive_images',
         'ResponsiveImages',
-        ['Media' => 'demo']
+        ['Media' => 'header']
     );
 });
-
-
-// $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper'] = [
-//     'className' => 'SMS\SmsImageViewhelper\ViewHelpers\ImageViewHelper'
-// ];
-// $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper'] = [
-//     'className' => 'SMS\SmsImageViewhelper\ViewHelpers\MediaViewHelper'
-// ];
