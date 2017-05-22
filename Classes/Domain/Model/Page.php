@@ -1,6 +1,6 @@
 <?php
 
-namespace SMS\SmsImageViewhelper\Domain\Model;
+namespace SMS\SmsResponsiveImages\Domain\Model;
 
 class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {

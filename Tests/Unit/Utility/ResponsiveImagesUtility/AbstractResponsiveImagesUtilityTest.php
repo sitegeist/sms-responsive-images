@@ -1,11 +1,11 @@
 <?php
 
-namespace SMS\SmsImageViewhelper\Tests\Unit\Utility\ResponsiveImagesUtility;
+namespace SMS\SmsResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use SMS\SmsImageViewhelper\Utility\ResponsiveImagesUtility;
+use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
 
 abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {

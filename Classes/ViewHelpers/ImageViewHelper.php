@@ -1,10 +1,10 @@
 <?php
 
-namespace SMS\SmsImageViewhelper\ViewHelpers;
+namespace SMS\SmsResponsiveImages\ViewHelpers;
 
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
-use SMS\SmsImageViewhelper\Utility\ResponsiveImagesUtility;
+use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
 
 class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 {

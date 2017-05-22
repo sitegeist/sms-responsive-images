@@ -1,13 +1,13 @@
 plugin.tx_smsresponsiveimages {
-	persistence {
-		classes {
-			SMS\SmsImageViewhelper\Domain\Model\Page {
-				mapping {
-					tableName = pages
-				}
-			}
-		}
-	}
+  persistence {
+    classes {
+      SMS\SmsResponsiveImages\Domain\Model\Page {
+        mapping {
+          tableName = pages
+        }
+      }
+    }
+  }
 }
 
 page >

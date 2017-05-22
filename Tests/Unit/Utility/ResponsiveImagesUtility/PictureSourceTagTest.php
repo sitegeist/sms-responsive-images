@@ -1,6 +1,6 @@
 <?php
 
-namespace SMS\SmsImageViewhelper\Tests\Unit\Utility\ResponsiveImagesUtility;
+namespace SMS\SmsResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 
 class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
 {

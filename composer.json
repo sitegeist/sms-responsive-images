@@ -1,5 +1,5 @@
 {
-    "name": "sitegeist/sms-responsive-images",
+    "name": "sitegeist/sms_responsive_images",
     "type": "typo3-cms-extension",
     "description": "Provides ViewHelpers and configuration to render valid responsive images based on TYPO3's image cropping tool.",
     "homepage": "https://github.com/sitegeist/sms-responsive-images",
@@ -18,6 +18,6 @@
     },
     "replace": {
         "sms_responsive_images": "self.version",
-        "typo3-ter/sms-responsive-images": "self.version"
+        "typo3-ter/sms_responsive_images": "self.version"
     }
 }

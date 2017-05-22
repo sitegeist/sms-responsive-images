@@ -1,4 +1,4 @@
-{namespace sms=SMS\SmsImageViewhelper\ViewHelpers}
+{namespace sms=SMS\SmsResponsiveImages\ViewHelpers}
 
 <h2>Responsive Images</h2>
 
@@ -39,14 +39,14 @@
 <f:for each="{page.media}" as="mediaFile">
 	<sms:media file="{mediaFile}" width="1000" breakpoints="{
 		0: {cropVariant: 'desktop', media: '(min-width: 900px)', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}},
-		1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}}
+		1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}},
 		2: {cropVariant: 'mobile', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}}
 	}" />
 
 	<f:comment>
 		<sms:image image="{mediaFile}" width="1000" breakpoints="{
 			0: {cropVariant: 'desktop', media: '(min-width: 900px)', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}},
-			1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}}
+			1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}},
 			2: {cropVariant: 'mobile', srcset: {0: 200, 1: 400, 2: 600, 3: 800, 4: 1000}}
 		}" />
 	</f:comment>
@@ -65,14 +65,14 @@
 <f:for each="{page.media}" as="mediaFile">
 	<sms:media file="{mediaFile}" width="1000" breakpoints="{
 		0: {cropVariant: 'desktop', media: '(min-width: 900px)', srcset: {0: '1x', 1: '2x'}},
-		1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: '1x', 1: '2x'}}
+		1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: '1x', 1: '2x'}},
 		2: {cropVariant: 'mobile', srcset: {0: '1x', 1: '2x'}}
 	}" />
 
 	<f:comment>
 		<sms:image image="{mediaFile}" width="1000" breakpoints="{
 			0: {cropVariant: 'desktop', media: '(min-width: 900px)', srcset: {0: '1x', 1: '2x'}},
-			1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: '1x', 1: '2x'}}
+			1: {cropVariant: 'tablet', media: '(min-width: 600px)', srcset: {0: '1x', 1: '2x'}},
 			2: {cropVariant: 'mobile', srcset: {0: '1x', 1: '2x'}}
 		}" />
 	</f:comment>

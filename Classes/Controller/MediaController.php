@@ -1,13 +1,13 @@
 <?php
 
-namespace SMS\SmsImageViewhelper\Controller;
+namespace SMS\SmsResponsiveImages\Controller;
 
 class MediaController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 	/**
 	 * Page Repository
 	 *
-	 * @var \SMS\SmsImageViewhelper\Domain\Repository\PageRepository
+	 * @var \SMS\SmsResponsiveImages\Domain\Repository\PageRepository
 	 * @inject
 	 */
 	protected $pageRepository;
