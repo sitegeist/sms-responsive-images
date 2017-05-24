@@ -2,11 +2,13 @@
 defined('TYPO3_MODE') or die();
 
 call_user_func(function () {
+    // Check if demo plugin should be enabled
     $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sms_responsive_images']);
     if (empty($extConf['enableDemoPlugin'])) {
         return;
     }
 
+    // Enable three fixed crop variants for the page media field
     $GLOBALS['TCA']['pages']['columns']['media']['config']['overrideChildTca']['columns']['crop']['config'] = [
         'cropVariants' => [
             'default' => [
