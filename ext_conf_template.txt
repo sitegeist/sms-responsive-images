@@ -1,2 +1,2 @@
-# cat=basic/enable; type=boolean; label=Enable demo plugin
+# cat=basic/enable; type=boolean; label=Enable demo plugin: This enables a demo plugin to try out different image configurations as well as a static TypoScript to create a simple demo page
 enableDemoPlugin = 0
