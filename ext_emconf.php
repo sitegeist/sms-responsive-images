@@ -11,33 +11,33 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'SMS Responsive Images',
-	'description' => 'Provides ViewHelpers and configuration to render valid Responsive Images based on TYPO3\'s image cropping tool.',
-	'category' => 'fe',
-	'author' => 'sitegeist',
-	'author_email' => 'extensions@sitegeist.de',
-	'author_company' => 'sitegeist media solutions GmbH',
-	'shy' => '',
-	'priority' => '',
-	'module' => '',
-	'state' => 'beta',
-	'internal' => '',
-	'uploadfolder' => false,
-	'createDirs' => '',
-	'modify_tables' => '',
-	'clearCacheOnLoad' => false,
-	'lockType' => '',
-	'version' => '1.0.0',
-	'constraints' => array(
-		'depends' => array(
-			'typo3' => '8.7.0-8.7.99',
-			'fluid' => '',
-			'php' => '7.0.0-0.0.0'
-		),
-		'conflicts' => array(
-		),
-		'suggests' => array(
-			'fluid_styled_content' => ''
-		),
-	)
+    'title' => 'SMS Responsive Images',
+    'description' => 'Provides ViewHelpers and configuration to render valid Responsive Images based on TYPO3\'s image cropping tool.',
+    'category' => 'fe',
+    'author' => 'sitegeist',
+    'author_email' => 'extensions@sitegeist.de',
+    'author_company' => 'sitegeist media solutions GmbH',
+    'shy' => '',
+    'priority' => '',
+    'module' => '',
+    'state' => 'beta',
+    'internal' => '',
+    'uploadfolder' => false,
+    'createDirs' => '',
+    'modify_tables' => '',
+    'clearCacheOnLoad' => false,
+    'lockType' => '',
+    'version' => '1.0.0',
+    'constraints' => array(
+        'depends' => array(
+            'typo3' => '8.7.0-8.7.99',
+            'fluid' => '',
+            'php' => '7.0.0-0.0.0'
+        ),
+        'conflicts' => array(
+        ),
+        'suggests' => array(
+            'fluid_styled_content' => ''
+        ),
+    )
 );
