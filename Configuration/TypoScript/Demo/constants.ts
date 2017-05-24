@@ -1,9 +1,11 @@
+# Set image dimensions for demo page
 styles.content.textmedia {
   maxW = 1200
   maxWInText = 600
 }
 
 tx_smsresponsiveimages {
+  # Set additional image sizes for content images on demo page
   srcset = 400, 500, 640, 1000, 1200, 2000, 2400
 
   # If there's only one column, you could use something like this:

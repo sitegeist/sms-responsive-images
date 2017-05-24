@@ -1,3 +1,4 @@
+# Associate model with pages table
 plugin.tx_smsresponsiveimages {
   persistence {
     classes {
@@ -13,6 +14,7 @@ plugin.tx_smsresponsiveimages {
 # Remove existing page setup
 page >
 
+# Create demo page
 tx_smsresponsiveimages_demo = PAGE
 tx_smsresponsiveimages_demo {
   meta.viewport = width=device-width, initial-scale=1.0

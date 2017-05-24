@@ -3,7 +3,7 @@ defined('TYPO3_MODE') or die();
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'sms_responsive_images',
-    'Configuration/TypoScript/base/',
+    'Configuration/TypoScript/Base/',
     'Responsive Images'
 );
 
@@ -21,7 +21,7 @@ call_user_func(function () {
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
         'sms_responsive_images',
-        'Configuration/TypoScript/demo/',
+        'Configuration/TypoScript/Demo/',
         'Responsive Images (Demo)'
     );
 });
