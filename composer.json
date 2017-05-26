@@ -5,6 +5,14 @@
     "homepage": "https://github.com/sitegeist/sms-responsive-images",
     "license": ["GPL-2.0+"],
     "keywords": ["TYPO3 CMS", "responsive images", "srcset", "sizes", "picture", "highdpi", "retina", "picturefill", "image", "aspect ratio", "cropping"],
+    "authors": [
+        {
+            "name": "sitegeist",
+            "email": "extensions@sitegeist.de",
+            "homepage": "https://sitegeist.de",
+            "role": "Developer"
+        }
+    ],
     "support": {
         "issues": "https://github.com/sitegeist/sms-responsive-images/issues"
     },
