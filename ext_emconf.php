@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'SMS Responsive Images',
-    'description' => 'Provides ViewHelpers and configuration to render valid Responsive Images based on TYPO3\'s image cropping tool.',
+    'description' => 'Provides ViewHelpers and configuration to render valid responsive images based on TYPO3\'s image cropping tool.',
     'category' => 'fe',
     'author' => 'Simon Praetorius',
     'author_email' => 'praetorius@sitegeist.de',
