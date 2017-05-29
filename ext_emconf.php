@@ -1,7 +1,7 @@
 <?php
 
 ########################################################################
-# Extension Manager/Repository config file for ext "sms_boilerplate".
+# Extension Manager/Repository config file for ext "sms_responsive_images".
 #
 # Auto generated 05-05-2014 09:20
 #

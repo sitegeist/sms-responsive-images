@@ -8,7 +8,7 @@ call_user_func(function () {
         return;
     }
 
-    // Enable three fixed crop variants for the page media field
+    // Demo plugin: Enable three fixed crop variants for the page media field
     $GLOBALS['TCA']['pages']['columns']['media']['config']['overrideChildTca']['columns']['crop']['config'] = [
         'cropVariants' => [
             'default' => [
