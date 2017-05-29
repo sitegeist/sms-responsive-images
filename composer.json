@@ -1,32 +1,32 @@
 {
-    "name": "sitegeist/sms_responsive_images",
-    "type": "typo3-cms-extension",
-    "description": "Provides ViewHelpers and configuration to render valid responsive images based on TYPO3's image cropping tool.",
+	"name": "sitegeist/sms_responsive_images",
+	"type": "typo3-cms-extension",
+	"description": "Provides ViewHelpers and configuration to render valid responsive images based on TYPO3's image cropping tool.",
 	"version": "1.0.0",
-    "homepage": "https://github.com/sitegeist/sms-responsive-images",
-    "license": ["GPL-2.0+"],
-    "keywords": ["TYPO3 CMS", "responsive images", "srcset", "sizes", "picture", "highdpi", "retina", "picturefill", "image", "aspect ratio", "cropping"],
-    "authors": [
-        {
-            "name": "Simon Praetorius",
-            "email": "praetorius@sitegeist.de",
-            "homepage": "https://sitegeist.de",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/sitegeist/sms-responsive-images/issues"
-    },
-    "require": {
-        "typo3/cms-core": "^8.7.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "SMS\\SmsResponsiveImages\\": "Classes/"
-        }
-    },
-    "replace": {
-        "sms_responsive_images": "self.version",
-        "typo3-ter/sms_responsive_images": "self.version"
-    }
+	"homepage": "https://github.com/sitegeist/sms-responsive-images",
+	"license": ["GPL-2.0+"],
+	"keywords": ["TYPO3 CMS", "responsive images", "srcset", "sizes", "picture", "highdpi", "retina", "picturefill", "image", "aspect ratio", "cropping"],
+	"authors": [
+		{
+			"name": "Simon Praetorius",
+			"email": "praetorius@sitegeist.de",
+			"homepage": "https://sitegeist.de",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/sitegeist/sms-responsive-images/issues"
+	},
+	"require": {
+		"typo3/cms-core": "^8.7.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"SMS\\SmsResponsiveImages\\": "Classes/"
+		}
+	},
+	"replace": {
+		"sms_responsive_images": "self.version",
+		"typo3-ter/sms_responsive_images": "self.version"
+	}
 }
