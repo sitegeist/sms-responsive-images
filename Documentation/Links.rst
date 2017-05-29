@@ -12,13 +12,13 @@ Links
 -----
 
 :TER:
-	https://typo3.org/extensions/repository/view/<extension key>
+	https://typo3.org/extensions/repository/view/sms_responsive_images
 
 :Bug Tracker:
-	https://forge.typo3.org/projects/extension-<extension key>/issues
+	https://github.com/sitegeist/sms-responsive-images/issues
 
 :Git Repository:
-	https://github.com/<username>/<extension key>
+	https://github.com/sitegeist/sms-responsive-images
 
 :Contact:
-	`@<username> <https://twitter.com/your-username>`__
+	`@s2bproject <https://twitter.com/s2bproject>`__, `@sitegeist_de <https://twitter.com/sitegeist_de>`__

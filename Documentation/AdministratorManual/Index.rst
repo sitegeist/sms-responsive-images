@@ -23,7 +23,7 @@ Installation
 Once you've installed the extension, the static TypoScript "Responsive Images" should be included. After that, the constant editor contains two new fields concerning content images:
 
 - Additional Image Sizes for Responsive Images: Additional image sizes that should be generated for each content image (comma-separated list of either image widths specified in pixels or pixel density descriptors, e. g. "2x")
-- Sizes Query for Responsive Images: Sizes query which tells the browser which of the image sizes should be used in the current environment (%1$d can be used as a placeholder for the calculated image width)
+- Sizes Query for Responsive Images: Sizes query which tells the browser which of the image sizes should be used in the current environment (``%1$d`` can be used as a placeholder for the calculated image width)
 
 Depending on the preferred image setup, these values can be adjusted to fit the layout of your website.
 
