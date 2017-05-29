@@ -33,10 +33,13 @@ SMS Responsive Images
       2017
 
    :Author:
-      sitegeist
+      Simon Praetorius
 
    :Email:
-      extensions@sitegeist.de
+      praetorius@sitegeist.de
+
+   :Company:
+      sitegeist media solutions GmbH
 
    :License:
       This document is published under the Open Publication License
