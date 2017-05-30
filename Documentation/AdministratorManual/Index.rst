@@ -20,7 +20,7 @@ Installation
 
    New fields in constants editor
 
-Once you've installed the extension, the static TypoScript "Responsive Images" should be included. After that, the constant editor contains two new fields concerning content images:
+Once you've installed the extension, the static TypoScript "Responsive Images" should be included. After that, the TypoScript constants editor contains two new fields concerning content images:
 
 - Additional Image Sizes for Responsive Images: Additional image sizes that should be generated for each content image (comma-separated list of either image widths specified in pixels or pixel density descriptors, e. g. "2x")
 - Sizes Query for Responsive Images: Sizes query which tells the browser which of the image sizes should be used in the current environment (``%1$d`` can be used as a placeholder for the calculated image width)
@@ -47,7 +47,7 @@ Next, follow these steps to create the demo page:
 - Create a new page
 - Create a TypoScript extension template on the page
    - Include the static TypoScript "Responsive Images (Demo)".
-   - Make sure that the page inherits or includes the static TypoScripts "Responsive Images" and "Fluid Content Elements"
+   - Make sure that the page inherits or includes the static TypoScripts "Responsive Images", "Fluid Content Elements" and "Fluid Content Elements CSS (optional)"
 - Add an image to the media field in the page properties, adjust cropping for each variant
 - Add image elements to the main content column
 
