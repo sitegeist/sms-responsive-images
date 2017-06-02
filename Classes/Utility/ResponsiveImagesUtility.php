@@ -143,7 +143,13 @@ class ResponsiveImagesUtility implements SingletonInterface
         if ($lastBreakpoint && !$lastBreakpoint['media'] && $picturefillMarkup) {
             // Generate different image sizes for last breakpoint
             $cropArea = $cropVariantCollection->getCropArea($lastBreakpoint['cropVariant']);
-            $srcset = $this->generateSrcsetImages($originalImage, $referenceWidth, $lastBreakpoint['srcset'], $cropArea, $absoluteUri);
+            $srcset = $this->generateSrcsetImages(
+                $originalImage,
+                $referenceWidth,
+                $lastBreakpoint['srcset'],
+                $cropArea,
+                $absoluteUri
+            );
             $srcsetMode = substr(key($srcset), -1); // x or w
 
             // Set srcset attribute for fallback image
@@ -249,8 +255,12 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @return void
      */
-    public function addMetadataToImageTag(TagBuilder $tag, FileInterface $originalImage, FileInterface $fallbackImage, Area $focusArea = null)
-    {
+    public function addMetadataToImageTag(
+        TagBuilder $tag,
+        FileInterface $originalImage,
+        FileInterface $fallbackImage,
+        Area $focusArea = null
+    ) {
         $focusArea = $focusArea ?: Area::createEmpty();
 
         // Add focus area to image tag
@@ -290,8 +300,13 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @return array
      */
-    public function generateSrcsetImages(FileInterface $image, int $defaultWidth, $srcset, Area $cropArea = null, bool $absoluteUri = false): array
-    {
+    public function generateSrcsetImages(
+        FileInterface $image,
+        int $defaultWidth,
+        $srcset,
+        Area $cropArea = null,
+        bool $absoluteUri = false
+    ): array {
         $cropArea = $cropArea ?: Area::createEmpty();
 
         // Convert srcset input to array

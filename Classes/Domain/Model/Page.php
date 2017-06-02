@@ -14,7 +14,8 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * __construct
      */
-    public function __construct() {
+    public function __construct()
+    {
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
@@ -27,7 +28,8 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects() {
+    protected function initStorageObjects()
+    {
         $this->media = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 

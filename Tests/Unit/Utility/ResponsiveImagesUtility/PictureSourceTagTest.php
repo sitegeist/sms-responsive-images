@@ -69,9 +69,25 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createPictureSourceTagProvider
      */
-    public function createPictureSourceTag($image, $defaultWidth, $srcset, $mediaQuery, $sizesQuery, $absoluteUri, $srcsetAttribute, $sizesAttribute)
-    {
-        $tag = $this->utility->createPictureSourceTag($image, $defaultWidth, $srcset, $mediaQuery, $sizesQuery, null, $absoluteUri);
+    public function createPictureSourceTag(
+        $image,
+        $defaultWidth,
+        $srcset,
+        $mediaQuery,
+        $sizesQuery,
+        $absoluteUri,
+        $srcsetAttribute,
+        $sizesAttribute
+    ) {
+        $tag = $this->utility->createPictureSourceTag(
+            $image,
+            $defaultWidth,
+            $srcset,
+            $mediaQuery,
+            $sizesQuery,
+            null,
+            $absoluteUri
+        );
         $this->assertEquals('source', $tag->getTagName());
         $this->assertEquals($mediaQuery, $tag->getAttribute('media'));
         $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));

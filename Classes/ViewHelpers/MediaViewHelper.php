@@ -17,7 +17,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('srcset', 'mixed', 'Image sizes that should be rendered.', false);
-        $this->registerArgument('sizes', 'string', 'Sizes query for responsive image.', false, '(min-width: %1$dpx) %1$dpx, 100vw');
+        $this->registerArgument('sizes', 'string', 'Sizes query for responsive image.', false,
+            '(min-width: %1$dpx) %1$dpx, 100vw');
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
     }
@@ -35,7 +36,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
     {
         if ($this->arguments['breakpoints']) {
             return $this->renderPicture($image, $width, $height);
-        } else if ($this->arguments['srcset']) {
+        } elseif ($this->arguments['srcset']) {
             return $this->renderImageSrcset($image, $width, $height);
         } else {
             return parent::renderImage($image, $width, $height);

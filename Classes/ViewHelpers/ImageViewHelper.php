@@ -15,7 +15,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('srcset', 'mixed', 'Image sizes that should be rendered.', false);
-        $this->registerArgument('sizes', 'string', 'Sizes query for responsive image.', false, '(min-width: %1$dpx) %1$dpx, 100vw');
+        $this->registerArgument('sizes', 'string', 'Sizes query for responsive image.', false,
+            '(min-width: %1$dpx) %1$dpx, 100vw');
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
     }
@@ -30,8 +31,13 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
      */
     public function render()
     {
-        if ((is_null($this->arguments['src']) && is_null($this->arguments['image'])) || (!is_null($this->arguments['src']) && !is_null($this->arguments['image']))) {
-            throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception('You must either specify a string src or a File object.', 1382284106);
+        if ((is_null($this->arguments['src']) && is_null($this->arguments['image']))
+            || (!is_null($this->arguments['src']) && !is_null($this->arguments['image']))
+        ) {
+            throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception(
+                'You must either specify a string src or a File object.',
+                1382284106
+            );
         }
 
         // Fall back to TYPO3 default if no responsive image feature was selected
@@ -41,7 +47,11 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 
         try {
             // Get FAL image object
-            $image = $this->imageService->getImage($this->arguments['src'], $this->arguments['image'], $this->arguments['treatIdAsReference']);
+            $image = $this->imageService->getImage(
+                $this->arguments['src'],
+                $this->arguments['image'],
+                $this->arguments['treatIdAsReference']
+            );
 
             // Determine cropping settings
             $cropString = $this->arguments['crop'];

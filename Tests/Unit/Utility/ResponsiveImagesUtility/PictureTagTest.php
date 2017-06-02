@@ -22,8 +22,18 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 2000, 'height' => 2000]),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 [
-                    ['cropVariant' => 'desktop', 'srcset' => [500, 1000], 'media' => 'media desktop', 'sizes' => 'sizes desktop'],
-                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'media' => 'media mobile', 'sizes' => 'sizes mobile']
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    [
+                        'cropVariant' => 'mobile',
+                        'srcset' => [400, 800],
+                        'media' => 'media mobile',
+                        'sizes' => 'sizes mobile'
+                    ]
                 ],
                 $cropVariantCollection,
                 null,
@@ -40,8 +50,18 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 2000, 'height' => 2000]),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 [
-                    ['cropVariant' => 'desktop', 'srcset' => [500, 1000], 'media' => 'media desktop', 'sizes' => 'sizes desktop'],
-                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'media' => 'media mobile', 'sizes' => 'sizes mobile']
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    [
+                        'cropVariant' => 'mobile',
+                        'srcset' => [400, 800],
+                        'media' => 'media mobile',
+                        'sizes' => 'sizes mobile'
+                    ]
                 ],
                 $cropVariantCollection,
                 null,
@@ -58,8 +78,17 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 2000, 'height' => 2000]),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 [
-                    ['cropVariant' => 'desktop', 'srcset' => [500, 1000], 'media' => 'media desktop', 'sizes' => 'sizes desktop'],
-                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    [
+                        'cropVariant' => 'mobile',
+                        'srcset' => [400, 800],
+                        'sizes' => 'sizes mobile'
+                    ]
                 ],
                 $cropVariantCollection,
                 null,
@@ -75,7 +104,12 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 2000, 'height' => 2000]),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 [
-                    ['cropVariant' => 'desktop', 'srcset' => [500, 1000], 'media' => 'media desktop', 'sizes' => 'sizes desktop'],
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
                     ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
                 ],
                 $cropVariantCollection,
@@ -98,12 +132,16 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 'picture',
                 [
-                    '<img srcset="/image@1000.jpg" width="1000" data-focus-area="' . htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600])) . '" alt="" />'
+                    '<img srcset="/image@1000.jpg" width="1000" data-focus-area="'
+                        . htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600]))
+                        . '" alt="" />'
                 ]
             ],
             // Test image metadata attributes
             'usingMetadata' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']),
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']
+                ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 [],
                 $cropVariantCollection,
@@ -121,8 +159,16 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createPictureTagProvider
      */
-    public function createPictureTag($originalImage, $fallbackImage, $breakpoints, $cropVariantCollection, $focusArea, $picturefillMarkup, $tagName, $tagContent)
-    {
+    public function createPictureTag(
+        $originalImage,
+        $fallbackImage,
+        $breakpoints,
+        $cropVariantCollection,
+        $focusArea,
+        $picturefillMarkup,
+        $tagName,
+        $tagContent
+    ) {
         $tag = $this->utility->createPictureTag(
             $originalImage,
             $fallbackImage,
@@ -159,8 +205,14 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createPictureTagWithCustomTagProvider
      */
-    public function createPictureTagWithCustomTag($originalImage, $fallbackImage, $cropVariantCollection, $pictureTag, $tagName, $testAttribute)
-    {
+    public function createPictureTagWithCustomTag(
+        $originalImage,
+        $fallbackImage,
+        $cropVariantCollection,
+        $pictureTag,
+        $tagName,
+        $testAttribute
+    ) {
         $tag = $this->utility->createPictureTag(
             $originalImage,
             $fallbackImage,
@@ -183,7 +235,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test if fallback tag attributes persist
             'usingCustomFallbackTag' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']),
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']
+                ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 new CropVariantCollection([]),
                 $fallbackTag,
@@ -196,8 +250,13 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createPictureTagWithCustomFallbackTagProvider
      */
-    public function createPictureTagWithCustomFallbackTag($originalImage, $fallbackImage, $cropVariantCollection, $fallbackTag, $tagContent)
-    {
+    public function createPictureTagWithCustomFallbackTag(
+        $originalImage,
+        $fallbackImage,
+        $cropVariantCollection,
+        $fallbackTag,
+        $tagContent
+    ) {
         $tag = $this->utility->createPictureTag(
             $originalImage,
             $fallbackImage,

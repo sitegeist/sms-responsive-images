@@ -28,8 +28,16 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createImageTagWithSrcsetUsingEmptySrcsetProvider
      */
-    public function createImageTagWithSrcsetUsingEmptySrcset($originalImage, $fallbackImage, $srcsetConfig, $tagName, $widthAttribute, $heightAttribute, $srcAttribute, $srcsetAttribute)
-    {
+    public function createImageTagWithSrcsetUsingEmptySrcset(
+        $originalImage,
+        $fallbackImage,
+        $srcsetConfig,
+        $tagName,
+        $widthAttribute,
+        $heightAttribute,
+        $srcAttribute,
+        $srcsetAttribute
+    ) {
         $tag = $this->utility->createImageTagWithSrcset($originalImage, $fallbackImage, $srcsetConfig);
         $this->assertEquals($tagName, $tag->getTagName());
         $this->assertEquals($widthAttribute, $tag->getAttribute('width'));
@@ -84,9 +92,24 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createImageTagWithSrcsetProvider
      */
-    public function createImageTagWithSrcset($originalImage, $fallbackImage, $srcsetConfig, $srcAttribute, $srcsetAttribute, $picturefillMarkup)
-    {
-        $tag = $this->utility->createImageTagWithSrcset($originalImage, $fallbackImage, $srcsetConfig, null, null, null, null, $picturefillMarkup);
+    public function createImageTagWithSrcset(
+        $originalImage,
+        $fallbackImage,
+        $srcsetConfig,
+        $srcAttribute,
+        $srcsetAttribute,
+        $picturefillMarkup
+    ) {
+        $tag = $this->utility->createImageTagWithSrcset(
+            $originalImage,
+            $fallbackImage,
+            $srcsetConfig,
+            null,
+            null,
+            null,
+            null,
+            $picturefillMarkup
+        );
         $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
         $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
     }
@@ -107,8 +130,12 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createImageTagWithSrcsetAndFocusAreaProvider
      */
-    public function createImageTagWithSrcsetAndFocusArea($originalImage, $fallbackImage, $focusArea, $focusAreaAttribute)
-    {
+    public function createImageTagWithSrcsetAndFocusArea(
+        $originalImage,
+        $fallbackImage,
+        $focusArea,
+        $focusAreaAttribute
+    ) {
         // Test focus area attribute
         $tag = $this->utility->createImageTagWithSrcset($originalImage, $fallbackImage, [], null, $focusArea);
         $this->assertEquals($focusAreaAttribute, $tag->getAttribute('data-focus-area'));
@@ -148,9 +175,21 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createImageTagWithSrcsetAndSizesProvider
      */
-    public function createImageTagWithSrcsetAndSizes($originalImage, $fallbackImage, $srcsetConfig, $sizesConfig, $sizesAttribute)
-    {
-        $tag = $this->utility->createImageTagWithSrcset($originalImage, $fallbackImage, $srcsetConfig, null, null, $sizesConfig);
+    public function createImageTagWithSrcsetAndSizes(
+        $originalImage,
+        $fallbackImage,
+        $srcsetConfig,
+        $sizesConfig,
+        $sizesAttribute
+    ) {
+        $tag = $this->utility->createImageTagWithSrcset(
+            $originalImage,
+            $fallbackImage,
+            $srcsetConfig,
+            null,
+            null,
+            $sizesConfig
+        );
         $this->assertEquals($sizesAttribute, $tag->getAttribute('sizes'));
     }
 
@@ -159,7 +198,9 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test image metadata attributes
             'usingMetadata' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']),
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']
+                ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 'image alt',
                 'image title'
@@ -188,7 +229,9 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
 
         return [
             'usingCustomTag' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title']),
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title']
+                ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 $customTag,
                 'fixed alt',
@@ -201,9 +244,22 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider createImageTagWithSrcsetBasedOnCustomTagProvider
      */
-    public function createImageTagWithSrcsetBasedOnCustomTag($originalImage, $fallbackImage, $customTag, $altAttribute, $longdescAttribute)
-    {
-        $tag = $this->utility->createImageTagWithSrcset($originalImage, $fallbackImage, [], null, null, null, $customTag);
+    public function createImageTagWithSrcsetBasedOnCustomTag(
+        $originalImage,
+        $fallbackImage,
+        $customTag,
+        $altAttribute,
+        $longdescAttribute
+    ) {
+        $tag = $this->utility->createImageTagWithSrcset(
+            $originalImage,
+            $fallbackImage,
+            [],
+            null,
+            null,
+            null,
+            $customTag
+        );
         $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
         $this->assertEquals($longdescAttribute, $tag->getAttribute('longdesc'));
     }

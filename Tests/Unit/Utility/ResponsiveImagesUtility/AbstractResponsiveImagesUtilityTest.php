@@ -41,7 +41,8 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
         return $imageServiceMock;
     }
 
-    protected function mockFileObject($properties) {
+    protected function mockFileObject($properties)
+    {
         $fileMock = $this->getMockBuilder(FileReference::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProperty'])
@@ -56,7 +57,8 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
         return $fileMock;
     }
 
-    protected function mockObjectManager() {
+    protected function mockObjectManager()
+    {
         $managerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])

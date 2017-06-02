@@ -71,7 +71,9 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             // Test alt and title attributes
             'usingAltAndTitle' => [
                 new TagBuilder('img'),
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']),
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']
+                ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 'image alt',
                 'image title'
@@ -79,7 +81,9 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             // Test fixed alt/title attributes
             'usingFixedAltAndTitleValues' => [
                 $imageTagWithAttributes,
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']),
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']
+                ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000]),
                 'fixed alt',
                 'fixed title'
@@ -99,8 +103,13 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider addMetadataToImageTagWithAltAndTitleProvider
      */
-    public function addMetadataToImageTagWithAltAndTitle($tag, $originalImage, $fallbackImage, $altAttribute, $titleAttribute)
-    {
+    public function addMetadataToImageTagWithAltAndTitle(
+        $tag,
+        $originalImage,
+        $fallbackImage,
+        $altAttribute,
+        $titleAttribute
+    ) {
         $this->utility->addMetadataToImageTag($tag, $originalImage, $fallbackImage);
         $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
         $this->assertEquals($titleAttribute, $tag->getAttribute('title'));
@@ -143,7 +152,11 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 ['200w', '400w', '600w'],
                 null,
                 true,
-                ['200w' => 'http://domain.tld/image@200.jpg', '400w' => 'http://domain.tld/image@400.jpg', '600w' => 'http://domain.tld/image@600.jpg']
+                [
+                    '200w' => 'http://domain.tld/image@200.jpg',
+                    '400w' => 'http://domain.tld/image@400.jpg',
+                    '600w' => 'http://domain.tld/image@600.jpg'
+                ]
             ],
             // Test srcset input as string
             'usingSrcsetString' => [
@@ -152,7 +165,11 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 '200, 400, 600',
                 null,
                 true,
-                ['200w' => 'http://domain.tld/image@200.jpg', '400w' => 'http://domain.tld/image@400.jpg', '600w' => 'http://domain.tld/image@600.jpg']
+                [
+                    '200w' => 'http://domain.tld/image@200.jpg',
+                    '400w' => 'http://domain.tld/image@400.jpg',
+                    '600w' => 'http://domain.tld/image@600.jpg'
+                ]
             ]
         ];
     }
