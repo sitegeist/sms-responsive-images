@@ -18,6 +18,7 @@ call_user_func(function () {
 });
 
 // Make sms a global namespace
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'] = [
-    'SMS\\SmsResponsiveImages\\ViewHelpers'
-];
+if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'])) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'] = [];
+}
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'][] = 'SMS\\SmsResponsiveImages\\ViewHelpers';
