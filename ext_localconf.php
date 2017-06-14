@@ -16,3 +16,8 @@ call_user_func(function () {
         ['Media' => 'header']
     );
 });
+
+// Make sms a global namespace
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'] = [
+    'SMS\\SmsResponsiveImages\\ViewHelpers'
+];
