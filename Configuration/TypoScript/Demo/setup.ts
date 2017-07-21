@@ -25,6 +25,7 @@ tx_smsresponsiveimages_demo {
   10 {
     file = EXT:sms_responsive_images/Resources/Private/Templates/Demo.html
     variables {
+      # Header image
       header = USER
       header {
         userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
@@ -41,24 +42,34 @@ tx_smsresponsiveimages_demo {
         view =< plugin.tx_smsresponsiveimages.view
       }
 
+      # Main content
       contentMain = CONTENT
       contentMain {
         table = tt_content
         select {
-           orderBy = sorting
-           where = colPos=0
-           languageField = sys_language_uid
+          orderBy = sorting
+          where = colPos=0
+          languageField = sys_language_uid
         }
       }
 
+      # Content for left column
       contentLeft = CONTENT
       contentLeft {
         table = tt_content
         select {
-           orderBy = sorting
-           where = colPos=1
-           languageField = sys_language_uid
+          orderBy = sorting
+          where = colPos=1
+          languageField = sys_language_uid
         }
+        # This is where you could modify responsive image parameters for this column
+        # renderObj < tt_content
+        # renderObj {
+        #   image.settings.tx_smsresponsiveimages {
+        #     srcset = 300, 450, 600, 750, 900
+        #     sizes = (min-width: 300px) 300px, 50vw
+        #   }
+        # }
       }
     }
   }
