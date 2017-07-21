@@ -20,12 +20,17 @@ composer.json or run `composer require sitegeist/sms-responsive-images`.
 
 Alternatively, you can install the extension from TYPO3 TER:
 
-https://typo3.org/extensions/repository/view/sms_responsive_images
+[TYPO3 TER: sms_responsive_images](https://typo3.org/extensions/repository/view/sms_responsive_images)
 
 For further instructions, please take a look at the full documentation.
 
 ## Documentation
 
+To get an overview of responsive images in general and what the extension does, take a
+look at the following blog post:
+
+[sitegeist Techblog: Responsive Images with TYPO3 8.7](https://techblog.sitegeist.de/responsive-images-with-typo3-8-7/)
+
 You will find the full documentation for this extension on typo3.org:
 
-https://docs.typo3.org/typo3cms/extensions/sms_responsive_images/
+[Full Documentation of SMS Responsive Images](https://docs.typo3.org/typo3cms/extensions/sms_responsive_images/)
