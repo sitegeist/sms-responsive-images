@@ -34,12 +34,12 @@ Examples
 
 ::
 
- <sms:image image="{image}" srcset="400, 600, 800, 1000" />
- <sms:image image="{image}" srcset="400w, 600w, 800w, 1000w" />
- <sms:image image="{image}" srcset="1x, 2x" />
- <sms:image image="{image}" srcset="{0: 400, 1: 600, 2: 800, 3: 1000}" />
+   <sms:image image="{image}" srcset="400, 600, 800, 1000" />
+   <sms:image image="{image}" srcset="400w, 600w, 800w, 1000w" />
+   <sms:image image="{image}" srcset="1x, 2x" />
+   <sms:image image="{image}" srcset="{0: 400, 1: 600, 2: 800, 3: 1000}" />
 
- <sms:media file="{image}" srcset="400, 600, 800, 1000" />
+   <sms:media file="{image}" srcset="400, 600, 800, 1000" />
 
 
 sizes
@@ -61,9 +61,9 @@ Examples
 
 ::
 
- <sms:image image="{image}" sizes="(min-width: 1200px) 600px, (min-width: 900px) 800px, 100vw" />
+   <sms:image image="{image}" sizes="(min-width: 1200px) 600px, (min-width: 900px) 800px, 100vw" />
 
- <sms:media file="{image}" sizes="(min-width: 1200px) 600px, (min-width: 900px) 800px, 100vw" />
+   <sms:media file="{image}" sizes="(min-width: 1200px) 600px, (min-width: 900px) 800px, 100vw" />
 
 
 breakpoints
@@ -92,15 +92,15 @@ Examples
 
 ::
 
- <sms:image image="{image}" breakpoints="{
-   0: {'cropVariant': 'desktop', 'media': '(min-width: 1000px)', 'srcset': '1000, 1200, 1400, 1600'},
-   1: {'cropVariant': 'mobile', 'srcset': '400, 600, 800, 1000, 1200, 1400, 1600'}
- }" />
+   <sms:image image="{image}" breakpoints="{
+      0: {'cropVariant': 'desktop', 'media': '(min-width: 1000px)', 'srcset': '1000, 1200, 1400, 1600'},
+      1: {'cropVariant': 'mobile', 'srcset': '400, 600, 800, 1000, 1200, 1400, 1600'}
+   }" />
 
- <sms:media file="{image}" breakpoints="{
-   0: {'cropVariant': 'desktop', 'media': '(min-width: 1000px)', 'srcset': '1000, 1200, 1400, 1600'},
-   1: {'cropVariant': 'mobile', 'srcset': '400, 600, 800, 1000, 1200, 1400, 1600'}
- } />
+   <sms:media file="{image}" breakpoints="{
+      0: {'cropVariant': 'desktop', 'media': '(min-width: 1000px)', 'srcset': '1000, 1200, 1400, 1600'},
+      1: {'cropVariant': 'mobile', 'srcset': '400, 600, 800, 1000, 1200, 1400, 1600'}
+   } />
 
 
 picturefill
@@ -122,6 +122,6 @@ Examples
 
 ::
 
- <sms:image image="{image}" srcset="400, 600" picturefill="false" />
+   <sms:image image="{image}" srcset="400, 600" picturefill="false" />
 
- <sms:media file="{image}" srcset="400, 600" picturefill="false" />
+   <sms:media file="{image}" srcset="400, 600" picturefill="false" />
