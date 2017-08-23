@@ -337,6 +337,17 @@ class ResponsiveImagesUtility implements SingletonInterface
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
             $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
+            /**
+             * If processed file isnt as width as it should be ([GFX][processor_allowUpscaling] set to false)
+             * then use final width of the image as widthDescriptor if not input case 3 is used
+             */
+            $finalWidth = $processedImage->getProperty('width');
+            if ($finalWidth !== $candidateWidth) {
+                if (substr($widthDescriptor, -1) === 'w' && !isset($images[$finalWidth.'w'])) {
+                    $images[$finalWidth.'w'] = $this->imageService->getImageUri($processedImage, $absoluteUri);
+                }
+                break;
+            }
             $images[$widthDescriptor] = $this->imageService->getImageUri($processedImage, $absoluteUri);
         }
 
