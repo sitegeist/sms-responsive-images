@@ -170,6 +170,18 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                     '400w' => 'http://domain.tld/image@400.jpg',
                     '600w' => 'http://domain.tld/image@600.jpg'
                 ]
+            ],
+            'usingTooSmallImage' => [
+                $this->mockFileObject(['width' => 400]),
+                400,
+                '200, 300, 500',
+                null,
+                false,
+                [
+                    '200w' => '/image@200.jpg',
+                    '300w' => '/image@300.jpg',
+                    '400w' => '/image@400.jpg'
+                ]
             ]
         ];
     }

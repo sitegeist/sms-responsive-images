@@ -29,6 +29,9 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
         $imageServiceMock
             ->method('applyProcessingInstructions')
             ->will($this->returnCallback(function ($file, $instructions) use ($test) {
+                // Simulate processor_allowUpscaling = false
+                $instructions['width'] = min($instructions['width'], $file->getProperty('width'));
+
                 return $test->mockFileObject($instructions);
             }));
 

@@ -317,7 +317,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         $images = [];
         foreach ($srcset as $widthDescriptor) {
             // Determine image width
-            switch (substr($widthDescriptor, -1)) {
+            $srcsetMode = substr($widthDescriptor, -1);
+            switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($defaultWidth * (float) substr($widthDescriptor, 0, -1));
                     break;
@@ -328,6 +329,7 @@ class ResponsiveImagesUtility implements SingletonInterface
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
+                    $srcsetMode = 'w';
                     $widthDescriptor = $candidateWidth . 'w';
             }
 
@@ -337,17 +339,14 @@ class ResponsiveImagesUtility implements SingletonInterface
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
             $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
-            /**
-             * If processed file isnt as width as it should be ([GFX][processor_allowUpscaling] set to false)
-             * then use final width of the image as widthDescriptor if not input case 3 is used
-             */
-            $finalWidth = $processedImage->getProperty('width');
-            if ($finalWidth !== $candidateWidth) {
-                if (substr($widthDescriptor, -1) === 'w' && !isset($images[$finalWidth.'w'])) {
-                    $images[$finalWidth.'w'] = $this->imageService->getImageUri($processedImage, $absoluteUri);
-                }
-                break;
+
+            // If processed file isn't as wide as it should be ([GFX][processor_allowUpscaling] set to false)
+            // then use final width of the image as widthDescriptor if not input case 3 is used
+            $processedWidth = $processedImage->getProperty('width');
+            if ($srcsetMode === 'w' && $processedWidth !== $candidateWidth) {
+                $widthDescriptor = $processedWidth . 'w';
             }
+
             $images[$widthDescriptor] = $this->imageService->getImageUri($processedImage, $absoluteUri);
         }
 
