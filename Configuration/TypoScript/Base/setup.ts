@@ -11,6 +11,10 @@ lib.contentElement {
     sizes = {$tx_smsresponsiveimages.sizes}
     breakpoints {
     }
+
+    # Use picturefill markup
+    picturefill = 1
+
     # Additional css classes for all image elements
     class =
   }
