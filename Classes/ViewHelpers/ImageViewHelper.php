@@ -24,6 +24,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
+        $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
     }
 
     /**
@@ -89,7 +90,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     null,
                     $this->tag,
                     $this->arguments['picturefill'],
-                    $this->arguments['absolute']
+                    $this->arguments['absolute'],
+                    $this->arguments['lazyload']
                 );
             } else {
                 // Generate img tag with srcset
@@ -102,7 +104,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['sizes'],
                     $this->tag,
                     $this->arguments['picturefill'],
-                    $this->arguments['absolute']
+                    $this->arguments['absolute'],
+                    $this->arguments['lazyload']
                 );
             }
         } catch (ResourceDoesNotExistException $e) {

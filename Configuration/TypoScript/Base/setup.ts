@@ -6,9 +6,16 @@ lib.contentElement {
 
   # Add responsive image settings to all content elements
   settings.tx_smsresponsiveimages {
+    lazyload = {$tx_smsresponsiveimages.lazyload}
     srcset = {$tx_smsresponsiveimages.srcset}
     sizes = {$tx_smsresponsiveimages.sizes}
     breakpoints {
     }
+
+    # Use picturefill markup
+    picturefill = 1
+
+    # Additional css classes for all image elements
+    class =
   }
 }

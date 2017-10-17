@@ -51,6 +51,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param TagBuilder    $tag
      * @param bool          $picturefillMarkup
      * @param bool          $absoluteUri
+     * @param  bool         $lazyload
      *
      * @return TagBuilder
      */
@@ -63,7 +64,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         string $sizesQuery = null,
         TagBuilder $tag = null,
         bool $picturefillMarkup = true,
-        bool $absoluteUri = false
+        bool $absoluteUri = false,
+        bool $lazyload = false
     ): TagBuilder {
         $tag = $tag ?: $this->objectManager->get(TagBuilder::class, 'img');
 
@@ -73,8 +75,11 @@ class ResponsiveImagesUtility implements SingletonInterface
         // Use width of fallback image as reference for relative sizes (1x, 2x...)
         $referenceWidth = $fallbackImage->getProperty('width');
 
+        // if lazyload enabled add data- prefix
+        $attributePrefix = $lazyload ? 'data-' : '';
+
         if (!$picturefillMarkup) {
-            $tag->addAttribute('src', $fallbackImageUri);
+            $tag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
         }
 
         // Generate different image sizes for srcset attribute
@@ -86,7 +91,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         $srcsetImages[$fallbackWidthDescriptor] = $fallbackImageUri;
 
         // Set srcset attribute for image tag
-        $tag->addAttribute('srcset', $this->generateSrcsetAttribute($srcsetImages));
+        $tag->addAttribute($attributePrefix . 'srcset', $this->generateSrcsetAttribute($srcsetImages));
 
         // Add sizes attribute to image tag
         if ($srcsetMode == 'w' && $sizesQuery) {
@@ -115,6 +120,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param  TagBuilder            $fallbackTag
      * @param  bool                  $picturefillMarkup
      * @param  bool                  $absoluteUri
+     * @param  bool                  $lazyload
      *
      * @return TagBuilder
      */
@@ -127,7 +133,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $tag = null,
         TagBuilder $fallbackTag = null,
         bool $picturefillMarkup = true,
-        bool $absoluteUri = false
+        bool $absoluteUri = false,
+        bool $lazyload = false
     ): TagBuilder {
         $tag = $tag ?: $this->objectManager->get(TagBuilder::class, 'picture');
         $fallbackTag = $fallbackTag ?: $this->objectManager->get(TagBuilder::class, 'img');
@@ -137,6 +144,9 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // Use width of fallback image as reference for relative sizes (1x, 2x...)
         $referenceWidth = $fallbackImage->getProperty('width');
+
+        // if lazyload enabled add data- prefix
+        $attributePrefix = $lazyload ? 'data-' : '';
 
         // Use last breakpoint as fallback image if it doesn't define a media query
         $lastBreakpoint = array_pop($breakpoints);
@@ -153,7 +163,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $srcsetMode = substr(key($srcset), -1); // x or w
 
             // Set srcset attribute for fallback image
-            $fallbackTag->addAttribute('srcset', $this->generateSrcsetAttribute($srcset));
+            $fallbackTag->addAttribute($attributePrefix . 'srcset', $this->generateSrcsetAttribute($srcset));
 
             // Set sizes query for fallback image
             if ($srcsetMode == 'w' && $lastBreakpoint['sizes']) {
@@ -168,9 +178,9 @@ class ResponsiveImagesUtility implements SingletonInterface
             // Set srcset attribute for fallback image (not src as advised by picturefill)
             $fallbackImageUri = $this->imageService->getImageUri($fallbackImage, $absoluteUri);
             if ($picturefillMarkup) {
-                $fallbackTag->addAttribute('srcset', $fallbackImageUri);
+                $fallbackTag->addAttribute($attributePrefix . 'srcset', $fallbackImageUri);
             } else {
-                $fallbackTag->addAttribute('src', $fallbackImageUri);
+                $fallbackTag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
             }
         }
 
@@ -191,7 +201,8 @@ class ResponsiveImagesUtility implements SingletonInterface
                 $breakpoint['media'],
                 $breakpoint['sizes'],
                 $cropArea,
-                $absoluteUri
+                $absoluteUri,
+                $lazyload
             );
             $sourceTags[] = $sourceTag->render();
         }
@@ -214,6 +225,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param  string        $sizesQuery
      * @param  Area          $cropArea
      * @param  bool          $absoluteUri
+     * @param  bool          $lazyload
      *
      * @return TagBuilder
      */
@@ -224,9 +236,13 @@ class ResponsiveImagesUtility implements SingletonInterface
         string $mediaQuery = '',
         string $sizesQuery = '',
         Area $cropArea = null,
-        bool $absoluteUri = false
+        bool $absoluteUri = false,
+        bool $lazyload = false
     ): TagBuilder {
         $cropArea = $cropArea ?: Area::createEmpty();
+
+        // if lazyload enabled add data- prefix
+        $attributePrefix = $lazyload ? 'data-' : '';
 
         // Generate different image sizes for srcset attribute
         $srcsetImages = $this->generateSrcsetImages($originalImage, $defaultWidth, $srcset, $cropArea, $absoluteUri);
@@ -234,7 +250,7 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // Create source tag for this breakpoint
         $sourceTag = $this->objectManager->get(TagBuilder::class, 'source');
-        $sourceTag->addAttribute('srcset', $this->generateSrcsetAttribute($srcsetImages));
+        $sourceTag->addAttribute($attributePrefix . 'srcset', $this->generateSrcsetAttribute($srcsetImages));
         if ($mediaQuery) {
             $sourceTag->addAttribute('media', $mediaQuery);
         }
