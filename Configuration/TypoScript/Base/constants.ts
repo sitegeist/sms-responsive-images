@@ -4,4 +4,7 @@ tx_smsresponsiveimages {
 
   # cat=content/cTextmedia/b9; type=string; label= Sizes Query for Responsive Images: Sizes query which tells the browser which of the image sizes should be used in the current environment (%1$d can be used as a placeholder for the calculated image width)
   sizes = (min-width: %1$dpx) %1$dpx, 100vw
+  
+  # cat=content/cTextmedia/c9; type=boolean; label= Enables lazyloading attribute
+  lazyload = 1
 }

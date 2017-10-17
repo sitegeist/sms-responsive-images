@@ -26,6 +26,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
+        $this->registerArgument('lazyload', 'bool', 'Use lazyloading attribute', false, false);
     }
 
     /**
@@ -39,10 +40,15 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      */
     protected function renderImage(FileInterface $image, $width, $height)
     {
+        if($this->arguments['lazyload']){
+            $this->arguments['class'] .= ' lazyload';
+            $this->tag->addAttribute('class', trim($this->tag->getAttribute('class') . ' lazyload'));
+        }
+
         if ($this->arguments['breakpoints']) {
-            return $this->renderPicture($image, $width, $height);
+            return $this->renderPicture($image, $width, $height, $this->arguments['lazyload']);
         } elseif ($this->arguments['srcset']) {
-            return $this->renderImageSrcset($image, $width, $height);
+            return $this->renderImageSrcset($image, $width, $height, $this->arguments['lazyload']);
         } else {
             return parent::renderImage($image, $width, $height);
         }
@@ -54,10 +60,11 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      * @param  FileInterface $image
      * @param  string        $width
      * @param  string        $height
+     * @param  boolean       $lazyload
      *
      * @return string                 Rendered picture tag
      */
-    protected function renderPicture(FileInterface $image, $width, $height)
+    protected function renderPicture(FileInterface $image, $width, $height, $lazyload)
     {
         // Get crop variants
         $cropString = $image instanceof FileReference ? $image->getProperty('crop') : '';
@@ -79,7 +86,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $focusArea,
             null,
             $this->tag,
-            $this->arguments['picturefill']
+            $this->arguments['picturefill'],
+            $lazyload
         );
 
         return $this->tag->render();
@@ -91,10 +99,11 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      * @param  FileInterface $image
      * @param  string        $width
      * @param  string        $height
+     * @param  boolean       $lazyload
      *
      * @return string                 Rendered img tag
      */
-    protected function renderImageSrcset(FileInterface $image, $width, $height)
+    protected function renderImageSrcset(FileInterface $image, $width, $height, $lazyload)
     {
         // Get crop variants
         $cropString = $image instanceof FileReference ? $image->getProperty('crop') : '';
@@ -116,7 +125,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $focusArea,
             $this->arguments['sizes'],
             $this->tag,
-            $this->arguments['picturefill']
+            $this->arguments['picturefill'],
+            $lazyload
         );
 
         return $this->tag->render();
