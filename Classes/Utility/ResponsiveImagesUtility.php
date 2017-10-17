@@ -158,8 +158,7 @@ class ResponsiveImagesUtility implements SingletonInterface
                 $referenceWidth,
                 $lastBreakpoint['srcset'],
                 $cropArea,
-                $absoluteUri,
-                $lazyload
+                $absoluteUri
             );
             $srcsetMode = substr(key($srcset), -1); // x or w
 
