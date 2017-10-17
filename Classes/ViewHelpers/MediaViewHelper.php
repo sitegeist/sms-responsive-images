@@ -41,9 +41,9 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
     protected function renderImage(FileInterface $image, $width, $height)
     {
         if ($this->arguments['breakpoints']) {
-            return $this->renderPicture($image, $width, $height, $this->arguments['lazyload']);
+            return $this->renderPicture($image, $width, $height);
         } elseif ($this->arguments['srcset']) {
-            return $this->renderImageSrcset($image, $width, $height, $this->arguments['lazyload']);
+            return $this->renderImageSrcset($image, $width, $height);
         } else {
             return parent::renderImage($image, $width, $height);
         }
@@ -81,6 +81,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             null,
             $this->tag,
             $this->arguments['picturefill'],
+            false,
             $this->arguments['lazyload']
         );
 
@@ -119,6 +120,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->arguments['sizes'],
             $this->tag,
             $this->arguments['picturefill'],
+            false,
             $this->arguments['lazyload']
         );
 
