@@ -80,8 +80,6 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         if (!$picturefillMarkup) {
             $tag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
-        } elseif ($lazyload) {
-            $tag->addAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
         }
 
         // Generate different image sizes for srcset attribute
