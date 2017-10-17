@@ -24,7 +24,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
-        $this->registerArgument('lazyload', 'bool', 'Use lazyloading attribute', false, false);
+        $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
     }
 
     /**
