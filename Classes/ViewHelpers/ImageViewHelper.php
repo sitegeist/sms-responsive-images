@@ -50,12 +50,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         if (!$this->arguments['breakpoints'] && !$this->arguments['srcset']) {
             return parent::render();
         }
-        try {
-            if($this->arguments['lazyload']){
-                $this->arguments['class'] .= ' lazyload';
-                $this->tag->addAttribute('class', trim($this->tag->getAttribute('class') . ' lazyload'));
-            }
 
+        try {
             // Get FAL image object
             $image = $this->imageService->getImage(
                 $this->arguments['src'],

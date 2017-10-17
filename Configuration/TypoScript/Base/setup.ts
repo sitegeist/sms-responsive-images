@@ -11,5 +11,7 @@ lib.contentElement {
     sizes = {$tx_smsresponsiveimages.sizes}
     breakpoints {
     }
+    # Additional css classes for all image elements
+    class =
   }
 }

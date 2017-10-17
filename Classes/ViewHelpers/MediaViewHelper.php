@@ -40,11 +40,6 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      */
     protected function renderImage(FileInterface $image, $width, $height)
     {
-        if($this->arguments['lazyload']){
-            $this->arguments['class'] .= ' lazyload';
-            $this->tag->addAttribute('class', trim($this->tag->getAttribute('class') . ' lazyload'));
-        }
-
         if ($this->arguments['breakpoints']) {
             return $this->renderPicture($image, $width, $height, $this->arguments['lazyload']);
         } elseif ($this->arguments['srcset']) {
