@@ -263,4 +263,64 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
         $this->assertEquals($longdescAttribute, $tag->getAttribute('longdesc'));
     }
+
+    public function createImageTagWithSrcsetAndLazyloadProvider()
+    {
+        return [
+            // Test standard output (instead of picturefill output)
+            'usingStandardOutput' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                [400],
+                null,
+                null,
+                '/image@1000.jpg',
+                '/image@400.jpg 400w, /image@1000.jpg 1000w',
+                false
+            ],
+            // Test srcset with 2 widths + fallback image
+            'usingTwoWidthsWithoutFallbackDuplicate' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                [400, 800],
+                null,
+                null,
+                null,
+                '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
+                true
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider createImageTagWithSrcsetAndLazyloadProvider
+     */
+    public function createImageTagWithSrcsetAndLazyload(
+        $originalImage,
+        $fallbackImage,
+        $srcsetConfig,
+        $srcAttribute,
+        $srcsetAttribute,
+        $dataSrcAttribute,
+        $dataSrcsetAttribute,
+        $picturefillMarkup
+    ) {
+        $tag = $this->utility->createImageTagWithSrcset(
+            $originalImage,
+            $fallbackImage,
+            $srcsetConfig,
+            null,
+            null,
+            null,
+            null,
+            $picturefillMarkup,
+            false,
+            true
+        );
+        $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
+        $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
+        $this->assertEquals($dataSrcAttribute, $tag->getAttribute('data-src'));
+        $this->assertEquals($dataSrcsetAttribute, $tag->getAttribute('data-srcset'));
+    }
 }
