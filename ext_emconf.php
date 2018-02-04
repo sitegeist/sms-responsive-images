@@ -35,6 +35,7 @@ $EM_CONF[$_EXTKEY] = array(
             'php' => '7.0.0-0.0.0'
         ),
         'conflicts' => array(
+            'fluid_styled_responsive_images' => ''
         ),
         'suggests' => array(
             'fluid_styled_content' => ''

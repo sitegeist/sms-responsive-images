@@ -20,6 +20,9 @@
     "require": {
         "typo3/cms-core": "^8.7.0"
     },
+    "conflict": {
+        "schnitzler/fluid-styled-responsive-images": ">=0.0.1"
+    },
     "autoload": {
         "psr-4": {
             "SMS\\SmsResponsiveImages\\": "Classes/"
