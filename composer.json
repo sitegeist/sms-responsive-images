@@ -2,7 +2,6 @@
     "name": "sitegeist/sms-responsive-images",
     "type": "typo3-cms-extension",
     "description": "Provides ViewHelpers and configuration to render valid responsive images based on TYPO3's image cropping tool.",
-    "version": "1.0.1",
     "homepage": "https://github.com/sitegeist/sms-responsive-images",
     "license": ["GPL-2.0+"],
     "keywords": ["TYPO3 CMS", "responsive images", "srcset", "sizes", "picture", "highdpi", "retina", "picturefill", "image", "aspect ratio", "cropping"],
