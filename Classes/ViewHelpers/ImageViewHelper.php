@@ -42,7 +42,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         ) {
             throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception(
                 'You must either specify a string src or a File object.',
-                1382284106
+                1517766588 // Original code: 1382284106
             );
         }
 
