@@ -1,0 +1,120 @@
+<!-- e. g. fileadmin/user_upload/path/to/file.jpg -->
+<f:variable name="filePath" value="{page.media.0.originalResource.publicUrl}" />
+<!-- e. g. 1:/path/to/file.jpg -->
+<f:variable name="fileIdentifier" value="{page.media.0.originalResource.originalFile.storage.uid}:{page.media.0.originalResource.originalFile.identifier}" />
+<!-- e. g. 4 -->
+<f:variable name="fileUid" value="{page.media.0.originalResource.originalFile.uid}" />
+<!-- e. g. 4 -->
+<f:variable name="fileReferenceUid" value="{page.media.0.uid}" />
+<!-- object of type \TYPO3\CMS\Extbase\Domain\Model\FileReference -->
+<f:variable name="extbaseFileReferenceObject" value="{page.media.0}" />
+<!-- object of type \TYPO3\CMS\Core\Resource\FileReference -->
+<f:variable name="coreFileReferenceObject" value="{page.media.0.originalResource}" />
+<!-- object of type \TYPO3\CMS\Core\Resource\File -->
+<f:variable name="coreFileReferenceObject" value="{page.media.0.originalResource.originalFile}" />
+
+<h1>f:image</h1>
+
+<h2>static file path</h2>
+<f:debug title="fluid" inline="1">
+	<f:image src="{filePath}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{filePath}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{filePath}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>static file identifier</h2>
+<f:debug title="fluid" inline="1">
+	<f:image src="{fileIdentifier}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{fileIdentifier}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{fileIdentifier}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>file uid</h2>
+<f:debug title="fluid" inline="1">
+	<f:image src="{fileUid}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{fileUid}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{fileUid}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>file reference uid</h2>
+<f:debug title="fluid" inline="1">
+	<f:image src="{fileReferenceUid}" treatIdAsReference="1" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{fileReferenceUid}" treatIdAsReference="1" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image src="{fileReferenceUid}" treatIdAsReference="1" width="1000" srcset="400, 800" />
+</f:debug>
+
+<h2>file reference object (extbase)</h2>
+<f:debug title="fluid" inline="1">
+	<f:image image="{extbaseFileReferenceObject}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image image="{extbaseFileReferenceObject}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image image="{extbaseFileReferenceObject}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>file reference object (core)</h2>
+<f:debug title="fluid" inline="1">
+	<f:image image="{extbaseFileReferenceObject.originalResource}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image image="{extbaseFileReferenceObject.originalResource}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image image="{extbaseFileReferenceObject.originalResource}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>file object (core)</h2>
+<f:debug title="fluid" inline="1">
+	<f:image image="{extbaseFileReferenceObject.originalResource.originalFile}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image image="{extbaseFileReferenceObject.originalResource.originalFile}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:image image="{extbaseFileReferenceObject.originalResource.originalFile}" width="1000" srcset="400, 800" />
+</f:debug>
+
+<h1>f:media</h1>
+<h2>file reference object (extbase)</h2>
+<f:debug title="fluid" inline="1">
+	<f:media file="{extbaseFileReferenceObject}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:media file="{extbaseFileReferenceObject}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:media file="{extbaseFileReferenceObject}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>file reference object (core)</h2>
+<f:debug title="fluid" inline="1">
+	<f:media file="{extbaseFileReferenceObject.originalResource}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:media file="{extbaseFileReferenceObject.originalResource}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:media file="{extbaseFileReferenceObject.originalResource}" width="1000" srcset="400, 800" />
+</f:debug>
+<h2>file object (core)</h2>
+<f:debug title="fluid" inline="1">
+	<f:media file="{extbaseFileReferenceObject.originalResource.originalFile}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:media file="{extbaseFileReferenceObject.originalResource.originalFile}" />
+</f:debug>
+<f:debug title="sms_responsive_images" inline="1">
+	<sms:media file="{extbaseFileReferenceObject.originalResource.originalFile}" width="1000" srcset="400, 800" />
+</f:debug>
