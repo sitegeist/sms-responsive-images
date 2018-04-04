@@ -324,4 +324,41 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         );
         $this->assertEquals(implode('', $tagContent), $tag->getContent());
     }
+
+    public function createPictureTagFromSvgProvider()
+    {
+        return [
+            // Test if fallback tag attributes persist
+            'withSvgImage' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'svg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                'img',
+                '/image@2000.svg',
+                null,
+                1000,
+                1000
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider createPictureTagFromSvgProvider
+     */
+    public function createPictureTagFromSvg($originalImage, $fallbackImage, $tagName, $srcAttribute, $srcsetAttribute, $heightAttribute, $widthAttribute)
+    {
+        $tag = $this->utility->createPictureTag(
+            $originalImage,
+            $fallbackImage,
+            [],
+            new CropVariantCollection([])
+        );
+        $this->assertEquals($tagName, $tag->getTagName());
+        $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
+        $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
+        $this->assertEquals($widthAttribute, $tag->getAttribute('width'));
+        $this->assertEquals($heightAttribute, $tag->getAttribute('height'));
+    }
 }

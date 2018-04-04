@@ -7,6 +7,21 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
 class ImageTagTest extends AbstractResponsiveImagesUtilityTest
 {
+    public function createSimpleImageTagProvider()
+    {
+        // TODO
+    }
+
+    /**
+     * @test
+     * @dataProvider createSimpleImageTagProvider
+     */
+    public function createSimpleImageTag()
+    {
+        // TODO
+        //$this->utility->createSimpleImageTag();
+    }
+
     public function createImageTagWithSrcsetUsingEmptySrcsetProvider()
     {
         return [
@@ -83,6 +98,15 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 ['1x', '2x'],
                 null,
                 '/image@1000.jpg 1x, /image@2000.jpg 2x',
+                true
+            ],
+            // Test svg image
+            'usingSvg' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                [100, 200, 300],
+                '/image@2000.svg',
+                null,
                 true
             ]
         ];
@@ -204,6 +228,15 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 'image alt',
                 'image title'
+            ],
+            // Test svg image metadata attributes
+            'usingMetadataWithSvg' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'svg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                'image alt',
+                'image title'
             ]
         ];
     }
@@ -233,6 +266,15 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                     ['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
                 ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                $customTag,
+                'fixed alt',
+                'long description'
+            ],
+            'usingCustomTagWithSvg' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title', 'extension' => 'svg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
                 $customTag,
                 'fixed alt',
                 'long description'
@@ -287,6 +329,17 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 null,
                 '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
+                true
+            ],
+            // Test svg image
+            'withSvgImage' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                [400, 800],
+                null,
+                null,
+                '/image@2000.svg',
+                null,
                 true
             ]
         ];
