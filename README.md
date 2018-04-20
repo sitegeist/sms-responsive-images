@@ -1,5 +1,7 @@
 # SMS Responsive Images
 
+[![Build Status](https://travis-ci.org/sitegeist/sms-responsive-images.svg?branch=master)](https://travis-ci.org/sitegeist/sms-responsive-images)
+
 ## Responsive Images for TYPO3 8.7
 
 This TYPO3 extension provides ViewHelpers and configuration to render valid
