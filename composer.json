@@ -19,6 +19,9 @@
     "require": {
         "typo3/cms-core": "^8.7.0"
     },
+    "require-dev": {
+        "typo3/testing-framework": "~1.0.3"
+    },
     "conflict": {
         "schnitzler/fluid-styled-responsive-images": ">=0.0.1"
     },
@@ -30,5 +33,8 @@
     "replace": {
         "sms_responsive_images": "self.version",
         "typo3-ter/sms-responsive-images": "self.version"
+    },
+    "scripts": {
+        "test": "phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml Tests/"
     }
 }
