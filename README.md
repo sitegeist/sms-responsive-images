@@ -10,6 +10,7 @@ responsive images based on TYPO3's image cropping tool.
 ### Authors & Sponsors
 
 * Simon Praetorius - praetorius@sitegeist.de
+* [All contributors](https://github.com/sitegeist/sms-responsive-images/graphs/contributors)
 
 *The development and the public-releases of this package is generously sponsored
 by my employer https://sitegeist.de.*
