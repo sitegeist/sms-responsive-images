@@ -13,9 +13,9 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
     {
         parent::setUp();
 
-        $this->utility = new ResponsiveImagesUtility;
-        $this->inject($this->utility, 'imageService', $this->mockImageService());
-        $this->inject($this->utility, 'objectManager', $this->mockObjectManager());
+        $this->utility = new ResponsiveImagesUtility(
+            $this->mockImageService()
+        );
     }
 
     protected function mockImageService()
@@ -58,23 +58,5 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
             }));
 
         return $fileMock;
-    }
-
-    protected function mockObjectManager()
-    {
-        $managerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMock();
-
-        $managerMock
-            ->method('get')
-            ->will($this->returnCallback(function ($className) {
-                $arguments = func_get_args();
-                array_shift($arguments);
-                return new $className(...$arguments);
-            }));
-
-        return $managerMock;
     }
 }

@@ -9,6 +9,19 @@ use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
 class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 {
     /**
+     * @var ResponsiveImagesUtility
+     */
+    protected $responsiveImagesUtility;
+
+    /**
+     * @param ResponsiveImagesUtility $responsiveImagesUtility
+     */
+    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility)
+    {
+        $this->responsiveImagesUtility = $responsiveImagesUtility;
+    }
+
+    /**
      * Initialize arguments.
      */
     public function initializeArguments()
@@ -81,7 +94,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 
             if ($this->arguments['breakpoints']) {
                 // Generate picture tag
-                $this->tag = $this->getResponsiveImagesUtility()->createPictureTag(
+                $this->tag = $this->responsiveImagesUtility->createPictureTag(
                     $image,
                     $fallbackImage,
                     $this->arguments['breakpoints'],
@@ -95,7 +108,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                 );
             } else {
                 // Generate img tag with srcset
-                $this->tag = $this->getResponsiveImagesUtility()->createImageTagWithSrcset(
+                $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
                     $image,
                     $fallbackImage,
                     $this->arguments['srcset'],
@@ -119,16 +132,5 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         }
 
         return $this->tag->render();
-    }
-
-    /**
-     * Returns an instance of the responsive images utility
-     * This fixes an issue with DI after clearing the cache
-     *
-     * @return ResponsiveImagesUtility
-     */
-    protected function getResponsiveImagesUtility()
-    {
-        return $this->objectManager->get(ResponsiveImagesUtility::class);
     }
 }

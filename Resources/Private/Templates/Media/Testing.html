@@ -1,17 +1,22 @@
-<!-- e. g. fileadmin/user_upload/path/to/file.jpg -->
-<f:variable name="filePath" value="{page.media.0.originalResource.publicUrl}" />
-<!-- e. g. 1:/path/to/file.jpg -->
-<f:variable name="fileIdentifier" value="{page.media.0.originalResource.originalFile.storage.uid}:{page.media.0.originalResource.originalFile.identifier}" />
-<!-- e. g. 4 -->
-<f:variable name="fileUid" value="{page.media.0.originalResource.originalFile.uid}" />
-<!-- e. g. 4 -->
-<f:variable name="fileReferenceUid" value="{page.media.0.uid}" />
-<!-- object of type \TYPO3\CMS\Extbase\Domain\Model\FileReference -->
-<f:variable name="extbaseFileReferenceObject" value="{page.media.0}" />
-<!-- object of type \TYPO3\CMS\Core\Resource\FileReference -->
-<f:variable name="coreFileReferenceObject" value="{page.media.0.originalResource}" />
-<!-- object of type \TYPO3\CMS\Core\Resource\File -->
-<f:variable name="coreFileReferenceObject" value="{page.media.0.originalResource.originalFile}" />
+<f:for each="{page.media}" as="mediaItem" iteration="iterator">
+	<f:if condition="{iterator.isFirst}">
+		<!-- e. g. fileadmin/user_upload/path/to/file.jpg -->
+		<f:variable name="filePath" value="{mediaItem.originalResource.publicUrl}" />
+		<!-- e. g. 1:/path/to/file.jpg -->
+		<f:variable name="fileIdentifier" value="{mediaItem.originalResource.originalFile.storage.uid}:{mediaItem.originalResource.originalFile.identifier}"
+		/>
+		<!-- e. g. 4 -->
+		<f:variable name="fileUid" value="{mediaItem.originalResource.originalFile.uid}" />
+		<!-- e. g. 4 -->
+		<f:variable name="fileReferenceUid" value="{mediaItem.uid}" />
+		<!-- object of type \TYPO3\CMS\Extbase\Domain\Model\FileReference -->
+		<f:variable name="extbaseFileReferenceObject" value="{mediaItem}" />
+		<!-- object of type \TYPO3\CMS\Core\Resource\FileReference -->
+		<f:variable name="coreFileReferenceObject" value="{mediaItem.originalResource}" />
+		<!-- object of type \TYPO3\CMS\Core\Resource\File -->
+		<f:variable name="coreFileReferenceObject" value="{mediaItem.originalResource.originalFile}" />
+	</f:if>
+</f:for>
 
 <h1>f:image</h1>
 
