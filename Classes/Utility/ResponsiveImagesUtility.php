@@ -309,7 +309,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $absoluteUri = false,
         bool $lazyload = false
     ): TagBuilder {
-        $tag = $tag ?: $this->objectManager->get(TagBuilder::class, 'img');
+        $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
         $fallbackImage = ($fallbackImage) ?: $originalImage;
 
         // if lazyload enabled add data- prefix
