@@ -52,6 +52,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param bool          $picturefillMarkup
      * @param bool          $absoluteUri
      * @param  bool         $lazyload
+     * @param  array|string $ignoreFileExtensions
      *
      * @return TagBuilder
      */
@@ -65,9 +66,22 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $tag = null,
         bool $picturefillMarkup = true,
         bool $absoluteUri = false,
-        bool $lazyload = false
+        bool $lazyload = false,
+        $ignoreFileExtensions = 'svg'
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
+
+        // Deal with file formats that can't be cropped separately
+        if ($this->hasIgnoredFileExtension($originalImage, $ignoreFileExtensions)) {
+            return $this->createSimpleImageTag(
+                $originalImage,
+                $fallbackImage,
+                $tag,
+                $focusArea,
+                $absoluteUri,
+                $lazyload
+            );
+        }
 
         // Generate fallback image url
         $fallbackImageUri = $this->imageService->getImageUri($fallbackImage, $absoluteUri);
@@ -121,6 +135,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param  bool                  $picturefillMarkup
      * @param  bool                  $absoluteUri
      * @param  bool                  $lazyload
+     * @param  array|string          $ignoreFileExtensions
      *
      * @return TagBuilder
      */
@@ -134,10 +149,23 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $fallbackTag = null,
         bool $picturefillMarkup = true,
         bool $absoluteUri = false,
-        bool $lazyload = false
+        bool $lazyload = false,
+        $ignoreFileExtensions = 'svg'
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'picture');
         $fallbackTag = $fallbackTag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
+
+        // Deal with file formats that can't be cropped separately
+        if ($this->hasIgnoredFileExtension($originalImage, $ignoreFileExtensions)) {
+            return $this->createSimpleImageTag(
+                $originalImage,
+                $fallbackImage,
+                $fallbackTag,
+                $focusArea,
+                $absoluteUri,
+                $lazyload
+            );
+        }
 
         // Normalize breakpoint configuration
         $breakpoints = $this->normalizeImageBreakpoints($breakpoints);
@@ -259,6 +287,45 @@ class ResponsiveImagesUtility implements SingletonInterface
         }
 
         return $sourceTag;
+    }
+
+    /**
+     * Creates a simple image tag
+     *
+     * @param  FileInterface $image
+     * @param  FileInterface $fallbackImage
+     * @param  TagBuilder    $tag
+     * @param  Area          $focusArea
+     * @param  bool          $absoluteUri
+     * @param  bool          $lazyload
+     *
+     * @return TagBuilder
+     */
+    public function createSimpleImageTag(
+        FileInterface $originalImage,
+        FileInterface $fallbackImage = null,
+        TagBuilder $tag = null,
+        Area $focusArea = null,
+        bool $absoluteUri = false,
+        bool $lazyload = false
+    ): TagBuilder {
+        $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
+        $fallbackImage = ($fallbackImage) ?: $originalImage;
+
+        // if lazyload enabled add data- prefix
+        $attributePrefix = $lazyload ? 'data-' : '';
+
+        // Set image source
+        $tag->addAttribute($attributePrefix . 'src', $this->imageService->getImageUri($originalImage, $absoluteUri));
+
+        // Set image proportions
+        $tag->addAttribute('width', $fallbackImage->getProperty('width'));
+        $tag->addAttribute('height', $fallbackImage->getProperty('height'));
+
+        // Add metadata to image tag
+        $this->addMetadataToImageTag($tag, $originalImage, $fallbackImage, $focusArea);
+
+        return $tag;
     }
 
     /**
@@ -409,5 +476,20 @@ class ResponsiveImagesUtility implements SingletonInterface
         ksort($breakpoints);
 
         return $breakpoints;
+    }
+
+    /**
+     * Check if the image has a file format that can't be cropped
+     *
+     * @param  FileInterface $image
+     * @param  string        $ignoreFileExtensions
+     *
+     * @return bool
+     */
+    public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg')
+    {
+        $ignoreFileExtensions = (is_array($ignoreFileExtensions))
+            ?: GeneralUtility::trimExplode(',', $ignoreFileExtensions);
+        return in_array($image->getProperty('extension'), $ignoreFileExtensions);
     }
 }

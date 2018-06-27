@@ -9,7 +9,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test empty srcset
             'usingEmptySrcset' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
                 [],
                 '',
@@ -20,7 +20,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test high dpi srcset
             'usingHighDpi' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
                 ['1x', '2x'],
                 '',
@@ -31,7 +31,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test responsive images srcset
             'usingResponsiveWidths' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
                 [400, 800],
                 '',
@@ -42,7 +42,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test dynamic sizes query
             'usingDynamicSizesQuery' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
                 [400],
                 'media query',
@@ -53,7 +53,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test absolute urls
             'requestingAbsoluteUrls' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
                 ['1x', '2x'],
                 '',

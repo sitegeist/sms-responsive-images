@@ -32,13 +32,17 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
                 // Simulate processor_allowUpscaling = false
                 $instructions['width'] = min($instructions['width'], $file->getProperty('width'));
 
+                // Use extension from original image
+                $instructions['extension'] = $file->getProperty('extension');
+
                 return $test->mockFileObject($instructions);
             }));
 
         $imageServiceMock
             ->method('getImageUri')
             ->will($this->returnCallback(function ($file, $absolute) {
-                return (($absolute) ? 'http://domain.tld' : '') . '/image@' . $file->getProperty('width') . '.jpg';
+                return (($absolute) ? 'http://domain.tld' : '') . '/image@' . $file->getProperty('width')
+                    . '.' . $file->getProperty('extension');
             }));
 
         return $imageServiceMock;

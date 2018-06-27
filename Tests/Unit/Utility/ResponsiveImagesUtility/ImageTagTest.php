@@ -7,13 +7,139 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
 class ImageTagTest extends AbstractResponsiveImagesUtilityTest
 {
+    public function createSimpleImageTagProvider()
+    {
+        return [
+            'simple' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                false,
+                'img',
+                '/image@2000.jpg',
+                null,
+                null,
+                null,
+                null
+            ],
+            'usingMetadata' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                false,
+                'img',
+                '/image@2000.jpg',
+                null,
+                null,
+                'image alt',
+                'image title'
+            ],
+            'usingPredefinedTag' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                new TagBuilder('img-test'),
+                null,
+                false,
+                false,
+                'img-test',
+                '/image@2000.jpg',
+                null,
+                null,
+                null,
+                null
+            ],
+            'usingFocusArea' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                new Area(0.4, 0.4, 0.6, 0.6),
+                false,
+                false,
+                'img',
+                '/image@2000.jpg',
+                null,
+                htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600])),
+                null,
+                null
+            ],
+            'usingAbsoluteUri' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                true,
+                false,
+                'img',
+                'http://domain.tld/image@2000.jpg',
+                null,
+                null,
+                null,
+                null
+            ],
+            'usingLazyload' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                true,
+                'img',
+                null,
+                '/image@2000.jpg',
+                null,
+                null,
+                null
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider createSimpleImageTagProvider
+     */
+    public function createSimpleImageTag(
+        $originalImage,
+        $fallbackImage,
+        $tag,
+        $focusArea,
+        $absoluteUri,
+        $lazyload,
+        $tagName,
+        $srcAttribute,
+        $dataSrcAttribute,
+        $dataFocusAreaAttribute,
+        $altAttribute,
+        $titleAttribute
+    ) {
+        $tag = $this->utility->createSimpleImageTag(
+            $originalImage,
+            $fallbackImage,
+            $tag,
+            $focusArea,
+            $absoluteUri,
+            $lazyload
+        );
+        $this->assertEquals($tagName, $tag->getTagName());
+        $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
+        $this->assertEquals($dataSrcAttribute, $tag->getAttribute('data-src'));
+        $this->assertEquals($dataFocusAreaAttribute, $tag->getAttribute('data-focus-area'));
+        $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
+        $this->assertEquals($titleAttribute, $tag->getAttribute('title'));
+    }
+
     public function createImageTagWithSrcsetUsingEmptySrcsetProvider()
     {
         return [
             // Test plain tag
             'usingEmptySrcset' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [],
                 'img',
                 1000,
@@ -51,8 +177,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test standard output (instead of picturefill output)
             'usingStandardOutput' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400],
                 '/image@1000.jpg',
                 '/image@400.jpg 400w, /image@1000.jpg 1000w',
@@ -60,8 +186,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test srcset with 3 widths, one having same width as fallback
             'usingThreeWidthsWithFallbackDuplicate' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800, 1000],
                 null,
                 '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
@@ -69,8 +195,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test srcset with 2 widths + fallback image
             'usingTwoWidthsWithoutFallbackDuplicate' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800],
                 null,
                 '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
@@ -78,11 +204,20 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test high dpi
             'usingHighDpi' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 ['1x', '2x'],
                 null,
                 '/image@1000.jpg 1x, /image@2000.jpg 2x',
+                true
+            ],
+            // Test svg image
+            'usingSvg' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                [100, 200, 300],
+                '/image@2000.svg',
+                null,
                 true
             ]
         ];
@@ -118,8 +253,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
     {
         return [
             'usingFocusArea' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 new Area(0.4, 0.4, 0.6, 0.6),
                 htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600]))
             ]
@@ -146,24 +281,24 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test sizes attribute
             'usingStaticQuery' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400],
                 'sizes query',
                 'sizes query'
             ],
             // Test sizes attribute with dynamic width
             'usingDynamicQuery' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400],
                 '%1$d',
                 1000
             ],
             // Test sizes attribute for high dpi setup
             'usingHighDpi' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 ['1x', '2x'],
                 '%1$d',
                 null
@@ -199,9 +334,18 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             // Test image metadata attributes
             'usingMetadata' => [
                 $this->mockFileObject(
-                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title']
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
                 ),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                'image alt',
+                'image title'
+            ],
+            // Test svg image metadata attributes
+            'usingMetadataWithSvg' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'svg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
                 'image alt',
                 'image title'
             ]
@@ -230,9 +374,18 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             'usingCustomTag' => [
                 $this->mockFileObject(
-                    ['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title']
+                    ['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
                 ),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                $customTag,
+                'fixed alt',
+                'long description'
+            ],
+            'usingCustomTagWithSvg' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alt' => 'image alt', 'title' => 'image title', 'extension' => 'svg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
                 $customTag,
                 'fixed alt',
                 'long description'
@@ -269,8 +422,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test standard output (instead of picturefill output)
             'usingStandardOutput' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400],
                 null,
                 null,
@@ -280,13 +433,24 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test srcset with 2 widths + fallback image
             'usingTwoWidthsWithoutFallbackDuplicate' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000]),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000]),
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800],
                 null,
                 null,
                 null,
                 '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
+                true
+            ],
+            // Test svg image
+            'withSvgImage' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                [400, 800],
+                null,
+                null,
+                '/image@2000.svg',
+                null,
                 true
             ]
         ];

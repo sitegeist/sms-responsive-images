@@ -39,6 +39,13 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
         $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
+        $this->registerArgument(
+            'ignoreFileExtensions',
+            'mixed',
+            'File extensions that won\'t generate responsive images',
+            false,
+            'svg'
+        );
     }
 
     /**
@@ -94,7 +101,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->tag,
             $this->arguments['picturefill'],
             false,
-            $this->arguments['lazyload']
+            $this->arguments['lazyload'],
+            $this->arguments['ignoreFileExtensions']
         );
 
         return $this->tag->render();
@@ -133,7 +141,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->tag,
             $this->arguments['picturefill'],
             false,
-            $this->arguments['lazyload']
+            $this->arguments['lazyload'],
+            $this->arguments['ignoreFileExtensions']
         );
 
         return $this->tag->render();
