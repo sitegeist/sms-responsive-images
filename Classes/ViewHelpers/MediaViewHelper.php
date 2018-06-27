@@ -11,6 +11,18 @@ use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
 class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
 {
     /**
+     * @var ResponsiveImagesUtility
+     */
+    protected $responsiveImagesUtility;
+
+    /**
+     * @param ResponsiveImagesUtility $responsiveImagesUtility
+     */
+    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility)
+    {
+        $this->responsiveImagesUtility = $responsiveImagesUtility;
+    }
+    /**
      * Initialize arguments.
      */
     public function initializeArguments()
@@ -72,7 +84,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea);
 
         // Generate picture tag
-        $this->tag = $this->getResponsiveImagesUtility()->createPictureTag(
+        $this->tag = $this->responsiveImagesUtility->createPictureTag(
             $image,
             $fallbackImage,
             $this->arguments['breakpoints'],
@@ -111,7 +123,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea);
 
         // Generate image tag
-        $this->tag = $this->getResponsiveImagesUtility()->createImageTagWithSrcset(
+        $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
             $image,
             $fallbackImage,
             $this->arguments['srcset'],
@@ -146,16 +158,5 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $fallbackImage = $imageService->applyProcessingInstructions($image, $processingInstructions);
 
         return $fallbackImage;
-    }
-
-    /**
-     * Returns an instance of the responsive images utility
-     * This fixes an issue with DI after clearing the cache
-     *
-     * @return ResponsiveImagesUtility
-     */
-    protected function getResponsiveImagesUtility()
-    {
-        return $this->objectManager->get(ResponsiveImagesUtility::class);
     }
 }

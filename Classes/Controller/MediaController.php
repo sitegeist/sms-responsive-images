@@ -2,15 +2,21 @@
 
 namespace SMS\SmsResponsiveImages\Controller;
 
+use SMS\SmsResponsiveImages\Domain\Repository\PageRepository;
+
 class MediaController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
      * Page Repository
      *
-     * @var \SMS\SmsResponsiveImages\Domain\Repository\PageRepository
-     * @inject
+     * @var PageRepository
      */
     protected $pageRepository;
+
+    public function injectPageRepository(PageRepository $pageRepository)
+    {
+        $this->pageRepository = $pageRepository;
+    }
 
     /**
      * Header Action

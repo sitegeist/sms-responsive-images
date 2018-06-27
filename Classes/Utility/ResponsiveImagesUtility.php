@@ -7,23 +7,15 @@ use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ResponsiveImagesUtility implements SingletonInterface
 {
     /**
-     * Object Manager
-     *
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     * @inject
-     */
-    protected $objectManager;
-
-    /**
      * Image Service
      *
-     * @var \TYPO3\CMS\Extbase\Service\ImageService
-     * @inject
+     * @var ImageService
      */
     protected $imageService;
 
@@ -38,6 +30,14 @@ class ResponsiveImagesUtility implements SingletonInterface
         'sizes' => '(min-width: %1$dpx) %1$dpx, 100vw',
         'srcset' => []
     ];
+
+    /**
+     * @param ImageService $imageService
+     */
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
 
     /**
      * Creates an image tag with the provided srcset candidates
@@ -67,7 +67,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $absoluteUri = false,
         bool $lazyload = false
     ): TagBuilder {
-        $tag = $tag ?: $this->objectManager->get(TagBuilder::class, 'img');
+        $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
 
         // Generate fallback image url
         $fallbackImageUri = $this->imageService->getImageUri($fallbackImage, $absoluteUri);
@@ -136,8 +136,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $absoluteUri = false,
         bool $lazyload = false
     ): TagBuilder {
-        $tag = $tag ?: $this->objectManager->get(TagBuilder::class, 'picture');
-        $fallbackTag = $fallbackTag ?: $this->objectManager->get(TagBuilder::class, 'img');
+        $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'picture');
+        $fallbackTag = $fallbackTag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
 
         // Normalize breakpoint configuration
         $breakpoints = $this->normalizeImageBreakpoints($breakpoints);
@@ -249,7 +249,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         $srcsetMode = substr(key($srcsetImages), -1); // x or w
 
         // Create source tag for this breakpoint
-        $sourceTag = $this->objectManager->get(TagBuilder::class, 'source');
+        $sourceTag = GeneralUtility::makeInstance(TagBuilder::class, 'source');
         $sourceTag->addAttribute($attributePrefix . 'srcset', $this->generateSrcsetAttribute($srcsetImages));
         if ($mediaQuery) {
             $sourceTag->addAttribute('media', $mediaQuery);
