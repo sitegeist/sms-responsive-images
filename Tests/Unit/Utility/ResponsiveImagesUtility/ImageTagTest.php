@@ -9,17 +9,128 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
 {
     public function createSimpleImageTagProvider()
     {
-        // TODO
+        return [
+            'simple' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                false,
+                'img',
+                '/image@2000.jpg',
+                null,
+                null,
+                null,
+                null
+            ],
+            'usingMetadata' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                false,
+                'img',
+                '/image@2000.jpg',
+                null,
+                null,
+                'image alt',
+                'image title'
+            ],
+            'usingPredefinedTag' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                new TagBuilder('img-test'),
+                null,
+                false,
+                false,
+                'img-test',
+                '/image@2000.jpg',
+                null,
+                null,
+                null,
+                null
+            ],
+            'usingFocusArea' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                new Area(0.4, 0.4, 0.6, 0.6),
+                false,
+                false,
+                'img',
+                '/image@2000.jpg',
+                null,
+                htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600])),
+                null,
+                null
+            ],
+            'usingAbsoluteUri' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                true,
+                false,
+                'img',
+                'http://domain.tld/image@2000.jpg',
+                null,
+                null,
+                null,
+                null
+            ],
+            'usingLazyload' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                true,
+                'img',
+                null,
+                '/image@2000.jpg',
+                null,
+                null,
+                null
+            ]
+        ];
     }
 
     /**
      * @test
      * @dataProvider createSimpleImageTagProvider
      */
-    public function createSimpleImageTag()
-    {
-        // TODO
-        //$this->utility->createSimpleImageTag();
+    public function createSimpleImageTag(
+        $originalImage,
+        $fallbackImage,
+        $tag,
+        $focusArea,
+        $absoluteUri,
+        $lazyload,
+        $tagName,
+        $srcAttribute,
+        $dataSrcAttribute,
+        $dataFocusAreaAttribute,
+        $altAttribute,
+        $titleAttribute
+    ) {
+        $tag = $this->utility->createSimpleImageTag(
+            $originalImage,
+            $fallbackImage,
+            $tag,
+            $focusArea,
+            $absoluteUri,
+            $lazyload
+        );
+        $this->assertEquals($tagName, $tag->getTagName());
+        $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
+        $this->assertEquals($dataSrcAttribute, $tag->getAttribute('data-src'));
+        $this->assertEquals($dataFocusAreaAttribute, $tag->getAttribute('data-focus-area'));
+        $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
+        $this->assertEquals($titleAttribute, $tag->getAttribute('title'));
     }
 
     public function createImageTagWithSrcsetUsingEmptySrcsetProvider()
