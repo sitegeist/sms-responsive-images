@@ -482,14 +482,16 @@ class ResponsiveImagesUtility implements SingletonInterface
      * Check if the image has a file format that can't be cropped
      *
      * @param  FileInterface $image
-     * @param  string        $ignoreFileExtensions
+     * @param  array|string  $ignoreFileExtensions
      *
      * @return bool
      */
     public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg')
     {
         $ignoreFileExtensions = (is_array($ignoreFileExtensions))
-            ?: GeneralUtility::trimExplode(',', $ignoreFileExtensions);
+            ? $ignoreFileExtensions 
+            : GeneralUtility::trimExplode(',', $ignoreFileExtensions);
+        
         return in_array($image->getProperty('extension'), $ignoreFileExtensions);
     }
 }
