@@ -489,9 +489,9 @@ class ResponsiveImagesUtility implements SingletonInterface
     public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg')
     {
         $ignoreFileExtensions = (is_array($ignoreFileExtensions))
-            ? $ignoreFileExtensions 
+            ? $ignoreFileExtensions
             : GeneralUtility::trimExplode(',', $ignoreFileExtensions);
-        
+
         return in_array($image->getProperty('extension'), $ignoreFileExtensions);
     }
 }
