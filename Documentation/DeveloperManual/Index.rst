@@ -128,7 +128,7 @@ Examples
 
 
 lazyload
-^^^^^^^^^^^
+^^^^^^^^
 :aspect:`Variable type`
    Boolean
 
@@ -152,3 +152,18 @@ Examples
    <sms:image image="{image}" srcset="400, 600" lazyload="true" />
 
    <sms:media file="{image}" srcset="400, 600" lazyload="true" />
+
+
+ignoreFileExtensions
+^^^^^^^^^^^^^^^^^^^^
+:aspect:`Variable type`
+   Array|String
+
+:aspect:`Description`
+   List of file extensions for which no responsive images should be generated (e. g. vector images that can't be cropped easily and don't need individual scaling).
+
+:aspect:`Default value`
+   'svg'
+
+:aspect:`Mandatory`
+   No
