@@ -12,8 +12,8 @@ call_user_func(function () {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'SMS.sms_responsive_images',
         'ResponsiveImages',
-        ['Media' => 'header'],
-        ['Media' => 'header']
+        ['Media' => 'header, testing'],
+        ['Media' => 'header, testing']
     );
 });
 

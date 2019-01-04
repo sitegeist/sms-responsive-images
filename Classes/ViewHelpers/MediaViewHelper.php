@@ -11,6 +11,18 @@ use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
 class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
 {
     /**
+     * @var ResponsiveImagesUtility
+     */
+    protected $responsiveImagesUtility;
+
+    /**
+     * @param ResponsiveImagesUtility $responsiveImagesUtility
+     */
+    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility)
+    {
+        $this->responsiveImagesUtility = $responsiveImagesUtility;
+    }
+    /**
      * Initialize arguments.
      */
     public function initializeArguments()
@@ -26,6 +38,14 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
+        $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
+        $this->registerArgument(
+            'ignoreFileExtensions',
+            'mixed',
+            'File extensions that won\'t generate responsive images',
+            false,
+            'svg'
+        );
     }
 
     /**
@@ -71,7 +91,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea);
 
         // Generate picture tag
-        $this->tag = $this->getResponsiveImagesUtility()->createPictureTag(
+        $this->tag = $this->responsiveImagesUtility->createPictureTag(
             $image,
             $fallbackImage,
             $this->arguments['breakpoints'],
@@ -79,7 +99,10 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $focusArea,
             null,
             $this->tag,
-            $this->arguments['picturefill']
+            $this->arguments['picturefill'],
+            false,
+            $this->arguments['lazyload'],
+            $this->arguments['ignoreFileExtensions']
         );
 
         return $this->tag->render();
@@ -108,7 +131,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea);
 
         // Generate image tag
-        $this->tag = $this->getResponsiveImagesUtility()->createImageTagWithSrcset(
+        $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
             $image,
             $fallbackImage,
             $this->arguments['srcset'],
@@ -116,7 +139,10 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $focusArea,
             $this->arguments['sizes'],
             $this->tag,
-            $this->arguments['picturefill']
+            $this->arguments['picturefill'],
+            false,
+            $this->arguments['lazyload'],
+            $this->arguments['ignoreFileExtensions']
         );
 
         return $this->tag->render();
@@ -141,16 +167,5 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $fallbackImage = $imageService->applyProcessingInstructions($image, $processingInstructions);
 
         return $fallbackImage;
-    }
-
-    /**
-     * Returns an instance of the responsive images utility
-     * This fixes an issue with DI after clearing the cache
-     *
-     * @return ResponsiveImagesUtility
-     */
-    protected function getResponsiveImagesUtility()
-    {
-        return $this->objectManager->get(ResponsiveImagesUtility::class);
     }
 }

@@ -2,9 +2,8 @@
     "name": "sitegeist/sms-responsive-images",
     "type": "typo3-cms-extension",
     "description": "Provides ViewHelpers and configuration to render valid responsive images based on TYPO3's image cropping tool.",
-    "version": "1.0.1",
     "homepage": "https://github.com/sitegeist/sms-responsive-images",
-    "license": ["GPL-2.0+"],
+    "license": ["GPL-2.0-or-later"],
     "keywords": ["TYPO3 CMS", "responsive images", "srcset", "sizes", "picture", "highdpi", "retina", "picturefill", "image", "aspect ratio", "cropping"],
     "authors": [
         {
@@ -18,7 +17,15 @@
         "issues": "https://github.com/sitegeist/sms-responsive-images/issues"
     },
     "require": {
-        "typo3/cms-core": "^8.7.0"
+        "typo3/cms-core": "^8.7.0 || ^9"
+    },
+    "require-dev": {
+        "typo3/testing-framework": "^1.0",
+        "squizlabs/php_codesniffer": "2.*",
+        "editorconfig-checker/editorconfig-checker": "^7.0"
+    },
+    "conflict": {
+        "schnitzler/fluid-styled-responsive-images": ">=0.0.1"
     },
     "autoload": {
         "psr-4": {
@@ -28,5 +35,25 @@
     "replace": {
         "sms_responsive_images": "self.version",
         "typo3-ter/sms-responsive-images": "self.version"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web"
+        }
+    },
+    "scripts": {
+        "lint": [
+            "@lint:php",
+            "@lint:editorconfig"
+        ],
+        "lint:php": "phpcs --standard=PSR2 --extensions=php --ignore=.Build,Tests,ext_emconf.php .",
+        "lint:editorconfig": "editorconfig-checker -d .",
+
+        "test": "phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml Tests/"
     }
 }

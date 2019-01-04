@@ -125,3 +125,45 @@ Examples
    <sms:image image="{image}" srcset="400, 600" picturefill="false" />
 
    <sms:media file="{image}" srcset="400, 600" picturefill="false" />
+
+
+lazyload
+^^^^^^^^
+:aspect:`Variable type`
+   Boolean
+
+:aspect:`Description`
+   If set to TRUE, the ViewHelper will generate markup which allows lazyloading of images with a JavaScript library of your choice.
+
+   - ``src="..."`` will become ``data-src="..."``
+   - ``srcset="..."`` will become ``data-srcset="..."``
+
+:aspect:`Default value`
+   FALSE
+
+:aspect:`Mandatory`
+   No
+
+Examples
+--------
+
+::
+
+   <sms:image image="{image}" srcset="400, 600" lazyload="true" />
+
+   <sms:media file="{image}" srcset="400, 600" lazyload="true" />
+
+
+ignoreFileExtensions
+^^^^^^^^^^^^^^^^^^^^
+:aspect:`Variable type`
+   Array|String
+
+:aspect:`Description`
+   List of file extensions for which no responsive images should be generated (e. g. vector images that can't be cropped easily and don't need individual scaling).
+
+:aspect:`Default value`
+   'svg'
+
+:aspect:`Mandatory`
+   No

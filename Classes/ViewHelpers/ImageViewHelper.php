@@ -9,6 +9,19 @@ use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
 class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 {
     /**
+     * @var ResponsiveImagesUtility
+     */
+    protected $responsiveImagesUtility;
+
+    /**
+     * @param ResponsiveImagesUtility $responsiveImagesUtility
+     */
+    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility)
+    {
+        $this->responsiveImagesUtility = $responsiveImagesUtility;
+    }
+
+    /**
      * Initialize arguments.
      */
     public function initializeArguments()
@@ -24,6 +37,14 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
+        $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
+        $this->registerArgument(
+            'ignoreFileExtensions',
+            'mixed',
+            'File extensions that won\'t generate responsive images',
+            false,
+            'svg'
+        );
     }
 
     /**
@@ -41,7 +62,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         ) {
             throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception(
                 'You must either specify a string src or a File object.',
-                1382284106
+                1517766588 // Original code: 1382284106
             );
         }
 
@@ -80,7 +101,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 
             if ($this->arguments['breakpoints']) {
                 // Generate picture tag
-                $this->tag = $this->getResponsiveImagesUtility()->createPictureTag(
+                $this->tag = $this->responsiveImagesUtility->createPictureTag(
                     $image,
                     $fallbackImage,
                     $this->arguments['breakpoints'],
@@ -89,11 +110,13 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     null,
                     $this->tag,
                     $this->arguments['picturefill'],
-                    $this->arguments['absolute']
+                    $this->arguments['absolute'],
+                    $this->arguments['lazyload'],
+                    $this->arguments['ignoreFileExtensions']
                 );
             } else {
                 // Generate img tag with srcset
-                $this->tag = $this->getResponsiveImagesUtility()->createImageTagWithSrcset(
+                $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
                     $image,
                     $fallbackImage,
                     $this->arguments['srcset'],
@@ -102,7 +125,9 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['sizes'],
                     $this->tag,
                     $this->arguments['picturefill'],
-                    $this->arguments['absolute']
+                    $this->arguments['absolute'],
+                    $this->arguments['lazyload'],
+                    $this->arguments['ignoreFileExtensions']
                 );
             }
         } catch (ResourceDoesNotExistException $e) {
@@ -116,16 +141,5 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         }
 
         return $this->tag->render();
-    }
-
-    /**
-     * Returns an instance of the responsive images utility
-     * This fixes an issue with DI after clearing the cache
-     *
-     * @return ResponsiveImagesUtility
-     */
-    protected function getResponsiveImagesUtility()
-    {
-        return $this->objectManager->get(ResponsiveImagesUtility::class);
     }
 }

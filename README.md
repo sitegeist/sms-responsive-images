@@ -1,5 +1,7 @@
 # SMS Responsive Images
 
+[![Build Status](https://travis-ci.org/sitegeist/sms-responsive-images.svg?branch=master)](https://travis-ci.org/sitegeist/sms-responsive-images)
+
 ## Responsive Images for TYPO3 8.7
 
 This TYPO3 extension provides ViewHelpers and configuration to render valid
@@ -8,6 +10,7 @@ responsive images based on TYPO3's image cropping tool.
 ### Authors & Sponsors
 
 * Simon Praetorius - praetorius@sitegeist.de
+* [All contributors](https://github.com/sitegeist/sms-responsive-images/graphs/contributors)
 
 *The development and the public-releases of this package is generously sponsored
 by my employer https://sitegeist.de.*

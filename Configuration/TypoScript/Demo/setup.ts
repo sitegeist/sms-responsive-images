@@ -35,7 +35,10 @@ tx_smsresponsiveimages_demo {
 
         controller = Media
         action = header
-        switchableControllerActions.Media.1 = header
+        switchableControllerActions.Media {
+            1 = header
+            2 = testing
+        }
 
         settings =< plugin.tx_smsresponsiveimages.settings
         persistence =< plugin.tx_smsresponsiveimages.persistence
