@@ -93,10 +93,15 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             // Generate fallback image
             $processingInstructions = [
                 'width' => $this->arguments['width'],
-                'minWidth' => $this->arguments['minWidth'],
-                'maxWidth' => $this->arguments['maxWidth'],
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
+            // Set min/maxWidth only if they are given
+            if (!is_null($this->arguments['minWidth'])) {
+                $processingInstructions['minWidth'] = $this->arguments['minWidth'];
+            }
+            if (!is_null($this->arguments['maxWidth'])) {
+                $processingInstructions['maxWidth'] = $this->arguments['maxWidth'];
+            }
             $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
             if ($this->arguments['breakpoints']) {
