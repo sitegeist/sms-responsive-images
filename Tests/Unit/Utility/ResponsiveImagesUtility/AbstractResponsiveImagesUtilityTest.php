@@ -41,7 +41,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
         $imageServiceMock
             ->method('getImageUri')
             ->will($this->returnCallback(function ($file, $absolute) {
-                return (($absolute) ? 'http://domain.tld' : '') . '/image@' . $file->getProperty('width')
+                return (($absolute) ? 'http://domain.tld' : '') . '/image-' . $file->getProperty('width')
                     . '.' . $file->getProperty('extension');
             }));
 

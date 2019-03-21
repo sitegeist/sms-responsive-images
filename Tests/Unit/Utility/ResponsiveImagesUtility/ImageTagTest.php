@@ -18,7 +18,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 false,
                 'img',
-                '/image@2000.jpg',
+                '/image-2000.jpg',
                 null,
                 null,
                 null,
@@ -34,7 +34,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 false,
                 'img',
-                '/image@2000.jpg',
+                '/image-2000.jpg',
                 null,
                 null,
                 'image alt',
@@ -48,7 +48,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 false,
                 'img-test',
-                '/image@2000.jpg',
+                '/image-2000.jpg',
                 null,
                 null,
                 null,
@@ -62,7 +62,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 false,
                 'img',
-                '/image@2000.jpg',
+                '/image-2000.jpg',
                 null,
                 htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600])),
                 null,
@@ -76,7 +76,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 false,
                 'img',
-                'http://domain.tld/image@2000.jpg',
+                'http://domain.tld/image-2000.jpg',
                 null,
                 null,
                 null,
@@ -91,7 +91,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 'img',
                 null,
-                '/image@2000.jpg',
+                '/image-2000.jpg',
                 null,
                 null,
                 null
@@ -145,7 +145,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 1000,
                 1000,
                 null,
-                '/image@1000.jpg 1000w'
+                '/image-1000.jpg 1000w'
             ]
         ];
     }
@@ -180,8 +180,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400],
-                '/image@1000.jpg',
-                '/image@400.jpg 400w, /image@1000.jpg 1000w',
+                '/image-1000.jpg',
+                '/image-400.jpg 400w, /image-1000.jpg 1000w',
                 false
             ],
             // Test srcset with 3 widths, one having same width as fallback
@@ -190,7 +190,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800, 1000],
                 null,
-                '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
+                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
                 true
             ],
             // Test srcset with 2 widths + fallback image
@@ -199,7 +199,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800],
                 null,
-                '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
+                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
                 true
             ],
             // Test high dpi
@@ -208,7 +208,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 ['1x', '2x'],
                 null,
-                '/image@1000.jpg 1x, /image@2000.jpg 2x',
+                '/image-1000.jpg 1x, /image-2000.jpg 2x',
                 true
             ],
             // Test svg image
@@ -216,7 +216,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
                 [100, 200, 300],
-                '/image@2000.svg',
+                '/image-2000.svg',
                 null,
                 true
             ]
@@ -427,8 +427,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 [400],
                 null,
                 null,
-                '/image@1000.jpg',
-                '/image@400.jpg 400w, /image@1000.jpg 1000w',
+                '/image-1000.jpg',
+                '/image-400.jpg 400w, /image-1000.jpg 1000w',
                 false
             ],
             // Test srcset with 2 widths + fallback image
@@ -439,7 +439,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 null,
                 null,
-                '/image@400.jpg 400w, /image@800.jpg 800w, /image@1000.jpg 1000w',
+                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
                 true
             ],
             // Test svg image
@@ -449,7 +449,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 [400, 800],
                 null,
                 null,
-                '/image@2000.svg',
+                '/image-2000.svg',
                 null,
                 true
             ]

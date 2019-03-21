@@ -41,9 +41,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'picture',
                 [
-                    '<source srcset="/image@500.jpg 500w, /image@1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<source srcset="/image@400.jpg 400w, /image@800.jpg 800w" media="media mobile" sizes="sizes mobile" />',
-                    '<img srcset="/image@1000.jpg" width="1000" alt="" />'
+                    '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source srcset="/image-400.jpg 400w, /image-800.jpg 800w" media="media mobile" sizes="sizes mobile" />',
+                    '<img srcset="/image-1000.jpg" width="1000" alt="" />'
                 ]
             ],
             // Test two breakpoints with media queries with standard output
@@ -70,9 +70,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'picture',
                 [
-                    '<source srcset="/image@500.jpg 500w, /image@1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<source srcset="/image@400.jpg 400w, /image@800.jpg 800w" media="media mobile" sizes="sizes mobile" />',
-                    '<img src="/image@1000.jpg" width="1000" alt="" />'
+                    '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source srcset="/image-400.jpg 400w, /image-800.jpg 800w" media="media mobile" sizes="sizes mobile" />',
+                    '<img src="/image-1000.jpg" width="1000" alt="" />'
                 ]
             ],
             // Test two breakpoints, last one without media query
@@ -98,8 +98,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'picture',
                 [
-                    '<source srcset="/image@500.jpg 500w, /image@1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<img srcset="/image@400.jpg 400w, /image@800.jpg 800w" sizes="sizes mobile" width="1000" alt="" />'
+                    '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<img srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" width="1000" alt="" />'
                 ]
             ],
             // Test two breakpoints, last one without media query, with standard output
@@ -121,9 +121,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'picture',
                 [
-                    '<source srcset="/image@500.jpg 500w, /image@1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<source srcset="/image@400.jpg 400w, /image@800.jpg 800w" sizes="sizes mobile" />',
-                    '<img src="/image@1000.jpg" width="1000" alt="" />'
+                    '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
+                    '<img src="/image-1000.jpg" width="1000" alt="" />'
                 ]
             ],
             // Test focus area
@@ -137,7 +137,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'picture',
                 [
-                    '<img srcset="/image@1000.jpg" width="1000" data-focus-area="'
+                    '<img srcset="/image-1000.jpg" width="1000" data-focus-area="'
                         . htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600]))
                         . '" alt="" />'
                 ]
@@ -155,7 +155,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'picture',
                 [
-                    '<img srcset="/image@1000.jpg" width="1000" alt="image alt" title="image title" />'
+                    '<img srcset="/image-1000.jpg" width="1000" alt="image alt" title="image title" />'
                 ]
             ],
             // Test lazyload markup
@@ -177,8 +177,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 'picture',
                 [
-                    '<source data-srcset="/image@500.jpg 500w, /image@1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<img data-srcset="/image@400.jpg 400w, /image@800.jpg 800w" sizes="sizes mobile" width="1000" alt="" />'
+                    '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<img data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" width="1000" alt="" />'
                 ]
             ],
             // Test lazyload markup with standard output
@@ -200,9 +200,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 'picture',
                 [
-                    '<source data-srcset="/image@500.jpg 500w, /image@1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<source data-srcset="/image@400.jpg 400w, /image@800.jpg 800w" sizes="sizes mobile" />',
-                    '<img data-src="/image@1000.jpg" width="1000" alt="" />'
+                    '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
+                    '<img data-src="/image-1000.jpg" width="1000" alt="" />'
                 ]
             ]
         ];
@@ -297,7 +297,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 new CropVariantCollection([]),
                 $fallbackTag,
-                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" srcset="/image@1000.jpg" width="1000" />']
+                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" srcset="/image-1000.jpg" width="1000" />']
             ]
         ];
     }
@@ -335,7 +335,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
                 'img',
-                '/image@2000.svg',
+                '/image-2000.svg',
                 null,
                 1000,
                 1000
