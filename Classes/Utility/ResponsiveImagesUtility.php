@@ -458,7 +458,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         foreach ($srcsetImages as $widthDescriptor => $imageCandidate) {
             $path = parse_url($imageCandidate, PHP_URL_PATH);
             $segments = explode('/', $path);
-            array_walk($segments, function(&$segment) {
+            array_walk($segments, function (&$segment) {
                 $segment = rawurlencode($segment);
             });
             $imageCandidate = str_replace($path, implode('/', $segments), $imageCandidate);
