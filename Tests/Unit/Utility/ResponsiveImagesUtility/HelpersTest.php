@@ -182,6 +182,17 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                     '300w' => '/image-300.jpg',
                     '400w' => '/image-400.jpg'
                 ]
+            ],
+            // Test if special characters are kept in file name
+            'usingSpecialCharactersInFileName' => [
+                $this->mockFileObject(['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'extension' => 'jpg']),
+                400,
+                [200],
+                null,
+                false,
+                [
+                    '200w' => '/this/is a/filename@with-/special!charac,ters-200.jpg'
+                ]
             ]
         ];
     }
@@ -221,6 +232,14 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             'usingMultipleSrcsetItems' => [
                 ['200w' => 'image-200.jpg', '400w' => 'image-400.jpg', '600w' => 'image-600.jpg'],
                 'image-200.jpg 200w, image-400.jpg 400w, image-600.jpg 600w'
+            ],
+            // Test if special characters are encoded in file name
+            'usingSpecialCharactersInFileName' => [
+                [
+                    '200w' => 'this/is a/filename@with-/special!charac,ters-200.jpg',
+                    '400w' => 'this/is a/filename@with-/special!charac,ters-400.jpg'
+                ],
+                'this/is%20a/filename@with-/special!charac%2Cters-200.jpg 200w, this/is%20a/filename@with-/special!charac%2Cters-400.jpg 400w'
             ]
         ];
     }

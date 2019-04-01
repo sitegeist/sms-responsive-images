@@ -32,7 +32,8 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
                 // Simulate processor_allowUpscaling = false
                 $instructions['width'] = min($instructions['width'], $file->getProperty('width'));
 
-                // Use extension from original image
+                // Use file name and extension from original image
+                $instructions['name'] = $file->getProperty('name');
                 $instructions['extension'] = $file->getProperty('extension');
 
                 return $test->mockFileObject($instructions);
@@ -41,7 +42,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
         $imageServiceMock
             ->method('getImageUri')
             ->will($this->returnCallback(function ($file, $absolute) {
-                return (($absolute) ? 'http://domain.tld' : '') . '/image-' . $file->getProperty('width')
+                return (($absolute) ? 'http://domain.tld' : '') . '/' . $file->getProperty('name') . '-' . $file->getProperty('width')
                     . '.' . $file->getProperty('extension');
             }));
 
@@ -50,6 +51,11 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
 
     protected function mockFileObject($properties)
     {
+        $defaultProperties = [
+            'name' => 'image'
+        ];
+        $properties = array_replace($defaultProperties, $properties);
+
         $fileMock = $this->getMockBuilder(FileReference::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProperty'])
