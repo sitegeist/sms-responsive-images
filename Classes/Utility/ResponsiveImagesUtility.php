@@ -456,9 +456,24 @@ class ResponsiveImagesUtility implements SingletonInterface
     {
         $srcsetString = [];
         foreach ($srcsetImages as $widthDescriptor => $imageCandidate) {
-            $srcsetString[] = $imageCandidate . ' ' . $widthDescriptor;
+            $srcsetString[] = $this->sanitizeSrcsetUrl($imageCandidate) . ' ' . $widthDescriptor;
         }
         return implode(', ', $srcsetString);
+    }
+
+    /**
+     * Ensures that the provided url can be used safely in a srcset attribute
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    public function sanitizeSrcsetUrl(string $url): string
+    {
+        return strtr($url, [
+            ' ' => '%20',
+            ',' => '%2C'
+        ]);
     }
 
     /**

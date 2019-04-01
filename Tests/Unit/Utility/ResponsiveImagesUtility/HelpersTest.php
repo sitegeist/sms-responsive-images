@@ -125,7 +125,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 ['1x', '2x'],
                 null,
                 false,
-                ['1x' => '/image@400.jpg', '2x' => '/image@800.jpg']
+                ['1x' => '/image-400.jpg', '2x' => '/image-800.jpg']
             ],
             // Test responsive image srcset (widths in integers)
             'usingResponsiveWidths' => [
@@ -134,7 +134,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 [200, 400, 600],
                 null,
                 false,
-                ['200w' => '/image@200.jpg', '400w' => '/image@400.jpg', '600w' => '/image@600.jpg']
+                ['200w' => '/image-200.jpg', '400w' => '/image-400.jpg', '600w' => '/image-600.jpg']
             ],
             // Test responsive image srcset (widths as strings)
             'usingResponsiveWidthsAsStrings' => [
@@ -143,7 +143,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 ['200w', '400w', '600w'],
                 null,
                 false,
-                ['200w' => '/image@200.jpg', '400w' => '/image@400.jpg', '600w' => '/image@600.jpg']
+                ['200w' => '/image-200.jpg', '400w' => '/image-400.jpg', '600w' => '/image-600.jpg']
             ],
             // Test absolute urls
             'requestingAbsoluteUrls' => [
@@ -153,9 +153,9 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 true,
                 [
-                    '200w' => 'http://domain.tld/image@200.jpg',
-                    '400w' => 'http://domain.tld/image@400.jpg',
-                    '600w' => 'http://domain.tld/image@600.jpg'
+                    '200w' => 'http://domain.tld/image-200.jpg',
+                    '400w' => 'http://domain.tld/image-400.jpg',
+                    '600w' => 'http://domain.tld/image-600.jpg'
                 ]
             ],
             // Test srcset input as string
@@ -166,9 +166,9 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 true,
                 [
-                    '200w' => 'http://domain.tld/image@200.jpg',
-                    '400w' => 'http://domain.tld/image@400.jpg',
-                    '600w' => 'http://domain.tld/image@600.jpg'
+                    '200w' => 'http://domain.tld/image-200.jpg',
+                    '400w' => 'http://domain.tld/image-400.jpg',
+                    '600w' => 'http://domain.tld/image-600.jpg'
                 ]
             ],
             'usingTooSmallImage' => [
@@ -178,9 +178,20 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 [
-                    '200w' => '/image@200.jpg',
-                    '300w' => '/image@300.jpg',
-                    '400w' => '/image@400.jpg'
+                    '200w' => '/image-200.jpg',
+                    '300w' => '/image-300.jpg',
+                    '400w' => '/image-400.jpg'
+                ]
+            ],
+            // Test if special characters are kept in file name
+            'usingSpecialCharactersInFileName' => [
+                $this->mockFileObject(['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'extension' => 'jpg']),
+                400,
+                [200],
+                null,
+                false,
+                [
+                    '200w' => '/this/is a/filename@with-/special!charac,ters-200.jpg'
                 ]
             ]
         ];
@@ -214,13 +225,21 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Check srcset with single image
             'usingSingleSrcsetItem' => [
-                ['1x' => 'image@1x.jpg'],
-                'image@1x.jpg 1x'
+                ['1x' => 'image-1x.jpg'],
+                'image-1x.jpg 1x'
             ],
             // Check srcset with multiple images
             'usingMultipleSrcsetItems' => [
-                ['200w' => 'image@200.jpg', '400w' => 'image@400.jpg', '600w' => 'image@600.jpg'],
-                'image@200.jpg 200w, image@400.jpg 400w, image@600.jpg 600w'
+                ['200w' => 'image-200.jpg', '400w' => 'image-400.jpg', '600w' => 'image-600.jpg'],
+                'image-200.jpg 200w, image-400.jpg 400w, image-600.jpg 600w'
+            ],
+            // Test if special characters are encoded in file name
+            'usingSpecialCharactersInFileName' => [
+                [
+                    '200w' => 'this/is a/filename@with-/special!charac,ters-200.jpg',
+                    '400w' => 'this/is a/filename@with-/special!charac,ters-400.jpg'
+                ],
+                'this/is%20a/filename@with-/special!charac%2Cters-200.jpg 200w, this/is%20a/filename@with-/special!charac%2Cters-400.jpg 400w'
             ]
         ];
     }

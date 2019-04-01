@@ -26,7 +26,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 false,
-                '/image@1000.jpg 1x, /image@2000.jpg 2x',
+                '/image-1000.jpg 1x, /image-2000.jpg 2x',
                 null
             ],
             // Test responsive images srcset
@@ -37,7 +37,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 false,
-                '/image@400.jpg 400w, /image@800.jpg 800w',
+                '/image-400.jpg 400w, /image-800.jpg 800w',
                 null
             ],
             // Test dynamic sizes query
@@ -48,7 +48,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 'media query',
                 '%d',
                 false,
-                '/image@400.jpg 400w',
+                '/image-400.jpg 400w',
                 1000
             ],
             // Test absolute urls
@@ -59,7 +59,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 true,
-                'http://domain.tld/image@1000.jpg 1x, http://domain.tld/image@2000.jpg 2x',
+                'http://domain.tld/image-1000.jpg 1x, http://domain.tld/image-2000.jpg 2x',
                 null
             ],
         ];
