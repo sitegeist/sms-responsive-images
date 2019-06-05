@@ -11,6 +11,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             'usingEmptySrcset' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
+                1000,
                 [],
                 '',
                 '',
@@ -21,6 +22,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             // Test high dpi srcset
             'usingHighDpi' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                1000,
                 1000,
                 ['1x', '2x'],
                 '',
@@ -33,6 +35,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             'usingResponsiveWidths' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
+                1000,
                 [400, 800],
                 '',
                 '',
@@ -44,6 +47,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             'usingDynamicSizesQuery' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 1000,
+                1000,
                 [400],
                 'media query',
                 '%d',
@@ -54,6 +58,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             // Test absolute urls
             'requestingAbsoluteUrls' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                1000,
                 1000,
                 ['1x', '2x'],
                 '',
@@ -72,6 +77,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
     public function createPictureSourceTag(
         $image,
         $defaultWidth,
+        $defaultHeight,
         $srcset,
         $mediaQuery,
         $sizesQuery,
@@ -82,6 +88,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
         $tag = $this->utility->createPictureSourceTag(
             $image,
             $defaultWidth,
+            $defaultHeight,
             $srcset,
             $mediaQuery,
             $sizesQuery,

@@ -174,7 +174,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         // Use width and height of fallback image as reference for relative sizes (1x, 2x...)
         $referenceWidth = $fallbackImage->getProperty('width');
         $referenceHeight = $fallbackImage->getProperty('height');
-        
+
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
 
