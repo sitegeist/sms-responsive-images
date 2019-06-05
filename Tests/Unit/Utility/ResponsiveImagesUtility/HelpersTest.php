@@ -120,7 +120,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         return [
             // Test high dpi image srcset
             'usingHighDpi' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                400,
                 400,
                 ['1x', '2x'],
                 null,
@@ -129,7 +130,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test responsive image srcset (widths in integers)
             'usingResponsiveWidths' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                400,
                 400,
                 [200, 400, 600],
                 null,
@@ -138,7 +140,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test responsive image srcset (widths as strings)
             'usingResponsiveWidthsAsStrings' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                400,
                 400,
                 ['200w', '400w', '600w'],
                 null,
@@ -147,7 +150,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test absolute urls
             'requestingAbsoluteUrls' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                400,
                 400,
                 ['200w', '400w', '600w'],
                 null,
@@ -160,7 +164,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test srcset input as string
             'usingSrcsetString' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                400,
                 400,
                 '200, 400, 600',
                 null,
@@ -172,7 +177,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 ]
             ],
             'usingTooSmallImage' => [
-                $this->mockFileObject(['width' => 400, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 400, 'height' => 400, 'extension' => 'jpg']),
+                400,
                 400,
                 '200, 300, 500',
                 null,
@@ -185,7 +191,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test if special characters are kept in file name
             'usingSpecialCharactersInFileName' => [
-                $this->mockFileObject(['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'extension' => 'jpg']),
+                $this->mockFileObject(['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'height' => 400, 'extension' => 'jpg']),
+                400,
                 400,
                 [200],
                 null,
@@ -201,13 +208,14 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
      * @test
      * @dataProvider generatesSrcsetImagesProvider
      */
-    public function generatesSrcsetImages($originalImage, $width, $srcsetConfig, $cropArea, $absoluteUri, $output)
+    public function generatesSrcsetImages($originalImage, $width, $height, $srcsetConfig, $cropArea, $absoluteUri, $output)
     {
         $this->assertEquals(
             $output,
             $this->utility->generateSrcsetImages(
                 $originalImage,
                 $width,
+                $height,
                 $srcsetConfig,
                 $cropArea,
                 $absoluteUri
