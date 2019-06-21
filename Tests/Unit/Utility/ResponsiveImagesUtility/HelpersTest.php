@@ -122,7 +122,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             'usingHighDpi' => [
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 400,
-                400,
+                0,
                 ['1x', '2x'],
                 null,
                 false,
@@ -132,7 +132,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             'usingResponsiveWidths' => [
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 400,
-                400,
+                0,
                 [200, 400, 600],
                 null,
                 false,
@@ -166,7 +166,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             'usingSrcsetString' => [
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 400,
-                400,
+                200,
                 '200, 400, 600',
                 null,
                 true,
@@ -179,7 +179,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             'usingTooSmallImage' => [
                 $this->mockFileObject(['width' => 400, 'height' => 400, 'extension' => 'jpg']),
                 400,
-                400,
+                200,
                 '200, 300, 500',
                 null,
                 false,
@@ -193,7 +193,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             'usingSpecialCharactersInFileName' => [
                 $this->mockFileObject(['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'height' => 400, 'extension' => 'jpg']),
                 400,
-                400,
+                200,
                 [200],
                 null,
                 false,
