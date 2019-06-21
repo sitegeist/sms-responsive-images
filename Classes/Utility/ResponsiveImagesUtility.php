@@ -171,10 +171,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         // Normalize breakpoint configuration
         $breakpoints = $this->normalizeImageBreakpoints($breakpoints);
 
-        // Use width and height of fallback image as reference for relative sizes (1x, 2x...)
+        // Use width of fallback image as reference for relative sizes (1x, 2x...)
         $referenceWidth = $fallbackImage->getProperty('width');
-        $referenceHeight = $fallbackImage->getProperty('height');
-        
+
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
 
@@ -186,7 +185,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $srcset = $this->generateSrcsetImages(
                 $originalImage,
                 $referenceWidth,
-                $referenceHeight,
+                0,
                 $lastBreakpoint['srcset'],
                 $cropArea,
                 $absoluteUri
@@ -228,7 +227,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $sourceTag = $this->createPictureSourceTag(
                 $originalImage,
                 $referenceWidth,
-                $referenceHeight,
+                0,
                 $breakpoint['srcset'],
                 $breakpoint['media'],
                 $breakpoint['sizes'],
@@ -383,7 +382,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @param  FileInterface  $image
      * @param  int            $defaultWidth
-     * @param  int            $defaultHeight
+     * @param  int            $defaultHeight - if value is zero, this value is not used and dimensions from cropping configuration are used
      * @param  array|string   $srcset
      * @param  Area           $cropArea
      * @param  bool           $absoluteUri
@@ -412,17 +411,23 @@ class ResponsiveImagesUtility implements SingletonInterface
             switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($defaultWidth * (float) substr($widthDescriptor, 0, -1));
-                    $candidateHeight = (int) ($defaultHeight * (float) substr($widthDescriptor, 0, -1));
+                    if ($defaultHeight > 0) {
+                        $candidateHeight = (int) ($defaultHeight * (float) substr($widthDescriptor, 0, -1));
+                    }
                     break;
 
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
-                    $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
+                    if ($defaultHeight > 0) {
+                        $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
+                    }
                     break;
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
-                    $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
+                    if ($defaultHeight > 0) {
+                        $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
+                    }
                     $srcsetMode = 'w';
                     $widthDescriptor = $candidateWidth . 'w';
             }
@@ -430,9 +435,11 @@ class ResponsiveImagesUtility implements SingletonInterface
             // Generate image
             $processingInstructions = [
                 'width' => $candidateWidth,
-            	'height' => $candidateHeight,
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
+            if ($defaultHeight > 0) {
+                $processingInstructions['height'] = $candidateHeight;
+            }
             $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
             // If processed file isn't as wide as it should be ([GFX][processor_allowUpscaling] set to false)
