@@ -186,11 +186,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $srcset = $this->generateSrcsetImages(
                 $originalImage,
                 $referenceWidth,
-<<<<<<< HEAD
-                $referenceHeight,
-=======
                 0,
->>>>>>> refs/heads/feature/minMaxHeight
                 $lastBreakpoint['srcset'],
                 $cropArea,
                 $absoluteUri
@@ -232,11 +228,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $sourceTag = $this->createPictureSourceTag(
                 $originalImage,
                 $referenceWidth,
-<<<<<<< HEAD
-                $referenceHeight,
-=======
                 0,
->>>>>>> refs/heads/feature/minMaxHeight
                 $breakpoint['srcset'],
                 $breakpoint['media'],
                 $breakpoint['sizes'],
@@ -391,11 +383,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @param  FileInterface  $image
      * @param  int            $defaultWidth
-<<<<<<< HEAD
-     * @param  int            $defaultHeight
-=======
      * @param  int            $defaultHeight - if value is zero, this value is not used and dimensions from cropping configuration are used
->>>>>>> refs/heads/feature/minMaxHeight
      * @param  array|string   $srcset
      * @param  Area           $cropArea
      * @param  bool           $absoluteUri
@@ -424,35 +412,23 @@ class ResponsiveImagesUtility implements SingletonInterface
             switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($defaultWidth * (float) substr($widthDescriptor, 0, -1));
-<<<<<<< HEAD
-                    $candidateHeight = (int) ($defaultHeight * (float) substr($widthDescriptor, 0, -1));
-=======
                     if ($defaultHeight > 0) {
                         $candidateHeight = (int) ($defaultHeight * (float) substr($widthDescriptor, 0, -1));
                     }
->>>>>>> refs/heads/feature/minMaxHeight
                     break;
 
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
-<<<<<<< HEAD
-                    $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
-=======
                     if ($defaultHeight > 0) {
                         $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
                     }
->>>>>>> refs/heads/feature/minMaxHeight
                     break;
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
-<<<<<<< HEAD
-                    $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
-=======
                     if ($defaultHeight > 0) {
                         $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
                     }
->>>>>>> refs/heads/feature/minMaxHeight
                     $srcsetMode = 'w';
                     $widthDescriptor = $candidateWidth . 'w';
             }
