@@ -53,6 +53,8 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param bool          $absoluteUri
      * @param  bool         $lazyload
      * @param  array|string $ignoreFileExtensions
+     * @param  int          $placeholderSize
+     * @param  bool         $placeholderInline
      *
      * @return TagBuilder
      */
@@ -149,6 +151,8 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param  bool                  $absoluteUri
      * @param  bool                  $lazyload
      * @param  array|string          $ignoreFileExtensions
+     * @param  int                   $placeholderSize
+     * @param  bool                  $placeholderInline
      *
      * @return TagBuilder
      */
@@ -324,6 +328,8 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param  Area          $focusArea
      * @param  bool          $absoluteUri
      * @param  bool          $lazyload
+     * @param  int           $placeholderSize
+     * @param  bool          $placeholderInline
      *
      * @return TagBuilder
      */
@@ -333,7 +339,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $tag = null,
         Area $focusArea = null,
         bool $absoluteUri = false,
-        bool $lazyload = false
+        bool $lazyload = false,
+        int $placeholderSize = 0,
+        bool $placeholderInline = false
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
         $fallbackImage = ($fallbackImage) ?: $originalImage;
@@ -343,6 +351,17 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // Set image source
         $tag->addAttribute($attributePrefix . 'src', $this->imageService->getImageUri($originalImage, $absoluteUri));
+
+        // Create placeholder image for lazyloading
+        if ($lazyload && $placeholderSize) {
+            $tag->addAttribute('src', $this->generatePlaceholderImage(
+                $originalImage,
+                $placeholderSize,
+                null,
+                $placeholderInline,
+                $absoluteUri
+            ));
+        }
 
         // Set image proportions
         $tag->addAttribute('width', $fallbackImage->getProperty('width'));
@@ -480,6 +499,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $inline = false,
         bool $absoluteUri = false
     ): string {
+        $cropArea = $cropArea ?: Area::createEmpty();
+
         $processingInstructions = [
             'width' => $width,
             'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
