@@ -38,6 +38,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
         $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
+        $this->registerArgument('placeholderSize', 'int', 'Size of the placeholder image for lazyloading (0 = disabled)', false, 0);
+        $this->registerArgument('placeholderInline', 'bool', 'Embed placeholder image for lazyloading inline as data uri', false, false);
         $this->registerArgument(
             'ignoreFileExtensions',
             'mixed',
@@ -117,7 +119,9 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['picturefill'],
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
-                    $this->arguments['ignoreFileExtensions']
+                    $this->arguments['ignoreFileExtensions'],
+                    $this->arguments['placeholderSize'],
+                    $this->arguments['placeholderInline']
                 );
             } else {
                 // Generate img tag with srcset
@@ -132,7 +136,9 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['picturefill'],
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
-                    $this->arguments['ignoreFileExtensions']
+                    $this->arguments['ignoreFileExtensions'],
+                    $this->arguments['placeholderSize'],
+                    $this->arguments['placeholderInline']
                 );
             }
         } catch (ResourceDoesNotExistException $e) {

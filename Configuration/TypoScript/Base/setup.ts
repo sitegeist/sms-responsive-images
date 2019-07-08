@@ -7,6 +7,10 @@ lib.contentElement {
   # Add responsive image settings to all content elements
   settings.tx_smsresponsiveimages {
     lazyload = {$tx_smsresponsiveimages.lazyload}
+    placeholder {
+      size = {$tx_smsresponsiveimages.placeholder.size}
+      inline = {$tx_smsresponsiveimages.placeholder.inline}
+    }
     srcset = {$tx_smsresponsiveimages.srcset}
     sizes = {$tx_smsresponsiveimages.sizes}
     breakpoints {

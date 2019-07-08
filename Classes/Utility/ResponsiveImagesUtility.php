@@ -67,7 +67,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $picturefillMarkup = true,
         bool $absoluteUri = false,
         bool $lazyload = false,
-        $ignoreFileExtensions = 'svg'
+        $ignoreFileExtensions = 'svg',
+        int $placeholderSize = 0,
+        bool $placeholderInline = false
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
 
@@ -94,6 +96,17 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         if (!$picturefillMarkup) {
             $tag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
+        }
+
+        // Create placeholder image for lazyloading
+        if ($lazyload && $placeholderSize) {
+            $tag->addAttribute('src', $this->generatePlaceholderImage(
+                $originalImage,
+                $placeholderSize,
+                $cropArea,
+                $placeholderInline,
+                $absoluteUri
+            ));
         }
 
         // Generate different image sizes for srcset attribute
@@ -150,7 +163,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $picturefillMarkup = true,
         bool $absoluteUri = false,
         bool $lazyload = false,
-        $ignoreFileExtensions = 'svg'
+        $ignoreFileExtensions = 'svg',
+        int $placeholderSize = 0,
+        bool $placeholderInline = false
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'picture');
         $fallbackTag = $fallbackTag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
@@ -210,6 +225,17 @@ class ResponsiveImagesUtility implements SingletonInterface
             } else {
                 $fallbackTag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
             }
+        }
+
+        // Create placeholder image for lazyloading
+        if ($lazyload && $placeholderSize) {
+            $fallbackTag->addAttribute('src', $this->generatePlaceholderImage(
+                $originalImage,
+                $placeholderSize,
+                $cropArea,
+                $placeholderInline,
+                $absoluteUri
+            ));
         }
 
         // Provide image width to be consistent with TYPO3 core behavior
@@ -434,6 +460,49 @@ class ResponsiveImagesUtility implements SingletonInterface
         }
 
         return $images;
+    }
+
+    /**
+     * Generates a tiny placeholder image for lazyloading
+     *
+     * @param FileInterface $image
+     * @param integer $width
+     * @param Area $cropArea
+     * @param boolean $inline
+     * @param boolean $absoluteUri
+     *
+     * @return string
+     */
+    public function generatePlaceholderImage(
+        FileInterface $image,
+        int $width = 20,
+        Area $cropArea = null,
+        bool $inline = false,
+        bool $absoluteUri = false
+    ): string {
+        $processingInstructions = [
+            'width' => $width,
+            'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
+        ];
+        $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
+
+        if ($inline) {
+            return $this->generateDataUri($processedImage);
+        } else {
+            return $this->imageService->getImageUri($processedImage, $absoluteUri);
+        }
+    }
+
+    /**
+     * Generates a data URI for the specified image file
+     *
+     * @param FileInterface $image
+     *
+     * @return string
+     */
+    public function generateDataUri(FileInterface $image): string
+    {
+        return 'data:' . $image->getMimeType() . ';base64,' . base64_encode($image->getContents());
     }
 
     /**
