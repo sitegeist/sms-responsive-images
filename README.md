@@ -36,4 +36,4 @@ look at the following blog post:
 
 You will find the full documentation for this extension on typo3.org:
 
-[Full Documentation of SMS Responsive Images](https://docs.typo3.org/typo3cms/extensions/sms_responsive_images/)
+[Full Documentation of SMS Responsive Images](https://docs.typo3.org/p/sitegeist/sms-responsive-images/master/en-us/)
