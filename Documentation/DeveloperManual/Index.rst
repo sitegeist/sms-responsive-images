@@ -154,6 +154,55 @@ Examples
    <sms:media file="{image}" srcset="400, 600" lazyload="true" />
 
 
+placeholderSize
+^^^^^^^^^^^^^^^
+:aspect:`Variable type`
+   Integer
+
+:aspect:`Description`
+   The size (= width) of the placeholder image that will be shown until lazyloading is finished.
+   If set to 0, placeholder images will be disabled and the ``src`` attribute will be skipped.
+
+:aspect:`Default value`
+   0
+
+:aspect:`Mandatory`
+   No
+
+Examples
+--------
+
+::
+
+   <sms:image image="{image}" srcset="400, 600" lazyload="true" placeholderSize="20" />
+
+   <sms:media file="{image}" srcset="400, 600" lazyload="true" placeholderSize="20" />
+
+
+placeholderInline
+^^^^^^^^^^^^^^^^^
+:aspect:`Variable type`
+   Boolean
+
+:aspect:`Description`
+   If set to TRUE, the placeholder image for lazyloading will be inserted inline as base64 encoded uri.
+
+:aspect:`Default value`
+   FALSE
+
+:aspect:`Mandatory`
+   No
+
+Examples
+--------
+
+::
+
+   <sms:image image="{image}" srcset="400, 600" lazyload="true" placeholderSize="20" placeholderInline="1" />
+
+   <sms:media file="{image}" srcset="400, 600" lazyload="true" placeholderSize="20" placeholderInline="1" />
+
+
 ignoreFileExtensions
 ^^^^^^^^^^^^^^^^^^^^
 :aspect:`Variable type`
