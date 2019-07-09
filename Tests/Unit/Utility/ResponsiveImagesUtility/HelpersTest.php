@@ -215,6 +215,54 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         );
     }
 
+    public function generatePlaceholderImageProvider()
+    {
+        return [
+            'usingFile' => [
+                $this->mockFileObject(['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg']),
+                20,
+                null,
+                false,
+                false,
+                '/image-20.jpg'
+            ],
+            'usingFileWithAbsolute' => [
+                $this->mockFileObject(['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg']),
+                20,
+                null,
+                false,
+                true,
+                'http://domain.tld/image-20.jpg'
+            ],
+            'usingInline' => [
+                $this->mockFileObject(['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg']),
+                20,
+                null,
+                true,
+                false,
+                'data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ='
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider generatePlaceholderImageProvider
+     */
+    public function generatePlaceholderImage($originalImage, $width, $cropArea, $inline, $absoluteUri, $output)
+    {
+        $this->assertEquals(
+            $output,
+            $this->utility->generatePlaceholderImage(
+                $originalImage,
+                $width,
+                $cropArea,
+                $inline,
+                $absoluteUri
+            )
+        );
+    }
+
     public function generateSrcsetAttributeProvider()
     {
         return [

@@ -35,6 +35,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
                 // Use file name and extension from original image
                 $instructions['name'] = $file->getProperty('name');
                 $instructions['extension'] = $file->getProperty('extension');
+                $instructions['mimeType'] = $file->getProperty('mimeType');
 
                 return $test->mockFileObject($instructions);
             }));
@@ -58,13 +59,23 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
 
         $fileMock = $this->getMockBuilder(FileReference::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProperty'])
+            ->setMethods(['getProperty', 'getMimeType', 'getContents'])
             ->getMock();
 
         $fileMock
             ->method('getProperty')
             ->will($this->returnCallback(function ($property) use ($properties) {
                 return $properties[$property];
+            }));
+        $fileMock
+            ->method('getMimeType')
+            ->will($this->returnCallback(function () use ($properties) {
+                return $properties['mimeType'];
+            }));
+        $fileMock
+            ->method('getContents')
+            ->will($this->returnCallback(function () use ($properties) {
+                return 'das-ist-der-dateiinhalt';
             }));
 
         return $fileMock;

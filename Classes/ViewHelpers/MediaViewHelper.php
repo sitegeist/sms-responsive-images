@@ -39,6 +39,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
         $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
         $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
+        $this->registerArgument('placeholderSize', 'int', 'Size of the placeholder image for lazyloading (0 = disabled)', false, 0);
+        $this->registerArgument('placeholderInline', 'bool', 'Embed placeholder image for lazyloading inline as data uri', false, false);
         $this->registerArgument(
             'ignoreFileExtensions',
             'mixed',
@@ -102,7 +104,9 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->arguments['picturefill'],
             false,
             $this->arguments['lazyload'],
-            $this->arguments['ignoreFileExtensions']
+            $this->arguments['ignoreFileExtensions'],
+            $this->arguments['placeholderSize'],
+            $this->arguments['placeholderInline']
         );
 
         return $this->tag->render();
@@ -142,7 +146,9 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->arguments['picturefill'],
             false,
             $this->arguments['lazyload'],
-            $this->arguments['ignoreFileExtensions']
+            $this->arguments['ignoreFileExtensions'],
+            $this->arguments['placeholderSize'],
+            $this->arguments['placeholderInline']
         );
 
         return $this->tag->render();

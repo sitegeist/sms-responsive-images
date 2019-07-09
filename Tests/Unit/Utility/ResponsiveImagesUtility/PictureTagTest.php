@@ -39,6 +39,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 true,
                 false,
+                0,
+                false,
                 'picture',
                 [
                     '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
@@ -68,6 +70,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 false,
+                0,
+                false,
                 'picture',
                 [
                     '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
@@ -96,6 +100,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 true,
                 false,
+                0,
+                false,
                 'picture',
                 [
                     '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
@@ -119,6 +125,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 false,
+                0,
+                false,
                 'picture',
                 [
                     '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
@@ -134,6 +142,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $cropVariantCollection,
                 new Area(0.4, 0.4, 0.6, 0.6),
                 true,
+                false,
+                0,
                 false,
                 'picture',
                 [
@@ -152,6 +162,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $cropVariantCollection,
                 null,
                 true,
+                false,
+                0,
                 false,
                 'picture',
                 [
@@ -175,6 +187,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 true,
                 true,
+                0,
+                false,
                 'picture',
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
@@ -198,13 +212,65 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 true,
+                0,
+                false,
                 'picture',
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
                     '<img data-src="/image-1000.jpg" width="1000" alt="" />'
                 ]
-            ]
+            ],
+            // Test lazyload markup with placeholder
+            'usingLazyloadWithPlaceholder' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
+                ],
+                $cropVariantCollection,
+                null,
+                true,
+                true,
+                20,
+                false,
+                'picture',
+                [
+                    '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<img data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" src="/image-20.jpg" width="1000" alt="" />'
+                ]
+            ],
+            // Test lazyload markup with inline placeholder
+            'usingLazyloadWithPlaceholder' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
+                ],
+                $cropVariantCollection,
+                null,
+                true,
+                true,
+                20,
+                true,
+                'picture',
+                [
+                    '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<img data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" src="data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=" width="1000" alt="" />'
+                ]
+            ],
         ];
     }
 
@@ -220,6 +286,8 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $focusArea,
         $picturefillMarkup,
         $lazyload,
+        $placeholderSize,
+        $placeholderInline,
         $tagName,
         $tagContent
     ) {
@@ -233,7 +301,10 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
             null,
             $picturefillMarkup,
             false,
-            $lazyload
+            $lazyload,
+            'svg',
+            $placeholderSize,
+            $placeholderInline
         );
         $this->assertEquals($tagName, $tag->getTagName());
         $this->assertEquals(implode('', $tagContent), $tag->getContent());
