@@ -7,4 +7,10 @@ tx_smsresponsiveimages {
 
   # cat=content/cTextmedia/b83; type=boolean; label= Generate image markup that supports lazyloading
   lazyload = 0
+
+  # cat=content/cTextmedia/b84; type=integer; label= Size of placeholder image for lazyloading (0 = disabled)
+  placeholder.size = 0
+
+  # cat=content/cTextmedia/b85; type=boolean; label= Embed placeholder image for lazyloading inline as base64
+  placeholder.inline = 0
 }

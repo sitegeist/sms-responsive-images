@@ -17,6 +17,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 false,
+                0,
+                false,
                 'img',
                 '/image-2000.jpg',
                 null,
@@ -33,6 +35,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 false,
+                0,
+                false,
                 'img',
                 '/image-2000.jpg',
                 null,
@@ -46,6 +50,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 new TagBuilder('img-test'),
                 null,
                 false,
+                false,
+                0,
                 false,
                 'img-test',
                 '/image-2000.jpg',
@@ -61,6 +67,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 new Area(0.4, 0.4, 0.6, 0.6),
                 false,
                 false,
+                0,
+                false,
                 'img',
                 '/image-2000.jpg',
                 null,
@@ -74,6 +82,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 null,
                 true,
+                false,
+                0,
                 false,
                 'img',
                 'http://domain.tld/image-2000.jpg',
@@ -89,8 +99,42 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 false,
                 true,
+                0,
+                false,
                 'img',
                 null,
+                '/image-2000.jpg',
+                null,
+                null,
+                null
+            ],
+            'usingLazyloadWithPlaceholder' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                true,
+                20,
+                false,
+                'img',
+                '/image-20.jpg',
+                '/image-2000.jpg',
+                null,
+                null,
+                null
+            ],
+            'usingLazyloadWithPlaceholderInline' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                true,
+                20,
+                true,
+                'img',
+                'data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=',
                 '/image-2000.jpg',
                 null,
                 null,
@@ -110,6 +154,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $focusArea,
         $absoluteUri,
         $lazyload,
+        $placeholderSize,
+        $placeholderInline,
         $tagName,
         $srcAttribute,
         $dataSrcAttribute,
@@ -123,7 +169,9 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             $tag,
             $focusArea,
             $absoluteUri,
-            $lazyload
+            $lazyload,
+            $placeholderSize,
+            $placeholderInline
         );
         $this->assertEquals($tagName, $tag->getTagName());
         $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
@@ -429,6 +477,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 '/image-1000.jpg',
                 '/image-400.jpg 400w, /image-1000.jpg 1000w',
+                false,
+                0,
                 false
             ],
             // Test srcset with 2 widths + fallback image
@@ -440,7 +490,9 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 null,
                 '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
-                true
+                true,
+                0,
+                false
             ],
             // Test svg image
             'withSvgImage' => [
@@ -451,8 +503,36 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 '/image-2000.svg',
                 null,
+                true,
+                0,
+                false
+            ],
+            // Test placeholder image
+            'usingPlaceholderImage' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [400],
+                '/image-20.jpg',
+                null,
+                '/image-1000.jpg',
+                '/image-400.jpg 400w, /image-1000.jpg 1000w',
+                false,
+                20,
+                false
+            ],
+            // Test placeholder image inline
+            'usingPlaceholderImageInline' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                [400],
+                'data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=',
+                null,
+                '/image-1000.jpg',
+                '/image-400.jpg 400w, /image-1000.jpg 1000w',
+                false,
+                20,
                 true
-            ]
+            ],
         ];
     }
 
@@ -468,7 +548,9 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $srcsetAttribute,
         $dataSrcAttribute,
         $dataSrcsetAttribute,
-        $picturefillMarkup
+        $picturefillMarkup,
+        $placeholderSize,
+        $placeholderInline
     ) {
         $tag = $this->utility->createImageTagWithSrcset(
             $originalImage,
@@ -480,7 +562,10 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             null,
             $picturefillMarkup,
             false,
-            true
+            true,
+            'svg',
+            $placeholderSize,
+            $placeholderInline
         );
         $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
         $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
