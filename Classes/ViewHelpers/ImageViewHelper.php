@@ -104,6 +104,12 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             if (!is_null($this->arguments['maxWidth'])) {
                 $processingInstructions['maxWidth'] = $this->arguments['maxWidth'];
             }
+            if (!is_null($this->arguments['minHeight'])) {
+            	$processingInstructions['minHeight'] = $this->arguments['minHeight'];
+            }
+            if (!is_null($this->arguments['maxHeight'])) {
+            	$processingInstructions['maxHeight'] = $this->arguments['maxHeight'];
+            }
             $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
             if ($this->arguments['breakpoints']) {

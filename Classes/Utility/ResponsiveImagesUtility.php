@@ -92,6 +92,7 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // Use width of fallback image as reference for relative sizes (1x, 2x...)
         $referenceWidth = $fallbackImage->getProperty('width');
+        $referenceHeight = $fallbackImage->getProperty('height');
 
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
@@ -112,7 +113,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         }
 
         // Generate different image sizes for srcset attribute
-        $srcsetImages = $this->generateSrcsetImages($originalImage, $referenceWidth, $srcset, $cropArea, $absoluteUri);
+        $srcsetImages = $this->generateSrcsetImages($originalImage, $referenceWidth, $referenceHeight, $srcset, $cropArea, $absoluteUri);
         $srcsetMode = substr(key($srcsetImages), -1); // x or w
 
         // Add fallback image to source options
@@ -129,7 +130,7 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // Provide image dimensions to be consistent with TYPO3 core behavior
         $tag->addAttribute('width', $referenceWidth);
-        $tag->addAttribute('height', $fallbackImage->getProperty('height'));
+        $tag->addAttribute('height', $referenceHeight);
 
         // Add metadata to image tag
         $this->addMetadataToImageTag($tag, $originalImage, $fallbackImage, $focusArea);
@@ -189,8 +190,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         // Normalize breakpoint configuration
         $breakpoints = $this->normalizeImageBreakpoints($breakpoints);
 
-        // Use width of fallback image as reference for relative sizes (1x, 2x...)
+        // Use width and height of fallback image as reference for relative sizes (1x, 2x...)
         $referenceWidth = $fallbackImage->getProperty('width');
+        $referenceHeight = $fallbackImage->getProperty('height');
 
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
@@ -203,6 +205,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $srcset = $this->generateSrcsetImages(
                 $originalImage,
                 $referenceWidth,
+                0,
                 $lastBreakpoint['srcset'],
                 $cropArea,
                 $absoluteUri
@@ -255,6 +258,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $sourceTag = $this->createPictureSourceTag(
                 $originalImage,
                 $referenceWidth,
+                0,
                 $breakpoint['srcset'],
                 $breakpoint['media'],
                 $breakpoint['sizes'],
@@ -278,6 +282,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @param  FileInterface $originalImage
      * @param  int           $defaultWidth
+     * @param  int           $defaultHeight
      * @param  array|string  $srcset
      * @param  string        $mediaQuery
      * @param  string        $sizesQuery
@@ -290,6 +295,7 @@ class ResponsiveImagesUtility implements SingletonInterface
     public function createPictureSourceTag(
         FileInterface $originalImage,
         int $defaultWidth,
+        int $defaultHeight,
         $srcset,
         string $mediaQuery = '',
         string $sizesQuery = '',
@@ -303,7 +309,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         $attributePrefix = $lazyload ? 'data-' : '';
 
         // Generate different image sizes for srcset attribute
-        $srcsetImages = $this->generateSrcsetImages($originalImage, $defaultWidth, $srcset, $cropArea, $absoluteUri);
+        $srcsetImages = $this->generateSrcsetImages($originalImage, $defaultWidth, $defaultHeight, $srcset, $cropArea, $absoluteUri);
         $srcsetMode = substr(key($srcsetImages), -1); // x or w
 
         // Create source tag for this breakpoint
@@ -422,6 +428,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @param  FileInterface  $image
      * @param  int            $defaultWidth
+     * @param  int            $defaultHeight - if value is zero, this value is not used and dimensions from cropping configuration are used
      * @param  array|string   $srcset
      * @param  Area           $cropArea
      * @param  bool           $absoluteUri
@@ -431,6 +438,7 @@ class ResponsiveImagesUtility implements SingletonInterface
     public function generateSrcsetImages(
         FileInterface $image,
         int $defaultWidth,
+        int $defaultHeight,
         $srcset,
         Area $cropArea = null,
         bool $absoluteUri = false
@@ -449,14 +457,23 @@ class ResponsiveImagesUtility implements SingletonInterface
             switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($defaultWidth * (float) substr($widthDescriptor, 0, -1));
+                    if ($defaultHeight > 0) {
+                        $candidateHeight = (int) ($defaultHeight * (float) substr($widthDescriptor, 0, -1));
+                    }
                     break;
 
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
+                    if ($defaultHeight > 0) {
+                        $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
+                    }
                     break;
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
+                    if ($defaultHeight > 0) {
+                        $candidateHeight = (int) ($candidateWidth * $defaultHeight / $defaultWidth + 0.5);
+                    }
                     $srcsetMode = 'w';
                     $widthDescriptor = $candidateWidth . 'w';
             }
@@ -464,8 +481,12 @@ class ResponsiveImagesUtility implements SingletonInterface
             // Generate image
             $processingInstructions = [
                 'width' => $candidateWidth,
+                'height' => $candidateHeight,
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
+            if ($defaultHeight > 0) {
+                $processingInstructions['height'] = $candidateHeight;
+            }
             $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
             // If processed file isn't as wide as it should be ([GFX][processor_allowUpscaling] set to false)
