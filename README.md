@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sitegeist/sms-responsive-images.svg?branch=master)](https://travis-ci.org/sitegeist/sms-responsive-images)
 
-## Responsive Images for TYPO3 8.7
+## Responsive Images for TYPO3
 
 This TYPO3 extension provides ViewHelpers and configuration to render valid
 responsive images based on TYPO3's image cropping tool.
@@ -17,9 +17,9 @@ by my employer https://sitegeist.de.*
 
 ## Installation
 
-This extension is available via packagist. Just add
-`"sitegeist/sms-responsive-images" : "~1.0"` to the require section of the
-composer.json or run `composer require sitegeist/sms-responsive-images`.
+This extension is available via packagist.
+
+    composer require sitegeist/sms-responsive-images
 
 Alternatively, you can install the extension from TYPO3 TER:
 
