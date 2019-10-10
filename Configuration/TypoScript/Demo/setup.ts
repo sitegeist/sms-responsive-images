@@ -2,7 +2,7 @@
 plugin.tx_smsresponsiveimages {
   persistence {
     classes {
-      SMS\SmsResponsiveImages\Domain\Model\Page {
+      Sitegeist\ResponsiveImages\Domain\Model\Page {
         mapping {
           tableName = pages
         }
@@ -29,8 +29,8 @@ tx_smsresponsiveimages_demo {
       header = USER
       header {
         userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-        extensionName = SmsResponsiveImages
-        vendorName = SMS
+        extensionName = ResponsiveImages
+        vendorName = Sitegeist
         pluginName = ResponsiveImages
 
         controller = Media

@@ -1,8 +1,8 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\Controller;
+namespace Sitegeist\ResponsiveImages\Controller;
 
-use SMS\SmsResponsiveImages\Domain\Repository\PageRepository;
+use Sitegeist\ResponsiveImages\Domain\Repository\PageRepository;
 
 class MediaController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {

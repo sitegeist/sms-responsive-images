@@ -1,6 +1,6 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\Domain\Model;
+namespace Sitegeist\ResponsiveImages\Domain\Model;
 
 class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {

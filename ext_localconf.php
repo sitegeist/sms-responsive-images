@@ -10,7 +10,7 @@ call_user_func(function () {
 
     // Enable demo plugin
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'SMS.sms_responsive_images',
+        'Sitegeist.sms_responsive_images',
         'ResponsiveImages',
         ['Media' => 'header, testing'],
         ['Media' => 'header, testing']
@@ -21,4 +21,4 @@ call_user_func(function () {
 if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'])) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'] = [];
 }
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'][] = 'SMS\\SmsResponsiveImages\\ViewHelpers';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sms'][] = 'Sitegeist\\ResponsiveImages\\ViewHelpers';

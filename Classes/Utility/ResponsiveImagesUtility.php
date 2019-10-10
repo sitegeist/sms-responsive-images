@@ -1,6 +1,6 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\Utility;
+namespace Sitegeist\ResponsiveImages\Utility;
 
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Resource\FileInterface;
