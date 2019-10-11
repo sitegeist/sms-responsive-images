@@ -16,9 +16,6 @@ lib.contentElement {
     breakpoints {
     }
 
-    # Use picturefill markup
-    picturefill = 1
-
     # Additional css classes for all image elements
     class =
   }

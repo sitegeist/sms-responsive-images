@@ -192,7 +192,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 'img',
                 1000,
                 1000,
-                null,
+                '/image-1000.jpg',
                 '/image-1000.jpg 1000w'
             ]
         ];
@@ -223,41 +223,37 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
     public function createImageTagWithSrcsetProvider()
     {
         return [
-            // Test standard output (instead of picturefill output)
+            // Test standard output
             'usingStandardOutput' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400],
                 '/image-1000.jpg',
-                '/image-400.jpg 400w, /image-1000.jpg 1000w',
-                false
+                '/image-400.jpg 400w, /image-1000.jpg 1000w'
             ],
             // Test srcset with 3 widths, one having same width as fallback
             'usingThreeWidthsWithFallbackDuplicate' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800, 1000],
-                null,
-                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
-                true
+                '/image-1000.jpg',
+                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w'
             ],
             // Test srcset with 2 widths + fallback image
             'usingTwoWidthsWithoutFallbackDuplicate' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [400, 800],
-                null,
-                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
-                true
+                '/image-1000.jpg',
+                '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w'
             ],
             // Test high dpi
             'usingHighDpi' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 ['1x', '2x'],
-                null,
-                '/image-1000.jpg 1x, /image-2000.jpg 2x',
-                true
+                '/image-1000.jpg',
+                '/image-1000.jpg 1x, /image-2000.jpg 2x'
             ],
             // Test svg image
             'usingSvg' => [
@@ -265,8 +261,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
                 [100, 200, 300],
                 '/image-2000.svg',
-                null,
-                true
+                null
             ]
         ];
     }
@@ -280,18 +275,12 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $fallbackImage,
         $srcsetConfig,
         $srcAttribute,
-        $srcsetAttribute,
-        $picturefillMarkup
+        $srcsetAttribute
     ) {
         $tag = $this->utility->createImageTagWithSrcset(
             $originalImage,
             $fallbackImage,
-            $srcsetConfig,
-            null,
-            null,
-            null,
-            null,
-            $picturefillMarkup
+            $srcsetConfig
         );
         $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
         $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
@@ -468,7 +457,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
     public function createImageTagWithSrcsetAndLazyloadProvider()
     {
         return [
-            // Test standard output (instead of picturefill output)
+            // Test standard output
             'usingStandardOutput' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
@@ -477,7 +466,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 '/image-1000.jpg',
                 '/image-400.jpg 400w, /image-1000.jpg 1000w',
-                false,
                 0,
                 false
             ],
@@ -488,9 +476,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 [400, 800],
                 null,
                 null,
-                null,
+                '/image-1000.jpg',
                 '/image-400.jpg 400w, /image-800.jpg 800w, /image-1000.jpg 1000w',
-                true,
                 0,
                 false
             ],
@@ -503,7 +490,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 '/image-2000.svg',
                 null,
-                true,
                 0,
                 false
             ],
@@ -516,7 +502,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 '/image-1000.jpg',
                 '/image-400.jpg 400w, /image-1000.jpg 1000w',
-                false,
                 20,
                 false
             ],
@@ -529,7 +514,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 '/image-1000.jpg',
                 '/image-400.jpg 400w, /image-1000.jpg 1000w',
-                false,
                 20,
                 true
             ],
@@ -548,7 +532,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $srcsetAttribute,
         $dataSrcAttribute,
         $dataSrcsetAttribute,
-        $picturefillMarkup,
         $placeholderSize,
         $placeholderInline
     ) {
@@ -560,7 +543,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             null,
             null,
             null,
-            $picturefillMarkup,
             false,
             true,
             'svg',

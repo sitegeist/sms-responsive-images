@@ -103,30 +103,6 @@ Examples
    } />
 
 
-picturefill
-^^^^^^^^^^^
-:aspect:`Variable type`
-   Boolean
-
-:aspect:`Description`
-   If set to FALSE, the ViewHelper will generate standard-compliant markup instead of the recommended markup by `picturefill <https://scottjehl.github.io/picturefill/>`__.
-
-:aspect:`Default value`
-   TRUE
-
-:aspect:`Mandatory`
-   No
-
-Examples
---------
-
-::
-
-   <sms:image image="{image}" srcset="400, 600" picturefill="false" />
-
-   <sms:media file="{image}" srcset="400, 600" picturefill="false" />
-
-
 lazyload
 ^^^^^^^^
 :aspect:`Variable type`

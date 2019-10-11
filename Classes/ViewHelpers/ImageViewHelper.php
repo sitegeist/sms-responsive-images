@@ -36,7 +36,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             '(min-width: %1$dpx) %1$dpx, 100vw'
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
-        $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
         $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
         $this->registerArgument('placeholderSize', 'int', 'Size of the placeholder image for lazyloading (0 = disabled)', false, 0);
         $this->registerArgument('placeholderInline', 'bool', 'Embed placeholder image for lazyloading inline as data uri', false, false);
@@ -116,7 +115,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $focusArea,
                     null,
                     $this->tag,
-                    $this->arguments['picturefill'],
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
@@ -133,7 +131,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $focusArea,
                     $this->arguments['sizes'],
                     $this->tag,
-                    $this->arguments['picturefill'],
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
