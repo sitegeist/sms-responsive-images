@@ -7,8 +7,10 @@ use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
 
-abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
+    protected $resetSingletonInstances = true;
+
     protected function setUp()
     {
         parent::setUp();
@@ -65,7 +67,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\CMS\Core\Tests
         $fileMock
             ->method('getProperty')
             ->will($this->returnCallback(function ($property) use ($properties) {
-                return $properties[$property];
+                return $properties[$property] ?? null;
             }));
         $fileMock
             ->method('getMimeType')

@@ -20,7 +20,7 @@
         "typo3/cms-core": "^9.5 || ^10.1"
     },
     "require-dev": {
-        "typo3/testing-framework": "^1.0",
+        "typo3/testing-framework": "^4.0",
         "squizlabs/php_codesniffer": "2.*",
         "editorconfig-checker/editorconfig-checker": "^7.0"
     },
