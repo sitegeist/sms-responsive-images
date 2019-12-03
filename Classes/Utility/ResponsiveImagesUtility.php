@@ -6,7 +6,7 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
-use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
