@@ -57,7 +57,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             'mixed',
             'File extensions that won\'t generate responsive images',
             false,
-            'svg'
+            'svg, gif'
         );
     }
 

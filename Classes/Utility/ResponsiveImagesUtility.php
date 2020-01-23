@@ -67,7 +67,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $tag = null,
         bool $absoluteUri = false,
         bool $lazyload = false,
-        $ignoreFileExtensions = 'svg',
+        $ignoreFileExtensions = 'svg, gif',
         int $placeholderSize = 0,
         bool $placeholderInline = false
     ): TagBuilder {
@@ -162,7 +162,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $fallbackTag = null,
         bool $absoluteUri = false,
         bool $lazyload = false,
-        $ignoreFileExtensions = 'svg',
+        $ignoreFileExtensions = 'svg, gif',
         int $placeholderSize = 0,
         bool $placeholderInline = false
     ): TagBuilder {
@@ -554,7 +554,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @return bool
      */
-    public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg')
+    public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg, gif')
     {
         $ignoreFileExtensions = (is_array($ignoreFileExtensions))
             ? $ignoreFileExtensions
