@@ -41,8 +41,8 @@ adjusting the `ignoreFileExtensions` parameter.
 
 There are also some changes under the hood you might want to consider:
 
-1. The PHP namespace has switched from `SMS` to `Sitegeist`, so if you extended one
-of the provided PHP classes, you need to adjust this.
+1. The PHP namespace has switched from `SMS\SmsResponsiveImages` to `Sitegeist\ResponsiveImages`,
+so if you extended one of the provided PHP classes, you need to adjust this.
 2. The extension now uses `.1579774724` instead of `.100` to overwrite the image partial
 of fluid_styled_content. This means that there will be less interference with other extensions.
 However, if you need to overwrite the `Image.html` file again, you need to specify your
