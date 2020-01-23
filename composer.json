@@ -33,7 +33,6 @@
         }
     },
     "replace": {
-        "sms_responsive_images": "self.version",
         "typo3-ter/sms-responsive-images": "self.version"
     },
     "config": {
