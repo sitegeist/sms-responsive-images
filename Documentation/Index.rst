@@ -27,7 +27,7 @@ SMS Responsive Images
       Provides ViewHelpers and configuration to render valid responsive images based on TYPO3's image cropping tool.
 
    :Keywords:
-      TYPO3 CMS,responsive images,srcset,sizes,picture,highdpi,retina,image,aspect ratio,cropping
+      TYPO3 CMS,responsive images,srcset,sizes,picture,highdpi,retina,image,aspect ratio,cropping,lazyload,placeholder
 
    :Copyright:
       2017

@@ -113,6 +113,7 @@ lazyload
 
    - ``src="..."`` will become ``data-src="..."``
    - ``srcset="..."`` will become ``data-srcset="..."``
+   - ``class="lazyload"`` will be added to the ``img`` tag
 
 :aspect:`Default value`
    FALSE
@@ -188,7 +189,7 @@ ignoreFileExtensions
    List of file extensions for which no responsive images should be generated (e. g. vector images that can't be cropped easily and don't need individual scaling).
 
 :aspect:`Default value`
-   'svg'
+   'svg, gif'
 
 :aspect:`Mandatory`
    No

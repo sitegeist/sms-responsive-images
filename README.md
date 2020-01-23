@@ -32,7 +32,7 @@ For further instructions, please take a look at the full documentation.
 To get an overview of responsive images in general and what the extension does, take a
 look at the following blog post:
 
-[sitegeist Techblog: Responsive Images with TYPO3 8.7](https://techblog.sitegeist.de/responsive-images-with-typo3-8-7/)
+[sitegeist Techblog: Responsive Images with TYPO3 8.7+](https://sitegeist.de/blog/typo3-blog/responsive-images-with-typo3-8-7.html)
 
 You will find the full documentation for this extension on typo3.org:
 
