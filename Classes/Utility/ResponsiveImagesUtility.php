@@ -108,6 +108,12 @@ class ResponsiveImagesUtility implements SingletonInterface
             ));
         }
 
+        // Add lazyload class to image tag
+        if ($lazyload) {
+            $existingClass = $tag->getAttribute('class');
+            $tag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
+        }
+
         // Generate different image sizes for srcset attribute
         $srcsetImages = $this->generateSrcsetImages($originalImage, $referenceWidth, $srcset, $cropArea, $absoluteUri);
         $srcsetMode = substr(key($srcsetImages), -1); // x or w
@@ -193,6 +199,12 @@ class ResponsiveImagesUtility implements SingletonInterface
         // Add fallback image source
         $fallbackImageUri = $this->imageService->getImageUri($fallbackImage, $absoluteUri);
         $fallbackTag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
+
+        // Add lazyload class to fallback image tag
+        if ($lazyload) {
+            $existingClass = $fallbackTag->getAttribute('class');
+            $fallbackTag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
+        }
 
         // Create placeholder image for lazyloading
         if ($lazyload && $placeholderSize) {
@@ -311,6 +323,12 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
+
+        // Add lazyload class to image tag
+        if ($lazyload) {
+            $existingClass = $tag->getAttribute('class');
+            $tag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
+        }
 
         // Set image source
         $tag->addAttribute($attributePrefix . 'src', $this->imageService->getImageUri($originalImage, $absoluteUri));

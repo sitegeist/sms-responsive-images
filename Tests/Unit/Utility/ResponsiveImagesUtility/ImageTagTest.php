@@ -9,6 +9,9 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
 {
     public function createSimpleImageTagProvider()
     {
+        $predefinedTag = new TagBuilder('img-test');
+        $predefinedTag->addAttribute('class', 'myClass');
+
         return [
             'simple' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
@@ -21,6 +24,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'img',
                 '/image-2000.jpg',
+                null,
                 null,
                 null,
                 null,
@@ -42,12 +46,13 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 null,
                 'image alt',
-                'image title'
+                'image title',
+                null
             ],
             'usingPredefinedTag' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
-                new TagBuilder('img-test'),
+                clone $predefinedTag,
                 null,
                 false,
                 false,
@@ -58,7 +63,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 null,
                 null,
-                null
+                null,
+                'myClass'
             ],
             'usingFocusArea' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
@@ -74,6 +80,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 null,
                 htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600])),
                 null,
+                null,
                 null
             ],
             'usingAbsoluteUri' => [
@@ -87,6 +94,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 'img',
                 'http://domain.tld/image-2000.jpg',
+                null,
                 null,
                 null,
                 null,
@@ -106,7 +114,25 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 '/image-2000.jpg',
                 null,
                 null,
-                null
+                null,
+                'lazyload'
+            ],
+            'usingLazyloadWithPredefinedTag' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                clone $predefinedTag,
+                null,
+                false,
+                true,
+                0,
+                false,
+                'img-test',
+                null,
+                '/image-2000.jpg',
+                null,
+                null,
+                null,
+                'myClass lazyload'
             ],
             'usingLazyloadWithPlaceholder' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
@@ -122,7 +148,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 '/image-2000.jpg',
                 null,
                 null,
-                null
+                null,
+                'lazyload'
             ],
             'usingLazyloadWithPlaceholderInline' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
@@ -138,7 +165,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 '/image-2000.jpg',
                 null,
                 null,
-                null
+                null,
+                'lazyload'
             ]
         ];
     }
@@ -161,7 +189,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $dataSrcAttribute,
         $dataFocusAreaAttribute,
         $altAttribute,
-        $titleAttribute
+        $titleAttribute,
+        $classAttribute
     ) {
         $tag = $this->utility->createSimpleImageTag(
             $originalImage,
@@ -179,6 +208,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $this->assertEquals($dataFocusAreaAttribute, $tag->getAttribute('data-focus-area'));
         $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
         $this->assertEquals($titleAttribute, $tag->getAttribute('title'));
+        $this->assertEquals($classAttribute, $tag->getAttribute('class'));
     }
 
     public function createImageTagWithSrcsetUsingEmptySrcsetProvider()
@@ -553,5 +583,6 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
         $this->assertEquals($dataSrcAttribute, $tag->getAttribute('data-src'));
         $this->assertEquals($dataSrcsetAttribute, $tag->getAttribute('data-srcset'));
+        $this->assertEquals('lazyload', $tag->getAttribute('class'));
     }
 }

@@ -128,7 +128,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
-                    '<img data-src="/image-1000.jpg" width="1000" alt="" />'
+                    '<img data-src="/image-1000.jpg" class="lazyload" width="1000" alt="" />'
                 ]
             ],
             // Test lazyload markup with placeholder
@@ -153,7 +153,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
-                    '<img src="/image-20.jpg" width="1000" alt="" />'
+                    '<img src="/image-20.jpg" class="lazyload" width="1000" alt="" />'
                 ]
             ],
             // Test lazyload markup with inline placeholder
@@ -178,7 +178,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
-                    '<img data-src="/image-1000.jpg" src="data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=" width="1000" alt="" />'
+                    '<img data-src="/image-1000.jpg" class="lazyload" src="data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=" width="1000" alt="" />'
                 ]
             ],
         ];
@@ -266,6 +266,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $fallbackTag->addAttribute('alt', 'fixed alt');
         $fallbackTag->addAttribute('title', 'fixed title');
         $fallbackTag->addAttribute('longdesc', 'fixed longdesc');
+        $fallbackTag->addAttribute('class', 'myClass');
 
         return [
             // Test if fallback tag attributes persist
@@ -275,8 +276,20 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 new CropVariantCollection([]),
-                $fallbackTag,
-                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" src="/image-1000.jpg" width="1000" />']
+                clone $fallbackTag,
+                false,
+                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" class="myClass" src="/image-1000.jpg" width="1000" />']
+            ],
+            // Test if fallback tag works with lazyloading
+            'usingCustomFallbackTagWithLazyload' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                new CropVariantCollection([]),
+                clone $fallbackTag,
+                true,
+                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" class="myClass lazyload" data-src="/image-1000.jpg" width="1000" />']
             ]
         ];
     }
@@ -290,6 +303,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $fallbackImage,
         $cropVariantCollection,
         $fallbackTag,
+        $lazyload,
         $tagContent
     ) {
         $tag = $this->utility->createPictureTag(
@@ -299,7 +313,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
             $cropVariantCollection,
             null,
             null,
-            $fallbackTag
+            $fallbackTag,
+            false,
+            $lazyload
         );
         $this->assertEquals(implode('', $tagContent), $tag->getContent());
     }
