@@ -13,4 +13,7 @@ tx_smsresponsiveimages {
 
   # cat=content/cTextmedia/b85; type=boolean; label= Embed placeholder image for lazyloading inline as base64
   placeholder.inline = 0
+
+  # cat=content/cTextmedia/b86; type=string; label= File extensions for which no responsive images should be generated
+  ignoreFileExtensions = svg, gif
 }

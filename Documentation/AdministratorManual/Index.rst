@@ -20,7 +20,7 @@ Installation
 
    New fields in constants editor
 
-Once you've installed the extension, the static TypoScript "Responsive Images" should be included. After that, the TypoScript constants editor contains two new fields concerning content images:
+Once you've installed the extension, the static TypoScript "Responsive Images" should be included. After that, the TypoScript constants editor contains new fields concerning content images. The most important ones are:
 
 - Additional Image Sizes for Responsive Images: Additional image sizes that should be generated for each content image (comma-separated list of either image widths specified in pixels or pixel density descriptors, e. g. "2x")
 - Sizes Query for Responsive Images: Sizes query which tells the browser which of the image sizes should be used in the current environment (``%1$d`` can be used as a placeholder for the calculated image width)
@@ -31,24 +31,18 @@ The image sizes can be altered or modified without major consequences. You shoul
 
 If you modify the sizes query, you should note that this applies to *all* content images by default, so this could have broad consequences to the download size of your website. The default value makes sure that the image can't get larger than the value configured in the backend. Long story short: You should know what you're doing.
 
-Demo PlugIn
------------
+Updating from 1.x
+-----------------
 
-.. figure:: ../Images/AdministratorManual/ExtConf.png
-   :width: 650px
-   :alt: Extension Configuration
+There are a few breaking changes which might require you to update your integration:
 
-   Extension configuration in extension manager
+- Support for TYPO3 8.7 is gone. Please use version 1.3 of the extension.
+- The ``picturefill`` attribute of ``<sms:image />`` and ``<sms:media />`` has been removed, so you need to remove it from your Fluid templates. Separate markup for picturefill.js is no longer required, so the extension now outputs standards-compliant markup at any time.
+- In addition to svg files, gif files are now excluded as well. You can change this by adjusting the ``ignoreFileExtensions`` parameter.
+- If ``lazyload`` is enabled, image tags will get a ``class="lazyload"`` automatically.
 
-The extension contains a demo mode in which you can test various image setups in a boilerplate website. The mode needs to be enabled in the extension's configuration found in the extension manager. Once you've enabled it, both a plugin and a new static TypoScript will be available, and the media field in the page properties allows three cropping variants (mobile, tablet, desktop).
+There are also some changes under the hood you might want to consider:
 
-Next, follow these steps to create the demo page:
-
-- Create a new page
-- Create a TypoScript extension template on the page
-   - Include the static TypoScript "Responsive Images (Demo)".
-   - Make sure that the page inherits or includes the static TypoScripts "Responsive Images", "Fluid Content Elements" and "Fluid Content Elements CSS (optional)"
-- Add an image to the media field in the page properties, adjust cropping for each variant
-- Add image elements to the main content column
-
-This should give you a simple demo environment in which you can test different image configurations.
+- The PHP namespace has switched from ``SMS\SmsResponsiveImages`` to ``Sitegeist\ResponsiveImages``, so if you extended one of the provided PHP classes, you need to adjust this.
+- The extension now uses ``.1579774724`` instead of ``.100`` to overwrite the image partial of fluid_styled_content. This means that there will be less interference with other extensions. However, if you need to overwrite the ``Image.html`` file again, you need to specify your partial after that value.
+- The demo plugin is gone, so if you were using it, it won't work anymore.

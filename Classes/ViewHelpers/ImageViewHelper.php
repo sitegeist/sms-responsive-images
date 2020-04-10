@@ -1,10 +1,10 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\ViewHelpers;
+namespace Sitegeist\ResponsiveImages\ViewHelpers;
 
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
-use SMS\SmsResponsiveImages\Utility\ResponsiveImagesUtility;
+use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
 
 class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 {
@@ -36,16 +36,27 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             '(min-width: %1$dpx) %1$dpx, 100vw'
         );
         $this->registerArgument('breakpoints', 'array', 'Image breakpoints from responsive design.', false);
-        $this->registerArgument('picturefill', 'bool', 'Use rendering suggested by picturefill.js', false, true);
         $this->registerArgument('lazyload', 'bool', 'Generate markup that supports lazyloading', false, false);
-        $this->registerArgument('placeholderSize', 'int', 'Size of the placeholder image for lazyloading (0 = disabled)', false, 0);
-        $this->registerArgument('placeholderInline', 'bool', 'Embed placeholder image for lazyloading inline as data uri', false, false);
+        $this->registerArgument(
+            'placeholderSize',
+            'int',
+            'Size of the placeholder image for lazyloading (0 = disabled)',
+            false,
+            0
+        );
+        $this->registerArgument(
+            'placeholderInline',
+            'bool',
+            'Embed placeholder image for lazyloading inline as data uri',
+            false,
+            false
+        );
         $this->registerArgument(
             'ignoreFileExtensions',
             'mixed',
             'File extensions that won\'t generate responsive images',
             false,
-            'svg'
+            'svg, gif'
         );
     }
 
@@ -54,15 +65,15 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
      *
      * @see https://docs.typo3.org/typo3cms/TyposcriptReference/ContentObjects/Image/
      *
-     * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
+     * @throws \TYPO3Fluid\Fluid\Core\Exception
      * @return string Rendered tag
      */
     public function render()
     {
-        if ((is_null($this->arguments['src']) && is_null($this->arguments['image']))
-            || (!is_null($this->arguments['src']) && !is_null($this->arguments['image']))
+        if (($this->arguments['src'] === '' && is_null($this->arguments['image']))
+            || $this->arguments['src'] !== '' && !is_null($this->arguments['image'])
         ) {
-            throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception(
+            throw new \TYPO3Fluid\Fluid\Core\Exception(
                 'You must either specify a string src or a File object.',
                 1517766588 // Original code: 1382284106
             );
@@ -116,7 +127,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $focusArea,
                     null,
                     $this->tag,
-                    $this->arguments['picturefill'],
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
@@ -133,7 +143,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $focusArea,
                     $this->arguments['sizes'],
                     $this->tag,
-                    $this->arguments['picturefill'],
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],

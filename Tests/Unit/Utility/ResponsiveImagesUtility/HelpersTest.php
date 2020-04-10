@@ -1,8 +1,8 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
+namespace Sitegeist\ResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 
-use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
 class HelpersTest extends AbstractResponsiveImagesUtilityTest

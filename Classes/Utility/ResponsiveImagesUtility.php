@@ -1,12 +1,12 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\Utility;
+namespace Sitegeist\ResponsiveImages\Utility;
 
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
-use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -49,7 +49,6 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param Area          $focusArea
      * @param string        $sizesQuery
      * @param TagBuilder    $tag
-     * @param bool          $picturefillMarkup
      * @param bool          $absoluteUri
      * @param  bool         $lazyload
      * @param  array|string $ignoreFileExtensions
@@ -66,10 +65,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         Area $focusArea = null,
         string $sizesQuery = null,
         TagBuilder $tag = null,
-        bool $picturefillMarkup = true,
         bool $absoluteUri = false,
         bool $lazyload = false,
-        $ignoreFileExtensions = 'svg',
+        $ignoreFileExtensions = 'svg, gif',
         int $placeholderSize = 0,
         bool $placeholderInline = false
     ): TagBuilder {
@@ -96,9 +94,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
 
-        if (!$picturefillMarkup) {
-            $tag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
-        }
+        // Add fallback image
+        $tag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
 
         // Create placeholder image for lazyloading
         if ($lazyload && $placeholderSize) {
@@ -109,6 +106,12 @@ class ResponsiveImagesUtility implements SingletonInterface
                 $placeholderInline,
                 $absoluteUri
             ));
+        }
+
+        // Add lazyload class to image tag
+        if ($lazyload) {
+            $existingClass = $tag->getAttribute('class');
+            $tag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
         }
 
         // Generate different image sizes for srcset attribute
@@ -147,7 +150,6 @@ class ResponsiveImagesUtility implements SingletonInterface
      * @param  Area                  $focusArea
      * @param  TagBuilder            $tag
      * @param  TagBuilder            $fallbackTag
-     * @param  bool                  $picturefillMarkup
      * @param  bool                  $absoluteUri
      * @param  bool                  $lazyload
      * @param  array|string          $ignoreFileExtensions
@@ -164,10 +166,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         Area $focusArea = null,
         TagBuilder $tag = null,
         TagBuilder $fallbackTag = null,
-        bool $picturefillMarkup = true,
         bool $absoluteUri = false,
         bool $lazyload = false,
-        $ignoreFileExtensions = 'svg',
+        $ignoreFileExtensions = 'svg, gif',
         int $placeholderSize = 0,
         bool $placeholderInline = false
     ): TagBuilder {
@@ -195,40 +196,14 @@ class ResponsiveImagesUtility implements SingletonInterface
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
 
-        // Use last breakpoint as fallback image if it doesn't define a media query
-        $lastBreakpoint = array_pop($breakpoints);
-        if ($lastBreakpoint && !$lastBreakpoint['media'] && $picturefillMarkup) {
-            // Generate different image sizes for last breakpoint
-            $cropArea = $cropVariantCollection->getCropArea($lastBreakpoint['cropVariant']);
-            $srcset = $this->generateSrcsetImages(
-                $originalImage,
-                $referenceWidth,
-                $lastBreakpoint['srcset'],
-                $cropArea,
-                $absoluteUri
-            );
-            $srcsetMode = substr(key($srcset), -1); // x or w
+        // Add fallback image source
+        $fallbackImageUri = $this->imageService->getImageUri($fallbackImage, $absoluteUri);
+        $fallbackTag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
 
-            // Set srcset attribute for fallback image
-            $fallbackTag->addAttribute($attributePrefix . 'srcset', $this->generateSrcsetAttribute($srcset));
-
-            // Set sizes query for fallback image
-            if ($srcsetMode == 'w' && $lastBreakpoint['sizes']) {
-                $fallbackTag->addAttribute('sizes', sprintf($lastBreakpoint['sizes'], $referenceWidth));
-            }
-        } else {
-            // Breakpoint can't be used as fallback
-            if ($lastBreakpoint) {
-                array_push($breakpoints, $lastBreakpoint);
-            }
-
-            // Set srcset attribute for fallback image (not src as advised by picturefill)
-            $fallbackImageUri = $this->imageService->getImageUri($fallbackImage, $absoluteUri);
-            if ($picturefillMarkup) {
-                $fallbackTag->addAttribute($attributePrefix . 'srcset', $fallbackImageUri);
-            } else {
-                $fallbackTag->addAttribute($attributePrefix . 'src', $fallbackImageUri);
-            }
+        // Add lazyload class to fallback image tag
+        if ($lazyload) {
+            $existingClass = $fallbackTag->getAttribute('class');
+            $fallbackTag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
         }
 
         // Create placeholder image for lazyloading
@@ -236,7 +211,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $fallbackTag->addAttribute('src', $this->generatePlaceholderImage(
                 $originalImage,
                 $placeholderSize,
-                $cropArea,
+                null,
                 $placeholderInline,
                 $absoluteUri
             ));
@@ -348,6 +323,12 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         // if lazyload enabled add data- prefix
         $attributePrefix = $lazyload ? 'data-' : '';
+
+        // Add lazyload class to image tag
+        if ($lazyload) {
+            $existingClass = $tag->getAttribute('class');
+            $tag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
+        }
 
         // Set image source
         $tag->addAttribute($attributePrefix . 'src', $this->imageService->getImageUri($originalImage, $absoluteUri));
@@ -591,7 +572,7 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @return bool
      */
-    public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg')
+    public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg, gif')
     {
         $ignoreFileExtensions = (is_array($ignoreFileExtensions))
             ? $ignoreFileExtensions

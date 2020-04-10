@@ -1,44 +1,30 @@
 <?php
-
-########################################################################
-# Extension Manager/Repository config file for ext "sms_responsive_images".
-#
-# Auto generated 05-05-2014 09:20
-#
-# Manual updates:
-# Only the data in the array - everything else is removed by next
-# writing. "version" and "dependencies" must not be touched!
-########################################################################
-
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF['sms_responsive_images'] = [
     'title' => 'SMS Responsive Images',
     'description' => 'Provides ViewHelpers and configuration to render valid responsive images based on TYPO3\'s image cropping tool.',
     'category' => 'fe',
     'author' => 'Simon Praetorius',
     'author_email' => 'praetorius@sitegeist.de',
     'author_company' => 'sitegeist media solutions GmbH',
-    'shy' => '',
-    'priority' => '',
-    'module' => '',
-    'state' => 'beta',
-    'internal' => '',
+    'state' => 'stable',
     'uploadfolder' => false,
-    'createDirs' => '',
-    'modify_tables' => '',
     'clearCacheOnLoad' => false,
-    'lockType' => '',
-    'version' => '1.3.0',
-    'constraints' => array(
-        'depends' => array(
-            'typo3' => '8.7.0-9.9.99',
-            'fluid' => '',
-            'php' => '7.0.0-0.0.0'
-        ),
-        'conflicts' => array(
+    'version' => '2.0.0',
+    'constraints' => [
+        'depends' => [
+            'typo3' => '9.5.99-10.9.99',
+            'php' => '7.2.0-7.9.99'
+        ],
+        'conflicts' => [
             'fluid_styled_responsive_images' => ''
-        ),
-        'suggests' => array(
+        ],
+        'suggests' => [
             'fluid_styled_content' => ''
-        ),
-    )
-);
+        ],
+    ],
+    'autoload' => [
+        'psr-4' => [
+            'Sitegeist\\ResponsiveImages\\' => 'Classes'
+        ]
+    ],
+];

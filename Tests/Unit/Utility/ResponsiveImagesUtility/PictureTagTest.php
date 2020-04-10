@@ -1,8 +1,8 @@
 <?php
 
-namespace SMS\SmsResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
+namespace Sitegeist\ResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 
-use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariant;
@@ -17,37 +17,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         ]);
 
         return [
-            // Test two breakpoints with media queries
-            'usingTwoBreakpointsWithMedia' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
-                [
-                    [
-                        'cropVariant' => 'desktop',
-                        'srcset' => [500, 1000],
-                        'media' => 'media desktop',
-                        'sizes' => 'sizes desktop'
-                    ],
-                    [
-                        'cropVariant' => 'mobile',
-                        'srcset' => [400, 800],
-                        'media' => 'media mobile',
-                        'sizes' => 'sizes mobile'
-                    ]
-                ],
-                $cropVariantCollection,
-                null,
-                true,
-                false,
-                0,
-                false,
-                'picture',
-                [
-                    '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<source srcset="/image-400.jpg 400w, /image-800.jpg 800w" media="media mobile" sizes="sizes mobile" />',
-                    '<img srcset="/image-1000.jpg" width="1000" alt="" />'
-                ]
-            ],
             // Test two breakpoints with media queries with standard output
             'usingTwoBreakpointsWithMediaRequestingStandardOutput' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
@@ -69,7 +38,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $cropVariantCollection,
                 null,
                 false,
-                false,
                 0,
                 false,
                 'picture',
@@ -77,35 +45,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                     '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source srcset="/image-400.jpg 400w, /image-800.jpg 800w" media="media mobile" sizes="sizes mobile" />',
                     '<img src="/image-1000.jpg" width="1000" alt="" />'
-                ]
-            ],
-            // Test two breakpoints, last one without media query
-            'usingTwoBreakpointsLastWithoutMedia' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
-                [
-                    [
-                        'cropVariant' => 'desktop',
-                        'srcset' => [500, 1000],
-                        'media' => 'media desktop',
-                        'sizes' => 'sizes desktop'
-                    ],
-                    [
-                        'cropVariant' => 'mobile',
-                        'srcset' => [400, 800],
-                        'sizes' => 'sizes mobile'
-                    ]
-                ],
-                $cropVariantCollection,
-                null,
-                true,
-                false,
-                0,
-                false,
-                'picture',
-                [
-                    '<source srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<img srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" width="1000" alt="" />'
                 ]
             ],
             // Test two breakpoints, last one without media query, with standard output
@@ -124,7 +63,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $cropVariantCollection,
                 null,
                 false,
-                false,
                 0,
                 false,
                 'picture',
@@ -141,13 +79,12 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [],
                 $cropVariantCollection,
                 new Area(0.4, 0.4, 0.6, 0.6),
-                true,
                 false,
                 0,
                 false,
                 'picture',
                 [
-                    '<img srcset="/image-1000.jpg" width="1000" data-focus-area="'
+                    '<img src="/image-1000.jpg" width="1000" data-focus-area="'
                         . htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600]))
                         . '" alt="" />'
                 ]
@@ -161,38 +98,12 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [],
                 $cropVariantCollection,
                 null,
-                true,
                 false,
                 0,
                 false,
                 'picture',
                 [
-                    '<img srcset="/image-1000.jpg" width="1000" alt="image alt" title="image title" />'
-                ]
-            ],
-            // Test lazyload markup
-            'usingLazyload' => [
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
-                [
-                    [
-                        'cropVariant' => 'desktop',
-                        'srcset' => [500, 1000],
-                        'media' => 'media desktop',
-                        'sizes' => 'sizes desktop'
-                    ],
-                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
-                ],
-                $cropVariantCollection,
-                null,
-                true,
-                true,
-                0,
-                false,
-                'picture',
-                [
-                    '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<img data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" width="1000" alt="" />'
+                    '<img src="/image-1000.jpg" width="1000" alt="image alt" title="image title" />'
                 ]
             ],
             // Test lazyload markup with standard output
@@ -210,7 +121,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 ],
                 $cropVariantCollection,
                 null,
-                false,
                 true,
                 0,
                 false,
@@ -218,7 +128,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
-                    '<img data-src="/image-1000.jpg" width="1000" alt="" />'
+                    '<img data-src="/image-1000.jpg" class="lazyload" width="1000" alt="" />'
                 ]
             ],
             // Test lazyload markup with placeholder
@@ -237,13 +147,13 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $cropVariantCollection,
                 null,
                 true,
-                true,
                 20,
                 false,
                 'picture',
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<img data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" src="/image-20.jpg" width="1000" alt="" />'
+                    '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
+                    '<img src="/image-20.jpg" class="lazyload" width="1000" alt="" />'
                 ]
             ],
             // Test lazyload markup with inline placeholder
@@ -262,13 +172,13 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 $cropVariantCollection,
                 null,
                 true,
-                true,
                 20,
                 true,
                 'picture',
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
-                    '<img data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" src="data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=" width="1000" alt="" />'
+                    '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
+                    '<img data-src="/image-1000.jpg" class="lazyload" src="data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=" width="1000" alt="" />'
                 ]
             ],
         ];
@@ -284,7 +194,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $breakpoints,
         $cropVariantCollection,
         $focusArea,
-        $picturefillMarkup,
         $lazyload,
         $placeholderSize,
         $placeholderInline,
@@ -299,7 +208,6 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
             $focusArea,
             null,
             null,
-            $picturefillMarkup,
             false,
             $lazyload,
             'svg',
@@ -358,6 +266,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $fallbackTag->addAttribute('alt', 'fixed alt');
         $fallbackTag->addAttribute('title', 'fixed title');
         $fallbackTag->addAttribute('longdesc', 'fixed longdesc');
+        $fallbackTag->addAttribute('class', 'myClass');
 
         return [
             // Test if fallback tag attributes persist
@@ -367,8 +276,20 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 ),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 new CropVariantCollection([]),
-                $fallbackTag,
-                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" srcset="/image-1000.jpg" width="1000" />']
+                clone $fallbackTag,
+                false,
+                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" class="myClass" src="/image-1000.jpg" width="1000" />']
+            ],
+            // Test if fallback tag works with lazyloading
+            'usingCustomFallbackTagWithLazyload' => [
+                $this->mockFileObject(
+                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
+                ),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                new CropVariantCollection([]),
+                clone $fallbackTag,
+                true,
+                ['<img alt="fixed alt" title="fixed title" longdesc="fixed longdesc" class="myClass lazyload" data-src="/image-1000.jpg" width="1000" />']
             ]
         ];
     }
@@ -382,6 +303,7 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $fallbackImage,
         $cropVariantCollection,
         $fallbackTag,
+        $lazyload,
         $tagContent
     ) {
         $tag = $this->utility->createPictureTag(
@@ -391,7 +313,9 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
             $cropVariantCollection,
             null,
             null,
-            $fallbackTag
+            $fallbackTag,
+            false,
+            $lazyload
         );
         $this->assertEquals(implode('', $tagContent), $tag->getContent());
     }
