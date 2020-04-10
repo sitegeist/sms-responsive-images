@@ -65,15 +65,15 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
      *
      * @see https://docs.typo3.org/typo3cms/TyposcriptReference/ContentObjects/Image/
      *
-     * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
+     * @throws \TYPO3Fluid\Fluid\Core\Exception
      * @return string Rendered tag
      */
     public function render()
     {
-        if ((is_null($this->arguments['src']) && is_null($this->arguments['image']))
-            || (!is_null($this->arguments['src']) && !is_null($this->arguments['image']))
+        if (($this->arguments['src'] === '' && is_null($this->arguments['image']))
+            || $this->arguments['src'] !== '' && !is_null($this->arguments['image'])
         ) {
-            throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception(
+            throw new \TYPO3Fluid\Fluid\Core\Exception(
                 'You must either specify a string src or a File object.',
                 1517766588 // Original code: 1382284106
             );
