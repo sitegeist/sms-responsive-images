@@ -70,8 +70,9 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
      */
     public function render()
     {
-        if (($this->arguments['src'] === '' && is_null($this->arguments['image']))
-            || $this->arguments['src'] !== '' && !is_null($this->arguments['image'])
+        $src = (string)$this->arguments['src'];
+        if (($src === '' && is_null($this->arguments['image']))
+            || $src !== '' && !is_null($this->arguments['image'])
         ) {
             throw new \TYPO3Fluid\Fluid\Core\Exception(
                 'You must either specify a string src or a File object.',
@@ -87,7 +88,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         try {
             // Get FAL image object
             $image = $this->imageService->getImage(
-                $this->arguments['src'],
+                $src,
                 $this->arguments['image'],
                 $this->arguments['treatIdAsReference']
             );
