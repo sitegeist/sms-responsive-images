@@ -70,7 +70,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      * @param string|null $fileExtension
      * @return string                 Rendered img tag
      */
-    protected function renderImage(FileInterface $image, $width, $height, ?string $fileExtension)
+    protected function renderImage(FileInterface $image, $width, $height, ?string $fileExtension = null)
     {
         if ($this->arguments['breakpoints']) {
             return $this->renderPicture($image, $width, $height);
