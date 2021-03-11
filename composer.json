@@ -32,9 +32,6 @@
             "Sitegeist\\ResponsiveImages\\": "Classes/"
         }
     },
-    "replace": {
-        "typo3-ter/sms-responsive-images": "self.version"
-    },
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin"
@@ -42,6 +39,7 @@
     "extra": {
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "sms_responsive_images",
             "web-dir": ".Build/Web"
         }
     },
