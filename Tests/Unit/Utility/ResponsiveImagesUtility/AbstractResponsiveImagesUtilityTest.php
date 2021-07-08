@@ -11,7 +11,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
 {
     protected $resetSingletonInstances = true;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
