@@ -16,4 +16,7 @@ tx_smsresponsiveimages {
 
   # cat=content/cTextmedia/b86; type=string; label= File extensions for which no responsive images should be generated
   ignoreFileExtensions = svg, gif
+
+  # cat=content/cTextmedia/b87; type=string; label= Use different file extension for all images
+  fileExtension =
 }

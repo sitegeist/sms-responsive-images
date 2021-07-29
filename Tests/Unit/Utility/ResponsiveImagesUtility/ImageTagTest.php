@@ -22,6 +22,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 0,
                 false,
+                null,
                 'img',
                 '/image-2000.jpg',
                 null,
@@ -41,6 +42,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 0,
                 false,
+                null,
                 'img',
                 '/image-2000.jpg',
                 null,
@@ -58,6 +60,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 0,
                 false,
+                null,
                 'img-test',
                 '/image-2000.jpg',
                 null,
@@ -75,6 +78,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 0,
                 false,
+                null,
                 'img',
                 '/image-2000.jpg',
                 null,
@@ -92,6 +96,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 false,
                 0,
                 false,
+                null,
                 'img',
                 'http://domain.tld/image-2000.jpg',
                 null,
@@ -109,6 +114,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 0,
                 false,
+                null,
                 'img',
                 null,
                 '/image-2000.jpg',
@@ -126,6 +132,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 0,
                 false,
+                null,
                 'img-test',
                 null,
                 '/image-2000.jpg',
@@ -143,6 +150,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 20,
                 false,
+                null,
                 'img',
                 '/image-20.jpg',
                 '/image-2000.jpg',
@@ -160,9 +168,28 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
                 true,
                 20,
                 true,
+                null,
                 'img',
                 'data:image/jpeg;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=',
                 '/image-2000.jpg',
+                null,
+                null,
+                null,
+                'lazyload'
+            ],
+            'usingCustomFileExtension' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                null,
+                null,
+                false,
+                true,
+                20,
+                true,
+                'webp',
+                'img',
+                'data:image/webp;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=',
+                '/image-2000.webp',
                 null,
                 null,
                 null,
@@ -184,6 +211,7 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $lazyload,
         $placeholderSize,
         $placeholderInline,
+        $fileExtension,
         $tagName,
         $srcAttribute,
         $dataSrcAttribute,
@@ -200,7 +228,8 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
             $absoluteUri,
             $lazyload,
             $placeholderSize,
-            $placeholderInline
+            $placeholderInline,
+            $fileExtension
         );
         $this->assertEquals($tagName, $tag->getTagName());
         $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
@@ -584,5 +613,133 @@ class ImageTagTest extends AbstractResponsiveImagesUtilityTest
         $this->assertEquals($dataSrcAttribute, $tag->getAttribute('data-src'));
         $this->assertEquals($dataSrcsetAttribute, $tag->getAttribute('data-srcset'));
         $this->assertEquals('lazyload', $tag->getAttribute('class'));
+    }
+
+    public function createImageTagWithSrcsetAndCustomFileExtensionProvider()
+    {
+        return [
+            // Test standard output
+            'usingStandardOutput' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [400],
+                false,
+                'svg',
+                '/image-1000.jpg',
+                '/image-400.webp 400w, /image-1000.jpg 1000w',
+                null,
+                null,
+                0,
+                false
+            ],
+            // Test standard output
+            'usingLazyload' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [400],
+                true,
+                'svg',
+                null,
+                null,
+                '/image-1000.jpg',
+                '/image-400.webp 400w, /image-1000.jpg 1000w',
+                0,
+                false
+            ],
+            // Test svg image
+            'withSvgImage' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                [400, 800],
+                true,
+                'svg',
+                null,
+                null,
+                '/image-1000.svg',
+                '/image-400.webp 400w, /image-800.webp 800w, /image-1000.svg 1000w',
+                0,
+                false
+            ],
+            // Test with ignored extension
+            'withIgnoredExtension' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'svg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'svg']),
+                [400, 800],
+                false,
+                'svg, webp',
+                '/image-2000.webp',
+                null,
+                null,
+                null,
+                0,
+                false
+            ],
+            // Test placeholder image
+            'usingPlaceholderImage' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [400],
+                true,
+                'svg',
+                '/image-20.webp',
+                null,
+                '/image-1000.jpg',
+                '/image-400.webp 400w, /image-1000.jpg 1000w',
+                20,
+                false
+            ],
+            // Test placeholder image inline
+            'usingPlaceholderImageInline' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                [400],
+                true,
+                'svg',
+                'data:image/webp;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=',
+                null,
+                '/image-1000.jpg',
+                '/image-400.webp 400w, /image-1000.jpg 1000w',
+                20,
+                true
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider createImageTagWithSrcsetAndCustomFileExtensionProvider
+     */
+    public function createImageTagWithSrcsetAndCustomFileExtension(
+        $originalImage,
+        $fallbackImage,
+        $srcsetConfig,
+        $lazyload,
+        $ignoreFileExtensions,
+        $srcAttribute,
+        $srcsetAttribute,
+        $dataSrcAttribute,
+        $dataSrcsetAttribute,
+        $placeholderSize,
+        $placeholderInline
+    ) {
+        $tag = $this->utility->createImageTagWithSrcset(
+            $originalImage,
+            $fallbackImage,
+            $srcsetConfig,
+            null,
+            null,
+            null,
+            null,
+            false,
+            $lazyload,
+            $ignoreFileExtensions,
+            $placeholderSize,
+            $placeholderInline,
+            'webp'
+        );
+        $this->assertEquals($srcAttribute, $tag->getAttribute('src'));
+        $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
+        $this->assertEquals($dataSrcAttribute, $tag->getAttribute('data-src'));
+        $this->assertEquals($dataSrcsetAttribute, $tag->getAttribute('data-srcset'));
     }
 }

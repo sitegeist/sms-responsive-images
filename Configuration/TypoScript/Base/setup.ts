@@ -14,6 +14,7 @@ lib.contentElement {
     breakpoints {
     }
     ignoreFileExtensions = {$tx_smsresponsiveimages.ignoreFileExtensions}
+    fileExtension = {$tx_smsresponsiveimages.fileExtension}
 
     # Additional css classes for all image elements
     class =

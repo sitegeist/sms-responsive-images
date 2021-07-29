@@ -15,6 +15,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 false,
+                null,
                 '',
                 null
             ],
@@ -26,6 +27,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 false,
+                null,
                 '/image-1000.jpg 1x, /image-2000.jpg 2x',
                 null
             ],
@@ -37,6 +39,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 false,
+                null,
                 '/image-400.jpg 400w, /image-800.jpg 800w',
                 null
             ],
@@ -48,7 +51,20 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 'media query',
                 '%d',
                 false,
+                null,
                 '/image-400.jpg 400w',
+                1000
+            ],
+            // Test custom file extension
+            'usingCustomFileExtension' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                1000,
+                [400],
+                'media query',
+                '%d',
+                false,
+                'webp',
+                '/image-400.webp 400w',
                 1000
             ],
             // Test absolute urls
@@ -59,6 +75,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
                 '',
                 '',
                 true,
+                null,
                 'http://domain.tld/image-1000.jpg 1x, http://domain.tld/image-2000.jpg 2x',
                 null
             ],
@@ -76,6 +93,7 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
         $mediaQuery,
         $sizesQuery,
         $absoluteUri,
+        $fileExtension,
         $srcsetAttribute,
         $sizesAttribute
     ) {
@@ -86,7 +104,9 @@ class PictureSourceTagTest extends AbstractResponsiveImagesUtilityTest
             $mediaQuery,
             $sizesQuery,
             null,
-            $absoluteUri
+            $absoluteUri,
+            false,
+            $fileExtension
         );
         $this->assertEquals('source', $tag->getTagName());
         $this->assertEquals($mediaQuery, $tag->getAttribute('media'));

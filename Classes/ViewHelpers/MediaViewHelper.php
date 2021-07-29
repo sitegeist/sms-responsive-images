@@ -73,9 +73,9 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
     protected function renderImage(FileInterface $image, $width, $height, ?string $fileExtension = null)
     {
         if ($this->arguments['breakpoints']) {
-            return $this->renderPicture($image, $width, $height);
+            return $this->renderPicture($image, $width, $height, $fileExtension);
         } elseif ($this->arguments['srcset']) {
-            return $this->renderImageSrcset($image, $width, $height);
+            return $this->renderImageSrcset($image, $width, $height, $fileExtension);
         } else {
             return parent::renderImage($image, $width, $height, $fileExtension);
         }
@@ -90,7 +90,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      *
      * @return string                 Rendered picture tag
      */
-    protected function renderPicture(FileInterface $image, $width, $height)
+    protected function renderPicture(FileInterface $image, $width, $height, ?string $fileExtension = null)
     {
         // Get crop variants
         $cropString = $image instanceof FileReference ? $image->getProperty('crop') : '';
@@ -101,7 +101,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $focusArea = $cropVariantCollection->getFocusArea($cropVariant);
 
         // Generate fallback image
-        $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea);
+        $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea, $fileExtension);
 
         // Generate picture tag
         $this->tag = $this->responsiveImagesUtility->createPictureTag(
@@ -116,7 +116,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->arguments['lazyload'],
             $this->arguments['ignoreFileExtensions'],
             $this->arguments['placeholderSize'],
-            $this->arguments['placeholderInline']
+            $this->arguments['placeholderInline'],
+            $fileExtension
         );
 
         return $this->tag->render();
@@ -131,7 +132,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      *
      * @return string                 Rendered img tag
      */
-    protected function renderImageSrcset(FileInterface $image, $width, $height)
+    protected function renderImageSrcset(FileInterface $image, $width, $height, ?string $fileExtension = null)
     {
         // Get crop variants
         $cropString = $image instanceof FileReference ? $image->getProperty('crop') : '';
@@ -142,7 +143,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         $focusArea = $cropVariantCollection->getFocusArea($cropVariant);
 
         // Generate fallback image
-        $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea);
+        $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea, $fileExtension);
 
         // Generate image tag
         $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
@@ -157,7 +158,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
             $this->arguments['lazyload'],
             $this->arguments['ignoreFileExtensions'],
             $this->arguments['placeholderSize'],
-            $this->arguments['placeholderInline']
+            $this->arguments['placeholderInline'],
+            $fileExtension
         );
 
         return $this->tag->render();
@@ -172,12 +174,19 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
      *
      * @return FileInterface
      */
-    protected function generateFallbackImage(FileInterface $image, $width, Area $cropArea)
-    {
+    protected function generateFallbackImage(
+        FileInterface $image,
+        $width,
+        Area $cropArea,
+        ?string $fileExtension = null
+    ) {
         $processingInstructions = [
             'width' => $width,
             'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
         ];
+        if (!empty($fileExtension)) {
+            $processingInstructions['fileExtension'] = $fileExtension;
+        }
         $imageService = $this->getImageService();
         $fallbackImage = $imageService->applyProcessingInstructions($image, $processingInstructions);
 

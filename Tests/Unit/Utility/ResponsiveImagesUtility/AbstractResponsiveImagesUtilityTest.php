@@ -34,12 +34,21 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
             ->method('applyProcessingInstructions')
             ->will($this->returnCallback(function ($file, $instructions) use ($test) {
                 // Simulate processor_allowUpscaling = false
-                $instructions['width'] = min($instructions['width'], $file->getProperty('width'));
+                $instructions['width'] = isset($instructions['width'])
+                    ? min($instructions['width'], $file->getProperty('width'))
+                    : $file->getProperty('width');
 
                 // Use file name and extension from original image
                 $instructions['name'] = $file->getProperty('name');
-                $instructions['extension'] = $file->getProperty('extension');
-                $instructions['mimeType'] = $file->getProperty('mimeType');
+
+                if (isset($instructions['fileExtension'])) {
+                    $instructions['extension'] = $instructions['fileExtension'];
+                    $instructions['mimeType'] = 'image/' . $instructions['fileExtension'];
+                    unset($instructions['fileExtension']);
+                } else {
+                    $instructions['extension'] = $file->getProperty('extension');
+                    $instructions['mimeType'] = $file->getProperty('mimeType');
+                }
 
                 return $test->mockFileObject($instructions, true);
             }));
