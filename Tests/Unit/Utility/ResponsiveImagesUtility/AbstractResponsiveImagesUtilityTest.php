@@ -2,10 +2,11 @@
 
 namespace Sitegeist\ResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 
-use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3\CMS\Core\Resource\FileReference;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
+use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\ProcessedFile;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\ImageService;
 
 abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
@@ -25,6 +26,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
         $test = $this;
 
         $imageServiceMock = $this->getMockBuilder(ImageService::class)
+            ->disableOriginalConstructor()
             ->setMethods(['applyProcessingInstructions', 'getImageUri'])
             ->getMock();
 
@@ -39,7 +41,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
                 $instructions['extension'] = $file->getProperty('extension');
                 $instructions['mimeType'] = $file->getProperty('mimeType');
 
-                return $test->mockFileObject($instructions);
+                return $test->mockFileObject($instructions, true);
             }));
 
         $imageServiceMock
@@ -52,14 +54,14 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
         return $imageServiceMock;
     }
 
-    protected function mockFileObject($properties)
+    protected function mockFileObject($properties, $processed = false)
     {
         $defaultProperties = [
             'name' => 'image'
         ];
         $properties = array_replace($defaultProperties, $properties);
 
-        $fileMock = $this->getMockBuilder(FileReference::class)
+        $fileMock = $this->getMockBuilder($processed ? ProcessedFile::class : FileReference::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProperty', 'getMimeType', 'getContents'])
             ->getMock();
