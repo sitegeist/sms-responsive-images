@@ -69,19 +69,23 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $lazyload = false,
         $ignoreFileExtensions = 'svg, gif',
         int $placeholderSize = 0,
-        bool $placeholderInline = false
+        bool $placeholderInline = false,
+        ?string $fileExtension = null
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
 
         // Deal with file formats that can't be cropped separately
-        if ($this->hasIgnoredFileExtension($originalImage, $ignoreFileExtensions)) {
+        if ($this->hasIgnoredFileExtension($originalImage, $ignoreFileExtensions, $fileExtension)) {
             return $this->createSimpleImageTag(
                 $originalImage,
                 $fallbackImage,
                 $tag,
                 $focusArea,
                 $absoluteUri,
-                $lazyload
+                $lazyload,
+                $placeholderSize,
+                $placeholderInline,
+                $fileExtension
             );
         }
 
@@ -104,7 +108,8 @@ class ResponsiveImagesUtility implements SingletonInterface
                 $placeholderSize,
                 $cropArea,
                 $placeholderInline,
-                $absoluteUri
+                $absoluteUri,
+                $fileExtension
             ));
         }
 
@@ -115,7 +120,14 @@ class ResponsiveImagesUtility implements SingletonInterface
         }
 
         // Generate different image sizes for srcset attribute
-        $srcsetImages = $this->generateSrcsetImages($originalImage, $referenceWidth, $srcset, $cropArea, $absoluteUri);
+        $srcsetImages = $this->generateSrcsetImages(
+            $originalImage,
+            $referenceWidth,
+            $srcset,
+            $cropArea,
+            $absoluteUri,
+            $fileExtension
+        );
         $srcsetMode = substr(key($srcsetImages), -1); // x or w
 
         // Add fallback image to source options
@@ -170,20 +182,24 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $lazyload = false,
         $ignoreFileExtensions = 'svg, gif',
         int $placeholderSize = 0,
-        bool $placeholderInline = false
+        bool $placeholderInline = false,
+        ?string $fileExtension = null
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'picture');
         $fallbackTag = $fallbackTag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
 
         // Deal with file formats that can't be cropped separately
-        if ($this->hasIgnoredFileExtension($originalImage, $ignoreFileExtensions)) {
+        if ($this->hasIgnoredFileExtension($originalImage, $ignoreFileExtensions, $fileExtension)) {
             return $this->createSimpleImageTag(
                 $originalImage,
                 $fallbackImage,
                 $fallbackTag,
                 $focusArea,
                 $absoluteUri,
-                $lazyload
+                $lazyload,
+                $placeholderSize,
+                $placeholderInline,
+                $fileExtension
             );
         }
 
@@ -213,7 +229,8 @@ class ResponsiveImagesUtility implements SingletonInterface
                 $placeholderSize,
                 null,
                 $placeholderInline,
-                $absoluteUri
+                $absoluteUri,
+                $fileExtension
             ));
         }
 
@@ -235,7 +252,8 @@ class ResponsiveImagesUtility implements SingletonInterface
                 $breakpoint['sizes'],
                 $cropArea,
                 $absoluteUri,
-                $lazyload
+                $lazyload,
+                $fileExtension
             );
             $sourceTags[] = $sourceTag->render();
         }
@@ -270,7 +288,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         string $sizesQuery = '',
         Area $cropArea = null,
         bool $absoluteUri = false,
-        bool $lazyload = false
+        bool $lazyload = false,
+        ?string $fileExtension = null
     ): TagBuilder {
         $cropArea = $cropArea ?: Area::createEmpty();
 
@@ -278,7 +297,14 @@ class ResponsiveImagesUtility implements SingletonInterface
         $attributePrefix = $lazyload ? 'data-' : '';
 
         // Generate different image sizes for srcset attribute
-        $srcsetImages = $this->generateSrcsetImages($originalImage, $defaultWidth, $srcset, $cropArea, $absoluteUri);
+        $srcsetImages = $this->generateSrcsetImages(
+            $originalImage,
+            $defaultWidth,
+            $srcset,
+            $cropArea,
+            $absoluteUri,
+            $fileExtension
+        );
         $srcsetMode = substr(key($srcsetImages), -1); // x or w
 
         // Create source tag for this breakpoint
@@ -316,7 +342,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         bool $absoluteUri = false,
         bool $lazyload = false,
         int $placeholderSize = 0,
-        bool $placeholderInline = false
+        bool $placeholderInline = false,
+        ?string $fileExtension = null
     ): TagBuilder {
         $tag = $tag ?: GeneralUtility::makeInstance(TagBuilder::class, 'img');
         $fallbackImage = ($fallbackImage) ?: $originalImage;
@@ -330,17 +357,26 @@ class ResponsiveImagesUtility implements SingletonInterface
             $tag->addAttribute('class', $existingClass ? $existingClass . ' lazyload' : 'lazyload');
         }
 
+        if (!empty($fileExtension)) {
+            $simpleImage = $this->imageService->applyProcessingInstructions($originalImage, [
+                'fileExtension' => $fileExtension
+            ]);
+        } else {
+            $simpleImage = $originalImage;
+        }
+
         // Set image source
-        $tag->addAttribute($attributePrefix . 'src', $this->imageService->getImageUri($originalImage, $absoluteUri));
+        $tag->addAttribute($attributePrefix . 'src', $this->imageService->getImageUri($simpleImage, $absoluteUri));
 
         // Create placeholder image for lazyloading
         if ($lazyload && $placeholderSize) {
             $tag->addAttribute('src', $this->generatePlaceholderImage(
-                $originalImage,
+                $simpleImage,
                 $placeholderSize,
                 null,
                 $placeholderInline,
-                $absoluteUri
+                $absoluteUri,
+                $fileExtension
             ));
         }
 
@@ -414,7 +450,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         int $defaultWidth,
         $srcset,
         Area $cropArea = null,
-        bool $absoluteUri = false
+        bool $absoluteUri = false,
+        ?string $fileExtension = null
     ): array {
         $cropArea = $cropArea ?: Area::createEmpty();
 
@@ -447,6 +484,9 @@ class ResponsiveImagesUtility implements SingletonInterface
                 'width' => $candidateWidth,
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
+            if (!empty($fileExtension)) {
+                $processingInstructions['fileExtension'] = $fileExtension;
+            }
             $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
             // If processed file isn't as wide as it should be ([GFX][processor_allowUpscaling] set to false)
@@ -478,7 +518,8 @@ class ResponsiveImagesUtility implements SingletonInterface
         int $width = 20,
         Area $cropArea = null,
         bool $inline = false,
-        bool $absoluteUri = false
+        bool $absoluteUri = false,
+        ?string $fileExtension = null
     ): string {
         $cropArea = $cropArea ?: Area::createEmpty();
 
@@ -486,6 +527,9 @@ class ResponsiveImagesUtility implements SingletonInterface
             'width' => $width,
             'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
         ];
+        if (!empty($fileExtension)) {
+            $processingInstructions['fileExtension'] = $fileExtension;
+        }
         $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
         if ($inline) {
@@ -572,12 +616,19 @@ class ResponsiveImagesUtility implements SingletonInterface
      *
      * @return bool
      */
-    public function hasIgnoredFileExtension(FileInterface $image, $ignoreFileExtensions = 'svg, gif')
-    {
+    public function hasIgnoredFileExtension(
+        FileInterface $image,
+        $ignoreFileExtensions = 'svg, gif',
+        ?string $fileExtension = null
+    ) {
         $ignoreFileExtensions = (is_array($ignoreFileExtensions))
             ? $ignoreFileExtensions
             : GeneralUtility::trimExplode(',', $ignoreFileExtensions);
 
-        return in_array($image->getProperty('extension'), $ignoreFileExtensions);
+        if (!empty($fileExtension)) {
+            return in_array($fileExtension, $ignoreFileExtensions);
+        } else {
+            return in_array($image->getProperty('extension'), $ignoreFileExtensions);
+        }
     }
 }

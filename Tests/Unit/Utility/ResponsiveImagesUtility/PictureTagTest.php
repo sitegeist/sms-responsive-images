@@ -153,11 +153,11 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
                 [
                     '<source data-srcset="/image-500.jpg 500w, /image-1000.jpg 1000w" media="media desktop" sizes="sizes desktop" />',
                     '<source data-srcset="/image-400.jpg 400w, /image-800.jpg 800w" sizes="sizes mobile" />',
-                    '<img src="/image-20.jpg" class="lazyload" width="1000" alt="" />'
+                    '<img data-src="/image-1000.jpg" class="lazyload" src="/image-20.jpg" width="1000" alt="" />'
                 ]
             ],
             // Test lazyload markup with inline placeholder
-            'usingLazyloadWithPlaceholder' => [
+            'usingLazyloadWithInlinePlaceholder' => [
                 $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
                 $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
                 [
@@ -355,5 +355,156 @@ class PictureTagTest extends AbstractResponsiveImagesUtilityTest
         $this->assertEquals($srcsetAttribute, $tag->getAttribute('srcset'));
         $this->assertEquals($widthAttribute, $tag->getAttribute('width'));
         $this->assertEquals($heightAttribute, $tag->getAttribute('height'));
+    }
+
+    public function createPictureTagWithCustomFileExtensionProvider()
+    {
+        $cropVariantCollection = new CropVariantCollection([
+            new CropVariant('desktop', 'Desktop', Area::createEmpty()),
+            new CropVariant('mobile', 'Mobile', Area::createEmpty())
+        ]);
+
+        return [
+            // Test two breakpoints with media queries with standard output
+            'usingTwoBreakpoints' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    [
+                        'cropVariant' => 'mobile',
+                        'srcset' => [400, 800],
+                        'media' => 'media mobile',
+                        'sizes' => 'sizes mobile'
+                    ]
+                ],
+                $cropVariantCollection,
+                null,
+                false,
+                0,
+                false,
+                'picture',
+                [
+                    '<source srcset="/image-500.webp 500w, /image-1000.webp 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source srcset="/image-400.webp 400w, /image-800.webp 800w" media="media mobile" sizes="sizes mobile" />',
+                    '<img src="/image-1000.jpg" width="1000" alt="" />'
+                ]
+            ],
+            // Test lazyload markup with standard output
+            'usingLazyload' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
+                ],
+                $cropVariantCollection,
+                null,
+                true,
+                0,
+                false,
+                'picture',
+                [
+                    '<source data-srcset="/image-500.webp 500w, /image-1000.webp 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source data-srcset="/image-400.webp 400w, /image-800.webp 800w" sizes="sizes mobile" />',
+                    '<img data-src="/image-1000.jpg" class="lazyload" width="1000" alt="" />'
+                ]
+            ],
+                        // Test lazyload markup with placeholder
+            'usingLazyloadWithPlaceholder' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
+                ],
+                $cropVariantCollection,
+                null,
+                true,
+                20,
+                false,
+                'picture',
+                [
+                    '<source data-srcset="/image-500.webp 500w, /image-1000.webp 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source data-srcset="/image-400.webp 400w, /image-800.webp 800w" sizes="sizes mobile" />',
+                    '<img data-src="/image-1000.jpg" class="lazyload" src="/image-20.webp" width="1000" alt="" />'
+                ]
+            ],
+            // Test lazyload markup with inline placeholder
+            'usingLazyloadWithInlinePlaceholder' => [
+                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg', 'mimeType' => 'image/jpeg']),
+                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                [
+                    [
+                        'cropVariant' => 'desktop',
+                        'srcset' => [500, 1000],
+                        'media' => 'media desktop',
+                        'sizes' => 'sizes desktop'
+                    ],
+                    ['cropVariant' => 'mobile', 'srcset' => [400, 800], 'sizes' => 'sizes mobile']
+                ],
+                $cropVariantCollection,
+                null,
+                true,
+                20,
+                true,
+                'picture',
+                [
+                    '<source data-srcset="/image-500.webp 500w, /image-1000.webp 1000w" media="media desktop" sizes="sizes desktop" />',
+                    '<source data-srcset="/image-400.webp 400w, /image-800.webp 800w" sizes="sizes mobile" />',
+                    '<img data-src="/image-1000.jpg" class="lazyload" src="data:image/webp;base64,ZGFzLWlzdC1kZXItZGF0ZWlpbmhhbHQ=" width="1000" alt="" />'
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider createPictureTagWithCustomFileExtensionProvider
+     */
+    public function createPictureTagWithCustomFileExtension(
+        $originalImage,
+        $fallbackImage,
+        $breakpoints,
+        $cropVariantCollection,
+        $focusArea,
+        $lazyload,
+        $placeholderSize,
+        $placeholderInline,
+        $tagName,
+        $tagContent
+    ) {
+        $tag = $this->utility->createPictureTag(
+            $originalImage,
+            $fallbackImage,
+            $breakpoints,
+            $cropVariantCollection,
+            $focusArea,
+            null,
+            null,
+            false,
+            $lazyload,
+            'svg',
+            $placeholderSize,
+            $placeholderInline,
+            'webp'
+        );
+        $this->assertEquals($tagName, $tag->getTagName());
+        $this->assertEquals(implode('', $tagContent), $tag->getContent());
     }
 }

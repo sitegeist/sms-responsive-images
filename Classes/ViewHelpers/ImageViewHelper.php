@@ -109,6 +109,9 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                 'width' => $this->arguments['width'],
                 'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
+            if (!empty($this->arguments['fileExtension'])) {
+                $processingInstructions['fileExtension'] = $this->arguments['fileExtension'];
+            }
             // Set min/maxWidth only if they are given
             if (!is_null($this->arguments['minWidth'])) {
                 $processingInstructions['minWidth'] = $this->arguments['minWidth'];
@@ -132,7 +135,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
                     $this->arguments['placeholderSize'],
-                    $this->arguments['placeholderInline']
+                    $this->arguments['placeholderInline'],
+                    $this->arguments['fileExtension']
                 );
             } else {
                 // Generate img tag with srcset
@@ -148,7 +152,8 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
                     $this->arguments['placeholderSize'],
-                    $this->arguments['placeholderInline']
+                    $this->arguments['placeholderInline'],
+                    $this->arguments['fileExtension']
                 );
             }
         } catch (ResourceDoesNotExistException $e) {
