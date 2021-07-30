@@ -103,6 +103,11 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         // Generate fallback image
         $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea, $fileExtension);
 
+        // Add loading attribute to tag
+        if (in_array($this->arguments['loading'] ?? '', ['lazy', 'eager', 'auto'], true)) {
+            $this->tag->addAttribute('loading', $this->arguments['loading']);
+        }
+
         // Generate picture tag
         $this->tag = $this->responsiveImagesUtility->createPictureTag(
             $image,
@@ -144,6 +149,11 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
 
         // Generate fallback image
         $fallbackImage = $this->generateFallbackImage($image, $width, $cropArea, $fileExtension);
+
+        // Add loading attribute to tag
+        if (in_array($this->arguments['loading'] ?? '', ['lazy', 'eager', 'auto'], true)) {
+            $this->tag->addAttribute('loading', $this->arguments['loading']);
+        }
 
         // Generate image tag
         $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
