@@ -85,6 +85,11 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             return parent::render();
         }
 
+        // Add loading attribute to tag
+        if (in_array($this->arguments['loading'] ?? '', ['lazy', 'eager', 'auto'], true)) {
+            $this->tag->addAttribute('loading', $this->arguments['loading']);
+        }
+
         try {
             // Get FAL image object
             $image = $this->imageService->getImage(
