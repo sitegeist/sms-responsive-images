@@ -2,9 +2,11 @@
 
 namespace Sitegeist\ResponsiveImages\ViewHelpers;
 
+use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
-use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\ImageService;
 
 class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 {
@@ -92,7 +94,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 
         try {
             // Get FAL image object
-            $image = $this->imageService->getImage(
+            $image = $this->getImageService()->getImage(
                 $src,
                 $this->arguments['image'],
                 $this->arguments['treatIdAsReference']
@@ -124,7 +126,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             if (!is_null($this->arguments['maxWidth'])) {
                 $processingInstructions['maxWidth'] = $this->arguments['maxWidth'];
             }
-            $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
+            $fallbackImage = $this->getImageService()->applyProcessingInstructions($image, $processingInstructions);
 
             if ($this->arguments['breakpoints']) {
                 // Generate picture tag
@@ -172,5 +174,10 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         }
 
         return $this->tag->render();
+    }
+
+    protected function getImageService(): ImageService
+    {
+        return GeneralUtility::makeInstance(ImageService::class);
     }
 }
