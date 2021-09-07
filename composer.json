@@ -17,7 +17,7 @@
         "issues": "https://github.com/sitegeist/sms-responsive-images/issues"
     },
     "require": {
-        "typo3/cms-core": "^10.1 || ^11.2 || ^9.5"
+        "typo3/cms-core": "^10.1 || ^11.4 || ^9.5"
     },
     "require-dev": {
         "typo3/testing-framework": "^4.0 || ^6.0",
