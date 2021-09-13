@@ -107,6 +107,9 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\MediaViewHelper
         if (in_array($this->arguments['loading'] ?? '', ['lazy', 'eager', 'auto'], true)) {
             $this->tag->addAttribute('loading', $this->arguments['loading']);
         }
+        if (in_array($this->arguments['decoding'] ?? '', ['sync', 'async', 'auto'], true)) {
+            $this->tag->addAttribute('decoding', $this->arguments['decoding']);
+        }
 
         // Generate picture tag
         $this->tag = $this->responsiveImagesUtility->createPictureTag(
