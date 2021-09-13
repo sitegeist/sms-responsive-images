@@ -80,7 +80,15 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             );
         }
 
+        if ((string)$this->arguments['fileExtension'] && !GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], (string)$this->arguments['fileExtension'])) {
+            throw new Exception(
+                'The extension ' . $this->arguments['fileExtension'] . ' is not specified in $GLOBALS[\'TYPO3_CONF_VARS\'][\'GFX\'][\'imagefile_ext\'] as a valid image file extension and can not be processed.',
+                1631539412 // Original code: 1618989190
+            );
+        }
+
         // Fall back to TYPO3 default if no responsive image feature was selected
+        // This also covers external image urls
         if (!$this->arguments['breakpoints'] && !$this->arguments['srcset']) {
             return parent::render();
         }
