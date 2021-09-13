@@ -7,7 +7,8 @@
   "Exclude": [
     ".Build",
     ".git",
-    ".DS_Store"
+    ".DS_Store",
+    "var/"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],

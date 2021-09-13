@@ -2,9 +2,11 @@
 
 namespace Sitegeist\ResponsiveImages\ViewHelpers;
 
+use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
-use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\Exception;
 
 class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 {
@@ -74,17 +76,18 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         if (($src === '' && is_null($this->arguments['image']))
             || $src !== '' && !is_null($this->arguments['image'])
         ) {
-            throw new \TYPO3Fluid\Fluid\Core\Exception(
+            throw new Exception(
                 'You must either specify a string src or a File object.',
                 1517766588 // Original code: 1382284106
             );
         }
 
-        if ((string)$this->arguments['fileExtension'] && !GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], (string)$this->arguments['fileExtension'])) {
-            throw new Exception(
-                'The extension ' . $this->arguments['fileExtension'] . ' is not specified in $GLOBALS[\'TYPO3_CONF_VARS\'][\'GFX\'][\'imagefile_ext\'] as a valid image file extension and can not be processed.',
-                1631539412 // Original code: 1618989190
-            );
+        if (!$this->isKnownFileExtension($this->arguments['fileExtension'])) {
+            throw new Exception(sprintf(
+                'The extension %s is not specified in %s as a valid image file extension and can not be processed.',
+                $this->arguments['fileExtension'],
+                '$GLOBALS[\'TYPO3_CONF_VARS\'][\'GFX\'][\'imagefile_ext\']'
+            ), 1631539412); // Original code: 1618989190
         }
 
         // Fall back to TYPO3 default if no responsive image feature was selected
@@ -180,5 +183,16 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
         }
 
         return $this->tag->render();
+    }
+
+    protected function isKnownFileExtension($fileExtension): bool
+    {
+        $fileExtension = (string) $fileExtension;
+        // Skip if no file extension was specified
+        if ($fileExtension === '') {
+            return true;
+        }
+        // Check against list of supported extensions
+        return GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], $fileExtension);
     }
 }
