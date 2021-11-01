@@ -61,17 +61,19 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             'svg, gif'
         );
 
-        $this->registerArgument(
-            'fileExtension',
-            'string',
-            'Custom file extension to use for images'
-        );
+        if (version_compare(TYPO3_version, '10.3', '<')) {
+            $this->registerArgument(
+                'fileExtension',
+                'string',
+                'Custom file extension to use for images'
+            );
 
-        $this->registerArgument(
-            'loading',
-            'string',
-            'Native lazy-loading for images property. Can be "lazy", "eager" or "auto". Used on image files only.'
-        );
+            $this->registerArgument(
+                'loading',
+                'string',
+                'Native lazy-loading for images property. Can be "lazy", "eager" or "auto". Used on image files only.'
+            );
+        }
     }
 
     /**
