@@ -482,8 +482,10 @@ class ResponsiveImagesUtility implements SingletonInterface
             // Generate image
             $processingInstructions = [
                 'width' => $candidateWidth,
-                'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
             ];
+            if (!$cropArea->isEmpty()) {
+                $processingInstructions['crop'] = $cropArea->makeAbsoluteBasedOnFile($image);
+            }
             if (!empty($fileExtension)) {
                 $processingInstructions['fileExtension'] = $fileExtension;
             }
@@ -525,8 +527,10 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         $processingInstructions = [
             'width' => $width,
-            'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
         ];
+        if (!$cropArea->isEmpty()) {
+            $processingInstructions['crop'] = $cropArea->makeAbsoluteBasedOnFile($image);
+        }
         if (!empty($fileExtension)) {
             $processingInstructions['fileExtension'] = $fileExtension;
         }
