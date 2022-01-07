@@ -11,28 +11,22 @@
 Installation
 ====================
 
-.. figure:: ../Images/AdministratorManual/ConstantsEditor.png
-   :width: 650px
-   :alt: Constants Editor
-
-   New fields in constants editor
-
 Composer mode
 =============
 
-If your TYPO3 installation uses Composer, install the latest Extension Builder
-through:
+If your TYPO3 installation uses Composer, install the latest version of the
+extension through:
 
 .. code-block:: bash
 
    composer require sitegeist/sms-responsive-images
 
-If you are not using the latest version of the Extension Builder, you need to
+If you want to use a different version of the extension, you need to
 add a version constraint, for example:
 
 .. code-block:: bash
 
-   composer require sitegeist/sms-responsive-images:"^2.0.0"
+   composer require sitegeist/sms-responsive-images:"^1.3"
 
 Legacy mode
 ===========
@@ -42,13 +36,13 @@ the extension in the Extension Manager:
 
 -  Navigate to :guilabel:`Admin Tools > Extensions > Get Extensions`.
 -  Click on :guilabel:`Update now`
--  Search for `sms-responsive-images`
+-  Search for `sms_responsive_images`
 -  Click :guilabel:`Import and install` on the side of the extension entry
 
 and activate it:
 
 -  Navigate to :guilabel:`Admin Tools > Extensions > Installed Extensions`
--  Search for `sms-responsive-images`
+-  Search for `sms_responsive_images`
 -  Activate the extension by clicking on the :guilabel:`Activate` button in the
    :guilabel:`A/D` column
 
