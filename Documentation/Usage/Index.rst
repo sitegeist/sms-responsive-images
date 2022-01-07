@@ -6,9 +6,7 @@
 .. include:: ../Includes.txt
 
 
-.. _admin-manual:
-
-Developer Manual
+Usage
 ====================
 
 The extension provides two Fluid ViewHelpers which can generate various image markups. They extend the original ``<f:image />`` and ``<f:media />`` ViewHelpers, so they can also be used for non-responsive images.

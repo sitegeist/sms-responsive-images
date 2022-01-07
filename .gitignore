@@ -1,4 +1,4 @@
 .Build
 composer.lock
-/Documentation-GENERATED-temp
+Documentation-GENERATED-temp
 var/

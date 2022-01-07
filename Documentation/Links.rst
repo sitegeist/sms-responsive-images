@@ -12,7 +12,7 @@ Links
 -----
 
 :TER:
-   https://typo3.org/extensions/repository/view/sms_responsive_images
+   https://extensions.typo3.org/extension/sms_responsive_images
 
 :Bug Tracker:
    https://github.com/sitegeist/sms-responsive-images/issues
