@@ -23,7 +23,7 @@ This extension is available via packagist.
 
 Alternatively, you can install the extension from TYPO3 TER:
 
-[TYPO3 TER: sms_responsive_images](https://typo3.org/extensions/repository/view/sms_responsive_images)
+[TYPO3 TER: sms_responsive_images](https://extensions.typo3.org/extension/sms_responsive_images)
 
 For further instructions, please take a look at the full documentation.
 

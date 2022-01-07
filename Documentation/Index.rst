@@ -59,6 +59,7 @@ SMS Responsive Images
    :titlesonly:
 
    Introduction/Index
-   AdministratorManual/Index
-   DeveloperManual/Index
+   Installation/Index
+   Configuration/Index
+   Usage/Index
    Links
