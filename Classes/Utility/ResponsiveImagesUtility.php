@@ -532,6 +532,11 @@ class ResponsiveImagesUtility implements SingletonInterface
         }
         $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
+        // Disable inline placeholder if the image is not processed at all and the width is not as planned
+        if (($image->getSha1() === $processedImage->getSha1()) && ($processedImage->getProperty('width') !== $width)) {
+            $inline = false;
+        }
+
         if ($inline) {
             return $this->generateDataUri($processedImage);
         } else {
