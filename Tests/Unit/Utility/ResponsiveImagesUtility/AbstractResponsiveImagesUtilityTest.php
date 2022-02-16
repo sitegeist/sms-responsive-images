@@ -72,7 +72,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
 
         $fileMock = $this->getMockBuilder($processed ? ProcessedFile::class : FileReference::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProperty', 'getMimeType', 'getContents'])
+            ->setMethods(['getProperty', 'getMimeType', 'getContents', 'getSha1'])
             ->getMock();
 
         $fileMock
@@ -89,6 +89,11 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
             ->method('getContents')
             ->will($this->returnCallback(function () use ($properties) {
                 return 'das-ist-der-dateiinhalt';
+            }));
+        $fileMock
+            ->method('getSha1')
+            ->will($this->returnCallback(function () use ($properties) {
+                return 'das-ist-der-sha1-hash';
             }));
 
         return $fileMock;
