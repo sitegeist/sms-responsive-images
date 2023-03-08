@@ -30,7 +30,7 @@ SMS Responsive Images
       TYPO3 CMS,responsive images,srcset,sizes,picture,highdpi,retina,image,aspect ratio,cropping,lazyload,placeholder
 
    :Copyright:
-      2017
+      2023
 
    :Author:
       Simon Praetorius
