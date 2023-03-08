@@ -31,6 +31,7 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
+        // phpcs:disable Generic.Files.LineLength
         $this->registerTagAttribute('alt', 'string', 'Specifies an alternate text for an image', false);
         $this->registerArgument('file', 'object', 'File', true);
         $this->registerArgument('additionalConfig', 'array', 'This array can hold additional configuration that is passed though to the Renderer object', false, []);
@@ -40,6 +41,7 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
         $this->registerArgument('fileExtension', 'string', 'Custom file extension to use for images');
         $this->registerArgument('loading', 'string', 'Native lazy-loading for images property. Can be "lazy", "eager" or "auto". Used on image files only.');
         $this->registerArgument('decoding', 'string', 'Provides an image decoding hint to the browser. Can be "sync", "async" or "auto"', false);
+        // phpcs:enable
 
         $this->registerArgument('srcset', 'mixed', 'Image sizes that should be rendered.', false);
         $this->registerArgument(
@@ -100,12 +102,12 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
             );
         }
 
-        if ((string)$this->arguments['fileExtension'] && !GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], (string)$this->arguments['fileExtension'])) {
-            throw new Exception(
-                'The extension ' . $this->arguments['fileExtension'] . ' is not specified in $GLOBALS[\'TYPO3_CONF_VARS\'][\'GFX\'][\'imagefile_ext\']'
-                    . ' as a valid image file extension and can not be processed.',
-                1678270962 // Original code: 1619030957
-            );
+        if (!$this->isKnownFileExtension($this->arguments['fileExtension'])) {
+            throw new Exception(sprintf(
+                'The extension %s is not specified in %s as a valid image file extension and can not be processed.',
+                $this->arguments['fileExtension'],
+                '$GLOBALS[\'TYPO3_CONF_VARS\'][\'GFX\'][\'imagefile_ext\']'
+            ), 1631539412); // Original code: 1619030957
         }
 
         $fileRenderer = GeneralUtility::makeInstance(RendererRegistry::class)->getRenderer($file);
@@ -303,5 +305,16 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
         $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
         return $fallbackImage;
+    }
+
+    protected function isKnownFileExtension($fileExtension): bool
+    {
+        $fileExtension = (string) $fileExtension;
+        // Skip if no file extension was specified
+        if ($fileExtension === '') {
+            return true;
+        }
+        // Check against list of supported extensions
+        return GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], $fileExtension);
     }
 }

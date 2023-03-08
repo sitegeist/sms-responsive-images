@@ -29,6 +29,7 @@ final class ImageViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
+        // phpcs:disable Generic.Files.LineLength
         $this->registerTagAttribute('alt', 'string', 'Specifies an alternate text for an image', false);
         $this->registerTagAttribute('ismap', 'string', 'Specifies an image as a server-side image-map. Rarely used. Look at usemap instead', false);
         $this->registerTagAttribute('longdesc', 'string', 'Specifies the URL to a document that contains a long description of an image', false);
@@ -50,6 +51,7 @@ final class ImageViewHelper extends AbstractTagBasedViewHelper
         $this->registerArgument('maxWidth', 'int', 'maximum width of the image');
         $this->registerArgument('maxHeight', 'int', 'maximum height of the image');
         $this->registerArgument('absolute', 'bool', 'Force absolute URL', false, false);
+        // phpcs:enable
 
         $this->registerArgument('srcset', 'mixed', 'Image sizes that should be rendered.', false);
         $this->registerArgument(

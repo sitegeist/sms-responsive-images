@@ -42,6 +42,9 @@ jobs:
             matrix:
                 php-versions: [8.2, 8.1, 8.0]
                 typo3-versions: [12, 11]
+                exclude:
+                    - php-versions: 8.0
+                      typo3-versions: 12
                 include:
                     - php-versions: 7.4
                       typo3-versions: 11

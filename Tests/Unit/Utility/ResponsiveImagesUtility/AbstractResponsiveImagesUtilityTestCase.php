@@ -5,16 +5,16 @@ namespace Sitegeist\ResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\ProcessedFile;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 
-abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
+abstract class AbstractResponsiveImagesUtilityTestCase extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
-    protected $resetSingletonInstances = true;
+    protected ResponsiveImagesUtility $utility;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->resetSingletonInstances = true;
 
         $this->utility = new ResponsiveImagesUtility(
             $this->mockImageService()
@@ -27,7 +27,7 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
 
         $imageServiceMock = $this->getMockBuilder(ImageService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['applyProcessingInstructions', 'getImageUri'])
+            ->onlyMethods(['applyProcessingInstructions', 'getImageUri'])
             ->getMock();
 
         $imageServiceMock
@@ -70,10 +70,23 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
         ];
         $properties = array_replace($defaultProperties, $properties);
 
-        $fileMock = $this->getMockBuilder($processed ? ProcessedFile::class : FileReference::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getProperty', 'getMimeType', 'getContents', 'usesOriginalFile'])
-            ->getMock();
+        if ($processed) {
+            $fileMock = $this->getMockBuilder(ProcessedFile::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['getProperty', 'getMimeType', 'getContents', 'usesOriginalFile'])
+                ->getMock();
+
+            $fileMock
+                ->method('usesOriginalFile')
+                ->will($this->returnCallback(function () use ($properties) {
+                    return false;
+                }));
+        } else {
+            $fileMock = $this->getMockBuilder(FileReference::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['getProperty', 'getMimeType', 'getContents'])
+                ->getMock();
+        }
 
         $fileMock
             ->method('getProperty')
@@ -89,11 +102,6 @@ abstract class AbstractResponsiveImagesUtilityTest extends \TYPO3\TestingFramewo
             ->method('getContents')
             ->will($this->returnCallback(function () use ($properties) {
                 return 'das-ist-der-dateiinhalt';
-            }));
-        $fileMock
-            ->method('usesOriginalFile')
-            ->will($this->returnCallback(function () use ($properties) {
-                return false;
             }));
 
         return $fileMock;

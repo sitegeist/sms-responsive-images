@@ -5,9 +5,9 @@ namespace Sitegeist\ResponsiveImages\Tests\Unit\Utility\ResponsiveImagesUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
-class HelpersTest extends AbstractResponsiveImagesUtilityTest
+class HelpersTest extends AbstractResponsiveImagesUtilityTestCase
 {
-    public function addMetadataToImageTagWithFocusAreaProvider()
+    public static function addMetadataToImageTagWithFocusAreaProvider()
     {
         $imageTagWithAttribute = new TagBuilder('img');
         $imageTagWithAttribute->addAttribute('data-focus-area', 'fixed');
@@ -16,32 +16,32 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             // Test focus area attribute
             'usingFocusArea' => [
                 new TagBuilder('img'),
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 new Area(0.4, 0.4, 0.6, 0.6),
                 htmlspecialchars(json_encode(['x' => 400, 'y' => 400, 'width' => 600, 'height' => 600]))
             ],
             // Test fallback to fixed value
             'usingFixedFocusAreaValue' => [
                 $imageTagWithAttribute,
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 new Area(0.4, 0.4, 0.6, 0.6),
                 'fixed'
             ],
             // Test omitted parameter
             'withoutFocusArea' => [
                 new TagBuilder('img'),
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 null,
                 null
             ],
             // Test empty focus area
             'withEmptyFocusArea' => [
                 new TagBuilder('img'),
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 new Area(0, 0, 1, 1),
                 null
             ]
@@ -54,6 +54,9 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
      */
     public function addMetadataToImageTagWithFocusArea($tag, $originalImage, $fallbackImage, $focusArea, $dataAttribute)
     {
+        $originalImage = $this->mockFileObject($originalImage);
+        $fallbackImage = $this->mockFileObject($fallbackImage);
+
         $this->utility->addMetadataToImageTag($tag, $originalImage, $fallbackImage, $focusArea);
         $this->assertEquals(
             $dataAttribute,
@@ -61,7 +64,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         );
     }
 
-    public function addMetadataToImageTagWithAltAndTitleProvider()
+    public static function addMetadataToImageTagWithAltAndTitleProvider()
     {
         $imageTagWithAttributes = new TagBuilder('img');
         $imageTagWithAttributes->addAttribute('alt', 'fixed alt');
@@ -71,28 +74,24 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             // Test alt and title attributes
             'usingAltAndTitle' => [
                 new TagBuilder('img'),
-                $this->mockFileObject(
-                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
-                ),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 'image alt',
                 'image title'
             ],
             // Test fixed alt/title attributes
             'usingFixedAltAndTitleValues' => [
                 $imageTagWithAttributes,
-                $this->mockFileObject(
-                    ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg']
-                ),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'alternative' => 'image alt', 'title' => 'image title', 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 'fixed alt',
                 'fixed title'
             ],
             // Test default alt/title attributes
             'withoutAltAndTitle' => [
                 new TagBuilder('img'),
-                $this->mockFileObject(['width' => 2000, 'height' => 2000, 'extension' => 'jpg']),
-                $this->mockFileObject(['width' => 1000, 'height' => 1000, 'extension' => 'jpg']),
+                ['width' => 2000, 'height' => 2000, 'extension' => 'jpg'],
+                ['width' => 1000, 'height' => 1000, 'extension' => 'jpg'],
                 '',
                 null
             ]
@@ -110,17 +109,20 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         $altAttribute,
         $titleAttribute
     ) {
+        $originalImage = $this->mockFileObject($originalImage);
+        $fallbackImage = $this->mockFileObject($fallbackImage);
+
         $this->utility->addMetadataToImageTag($tag, $originalImage, $fallbackImage);
         $this->assertEquals($altAttribute, $tag->getAttribute('alt'));
         $this->assertEquals($titleAttribute, $tag->getAttribute('title'));
     }
 
-    public function generatesSrcsetImagesProvider()
+    public static function generatesSrcsetImagesProvider()
     {
         return [
             // Test high dpi image srcset
             'usingHighDpi' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                ['width' => 1000, 'extension' => 'jpg'],
                 400,
                 ['1x', '2x'],
                 null,
@@ -129,7 +131,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test responsive image srcset (widths in integers)
             'usingResponsiveWidths' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                ['width' => 1000, 'extension' => 'jpg'],
                 400,
                 [200, 400, 600],
                 null,
@@ -138,7 +140,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test responsive image srcset (widths as strings)
             'usingResponsiveWidthsAsStrings' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                ['width' => 1000, 'extension' => 'jpg'],
                 400,
                 ['200w', '400w', '600w'],
                 null,
@@ -147,7 +149,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test absolute urls
             'requestingAbsoluteUrls' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                ['width' => 1000, 'extension' => 'jpg'],
                 400,
                 ['200w', '400w', '600w'],
                 null,
@@ -160,7 +162,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test srcset input as string
             'usingSrcsetString' => [
-                $this->mockFileObject(['width' => 1000, 'extension' => 'jpg']),
+                ['width' => 1000, 'extension' => 'jpg'],
                 400,
                 '200, 400, 600',
                 null,
@@ -172,7 +174,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 ]
             ],
             'usingTooSmallImage' => [
-                $this->mockFileObject(['width' => 400, 'extension' => 'jpg']),
+                ['width' => 400, 'extension' => 'jpg'],
                 400,
                 '200, 300, 500',
                 null,
@@ -185,7 +187,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
             ],
             // Test if special characters are kept in file name
             'usingSpecialCharactersInFileName' => [
-                $this->mockFileObject(['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'extension' => 'jpg']),
+                ['name' => 'this/is a/filename@with-/special!charac,ters', 'width' => 400, 'extension' => 'jpg'],
                 400,
                 [200],
                 null,
@@ -203,6 +205,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
      */
     public function generatesSrcsetImages($originalImage, $width, $srcsetConfig, $cropArea, $absoluteUri, $output)
     {
+        $originalImage = $this->mockFileObject($originalImage);
+
         $this->assertEquals(
             $output,
             $this->utility->generateSrcsetImages(
@@ -215,11 +219,11 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         );
     }
 
-    public function generatePlaceholderImageProvider()
+    public static function generatePlaceholderImageProvider()
     {
         return [
             'usingFile' => [
-                $this->mockFileObject(['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg']),
+                ['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg'],
                 20,
                 null,
                 false,
@@ -227,7 +231,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 '/image-20.jpg'
             ],
             'usingFileWithAbsolute' => [
-                $this->mockFileObject(['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg']),
+                ['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg'],
                 20,
                 null,
                 false,
@@ -235,7 +239,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
                 'http://domain.tld/image-20.jpg'
             ],
             'usingInline' => [
-                $this->mockFileObject(['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg']),
+                ['width' => 1000, 'mimeType' => 'image/jpeg', 'extension' => 'jpg'],
                 20,
                 null,
                 true,
@@ -251,6 +255,8 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
      */
     public function generatePlaceholderImage($originalImage, $width, $cropArea, $inline, $absoluteUri, $output)
     {
+        $originalImage = $this->mockFileObject($originalImage);
+
         $this->assertEquals(
             $output,
             $this->utility->generatePlaceholderImage(
@@ -263,7 +269,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         );
     }
 
-    public function generateSrcsetAttributeProvider()
+    public static function generateSrcsetAttributeProvider()
     {
         return [
             // Test empty srcset
@@ -301,7 +307,7 @@ class HelpersTest extends AbstractResponsiveImagesUtilityTest
         $this->assertEquals($output, $this->utility->generateSrcsetAttribute($input));
     }
 
-    public function normalizeImageBreakpointsProvider()
+    public static function normalizeImageBreakpointsProvider()
     {
         return [
             // Test without any breakpoints
