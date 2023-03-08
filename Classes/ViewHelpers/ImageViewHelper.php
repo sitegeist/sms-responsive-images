@@ -172,7 +172,7 @@ final class ImageViewHelper extends AbstractTagBasedViewHelper
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
-                    $this->arguments['placeholderSize'],
+                    (int) $this->arguments['placeholderSize'],
                     $this->arguments['placeholderInline'],
                     $this->arguments['fileExtension']
                 );
@@ -190,7 +190,7 @@ final class ImageViewHelper extends AbstractTagBasedViewHelper
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
-                    $this->arguments['placeholderSize'],
+                    (int) $this->arguments['placeholderSize'],
                     $this->arguments['placeholderInline'],
                     $this->arguments['fileExtension']
                 );
@@ -211,7 +211,7 @@ final class ImageViewHelper extends AbstractTagBasedViewHelper
                     $focusArea,
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
-                    $this->arguments['placeholderSize'],
+                    (int) $this->arguments['placeholderSize'],
                     $this->arguments['placeholderInline'],
                     $this->arguments['fileExtension']
                 );

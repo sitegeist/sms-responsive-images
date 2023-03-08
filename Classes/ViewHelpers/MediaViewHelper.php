@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\Rendering\RendererRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
@@ -222,7 +223,7 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
             false,
             $this->arguments['lazyload'],
             $this->arguments['ignoreFileExtensions'],
-            $this->arguments['placeholderSize'],
+            (int) $this->arguments['placeholderSize'],
             $this->arguments['placeholderInline'],
             $fileExtension
         );
@@ -272,7 +273,7 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
             false,
             $this->arguments['lazyload'],
             $this->arguments['ignoreFileExtensions'],
-            $this->arguments['placeholderSize'],
+            (int) $this->arguments['placeholderSize'],
             $this->arguments['placeholderInline'],
             $fileExtension
         );
