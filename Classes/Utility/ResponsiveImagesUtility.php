@@ -130,7 +130,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $absoluteUri,
             $fileExtension
         );
-        $srcsetMode = substr(key($srcsetImages), -1); // x or w
+        $srcsetMode = substr(key($srcsetImages) ?? 'w', -1); // x or w
 
         // Add fallback image to source options
         $fallbackWidthDescriptor = ($srcsetMode == 'x') ? '1x'  : $referenceWidth . 'w';
@@ -307,7 +307,7 @@ class ResponsiveImagesUtility implements SingletonInterface
             $absoluteUri,
             $fileExtension
         );
-        $srcsetMode = substr(key($srcsetImages), -1); // x or w
+        $srcsetMode = substr(key($srcsetImages) ?? 'w', -1); // x or w
 
         // Create source tag for this breakpoint
         $sourceTag = GeneralUtility::makeInstance(TagBuilder::class, 'source');
