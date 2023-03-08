@@ -16,7 +16,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 
 final class MediaViewHelper extends AbstractTagBasedViewHelper
 {
-    protected string $tagName = 'img';
+    protected $tagName = 'img';
     protected ImageService $imageService;
     protected ResponsiveImagesUtility $responsiveImagesUtility;
 

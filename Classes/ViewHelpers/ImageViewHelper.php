@@ -14,7 +14,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 final class ImageViewHelper extends AbstractTagBasedViewHelper
 {
-    protected string $tagName = 'img';
+    protected $tagName = 'img';
     protected ImageService $imageService;
     protected ResponsiveImagesUtility $responsiveImagesUtility;
 
