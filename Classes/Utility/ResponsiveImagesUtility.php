@@ -464,6 +464,7 @@ class ResponsiveImagesUtility implements SingletonInterface
 
         $images = [];
         foreach ($srcset as $widthDescriptor) {
+            $widthDescriptor = (string) $widthDescriptor;
             // Determine image width
             $srcsetMode = substr($widthDescriptor, -1);
             switch ($srcsetMode) {
