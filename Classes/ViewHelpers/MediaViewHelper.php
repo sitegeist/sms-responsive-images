@@ -21,11 +21,14 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
     protected ImageService $imageService;
     protected ResponsiveImagesUtility $responsiveImagesUtility;
 
-    public function __construct()
+    public function injectImageService(ImageService $imageService): void
     {
-        parent::__construct();
-        $this->imageService = GeneralUtility::makeInstance(ImageService::class);
-        $this->responsiveImagesUtility = GeneralUtility::makeInstance(ResponsiveImagesUtility::class);
+        $this->imageService = $imageService;
+    }
+
+    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility): void
+    {
+        $this->responsiveImagesUtility = $responsiveImagesUtility;
     }
 
     public function initializeArguments(): void
