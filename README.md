@@ -30,6 +30,9 @@ For further instructions, please take a look at the full documentation.
 * Support for TYPO3 9.5 and PHP < 7.4 is gone.
 * If you still include `constants.ts` and `setup.ts` manually in your TypoScript configuration, these
 files have now been renamed to `constants.typoscript` and `setup.typoscript`.
+* Since TYPO3 v12
+[has declared all ViewHelper classes as `final`](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/11.5/Important-95298-FluidViewhelpersWillBeDeclaredFinalInV12.html),
+this has been applied to the responsive images ViewHelpers as well.
 
 ## Updating from 1.x
 
