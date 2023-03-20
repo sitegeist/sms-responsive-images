@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 name: Validate composer.json
@@ -16,7 +16,7 @@ jobs:
 
             -
                 name: Cache composer dependencies
-                uses: actions/cache@v1
+                uses: actions/cache@v3
                 with:
                     path: ~/.composer/cache
                     key: composer
@@ -54,7 +54,7 @@ jobs:
         name: Unit Testing (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 name: Setup PHP
@@ -65,7 +65,7 @@ jobs:
 
             -
                 name: Cache composer dependencies
-                uses: actions/cache@v1
+                uses: actions/cache@v3
                 with:
                     path: ~/.composer/cache
                     key: php-${{ matrix.php-versions }}-typo3-${{ matrix.typo3-versions }}
@@ -91,7 +91,7 @@ jobs:
         name: Functional Testing (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 name: Setup PHP
@@ -106,7 +106,7 @@ jobs:
 
             -
                 name: Cache composer dependencies
-                uses: actions/cache@v1
+                uses: actions/cache@v3
                 with:
                     path: ~/.composer/cache
                     key: php-${{ matrix.php-versions }}-typo3-${{ matrix.typo3-versions }}
