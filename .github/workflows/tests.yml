@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 name: Validate composer.json
@@ -16,7 +16,7 @@ jobs:
 
             -
                 name: Cache composer dependencies
-                uses: actions/cache@v1
+                uses: actions/cache@v3
                 with:
                     path: ~/.composer/cache
                     key: composer
@@ -34,25 +34,27 @@ jobs:
                 run: composer lint:editorconfig
 
 
-    test:
+    test-unit:
         runs-on: ubuntu-latest
 
         strategy:
             max-parallel: 2
             matrix:
-                php-versions: [7.4, 7.3]
-                typo3-versions: [11, 10, 9]
+                php-versions: [8.2, 8.1, 8.0]
+                typo3-versions: [12, 11]
                 exclude:
-                    - php-versions: 7.3
-                      typo3-versions: 11
+                    - php-versions: 8.0
+                      typo3-versions: 12
                 include:
-                    - php-versions: 8
+                    - php-versions: 7.4
                       typo3-versions: 11
+                    - php-versions: 7.4
+                      typo3-versions: 10
 
-        name: PHP ${{ matrix.php-versions }} with TYPO3 ${{ matrix.typo3-versions }}
+        name: Unit Testing (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 name: Setup PHP
@@ -63,7 +65,7 @@ jobs:
 
             -
                 name: Cache composer dependencies
-                uses: actions/cache@v1
+                uses: actions/cache@v3
                 with:
                     path: ~/.composer/cache
                     key: php-${{ matrix.php-versions }}-typo3-${{ matrix.typo3-versions }}
@@ -73,5 +75,46 @@ jobs:
                 run: composer require typo3/minimal "^${{ matrix.typo3-versions }}" --prefer-dist --no-progress --no-suggest
 
             -
-                name: Automated Testing
-                run: composer test
+                name: Unit Testing
+                run: composer test:unit
+
+
+    test-functional:
+        runs-on: ubuntu-latest
+
+        strategy:
+            max-parallel: 1
+            matrix:
+                php-versions: [8.2, 8.1]
+                typo3-versions: [12]
+
+        name: Functional Testing (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
+        steps:
+            -
+                uses: actions/checkout@v3
+
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-versions }}
+                    extensions: intl, mbstring, pdo_sqlite
+
+            -
+                name: Setup GraphicsMagick
+                run: sudo apt-get install -y graphicsmagick
+
+            -
+                name: Cache composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ~/.composer/cache
+                    key: php-${{ matrix.php-versions }}-typo3-${{ matrix.typo3-versions }}
+
+            -
+                name: Install composer dependencies
+                run: composer require typo3/minimal "^${{ matrix.typo3-versions }}" --prefer-dist --no-progress --no-suggest
+
+            -
+                name: Functional Testing
+                run: typo3DatabaseDriver=pdo_sqlite composer test:functional

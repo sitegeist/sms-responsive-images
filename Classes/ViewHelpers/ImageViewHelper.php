@@ -1,34 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sitegeist\ResponsiveImages\ViewHelpers;
 
 use Sitegeist\ResponsiveImages\Utility\ResponsiveImagesUtility;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\Exception;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
-class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
+final class ImageViewHelper extends AbstractTagBasedViewHelper
 {
-    /**
-     * @var ResponsiveImagesUtility
-     */
-    protected $responsiveImagesUtility;
+    protected $tagName = 'img';
+    protected ImageService $imageService;
+    protected ResponsiveImagesUtility $responsiveImagesUtility;
 
-    /**
-     * @param ResponsiveImagesUtility $responsiveImagesUtility
-     */
-    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility)
+    public function injectImageService(ImageService $imageService): void
+    {
+        $this->imageService = $imageService;
+    }
+
+    public function injectResponsiveImagesUtility(ResponsiveImagesUtility $responsiveImagesUtility): void
     {
         $this->responsiveImagesUtility = $responsiveImagesUtility;
     }
 
-    /**
-     * Initialize arguments.
-     */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
+        $this->registerUniversalTagAttributes();
+        // phpcs:disable Generic.Files.LineLength
+        $this->registerTagAttribute('alt', 'string', 'Specifies an alternate text for an image', false);
+        $this->registerTagAttribute('ismap', 'string', 'Specifies an image as a server-side image-map. Rarely used. Look at usemap instead', false);
+        $this->registerTagAttribute('longdesc', 'string', 'Specifies the URL to a document that contains a long description of an image', false);
+        $this->registerTagAttribute('usemap', 'string', 'Specifies an image as a client-side image-map', false);
+        $this->registerTagAttribute('loading', 'string', 'Native lazy-loading for images property. Can be "lazy", "eager" or "auto"', false);
+        $this->registerTagAttribute('decoding', 'string', 'Provides an image decoding hint to the browser. Can be "sync", "async" or "auto"', false);
+
+        $this->registerArgument('src', 'string', 'a path to a file, a combined FAL identifier or an uid (int). If $treatIdAsReference is set, the integer is considered the uid of the sys_file_reference record. If you already got a FAL object, consider using the $image parameter instead', false, '');
+        $this->registerArgument('treatIdAsReference', 'bool', 'given src argument is a sys_file_reference record', false, false);
+        $this->registerArgument('image', 'object', 'a FAL object (\\TYPO3\\CMS\\Core\\Resource\\File or \\TYPO3\\CMS\\Core\\Resource\\FileReference)');
+        $this->registerArgument('crop', 'string|bool', 'overrule cropping of image (setting to FALSE disables the cropping set in FileReference)');
+        $this->registerArgument('cropVariant', 'string', 'select a cropping variant, in case multiple croppings have been specified or stored in FileReference', false, 'default');
+        $this->registerArgument('fileExtension', 'string', 'Custom file extension to use');
+
+        $this->registerArgument('width', 'string', 'width of the image. This can be a numeric value representing the fixed width of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.');
+        $this->registerArgument('height', 'string', 'height of the image. This can be a numeric value representing the fixed height of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.');
+        $this->registerArgument('minWidth', 'int', 'minimum width of the image');
+        $this->registerArgument('minHeight', 'int', 'minimum height of the image');
+        $this->registerArgument('maxWidth', 'int', 'maximum width of the image');
+        $this->registerArgument('maxHeight', 'int', 'maximum height of the image');
+        $this->registerArgument('absolute', 'bool', 'Force absolute URL', false, false);
+        // phpcs:enable
+
         $this->registerArgument('srcset', 'mixed', 'Image sizes that should be rendered.', false);
         $this->registerArgument(
             'sizes',
@@ -60,20 +87,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             false,
             'svg, gif'
         );
-
-        if (version_compare(TYPO3_version, '10.3', '<')) {
-            $this->registerArgument(
-                'fileExtension',
-                'string',
-                'Custom file extension to use for images'
-            );
-
-            $this->registerArgument(
-                'loading',
-                'string',
-                'Native lazy-loading for images property. Can be "lazy", "eager" or "auto". Used on image files only.'
-            );
-        }
     }
 
     /**
@@ -84,7 +97,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
      * @throws \TYPO3Fluid\Fluid\Core\Exception
      * @return string Rendered tag
      */
-    public function render()
+    public function render(): string
     {
         $src = (string)$this->arguments['src'];
         if (($src === '' && is_null($this->arguments['image']))
@@ -104,12 +117,6 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             ), 1631539412); // Original code: 1618989190
         }
 
-        // Fall back to TYPO3 default if no responsive image feature was selected
-        // This also covers external image urls
-        if (!$this->arguments['breakpoints'] && !$this->arguments['srcset']) {
-            return parent::render();
-        }
-
         // Add loading attribute to tag
         if (in_array($this->arguments['loading'] ?? '', ['lazy', 'eager', 'auto'], true)) {
             $this->tag->addAttribute('loading', $this->arguments['loading']);
@@ -120,7 +127,7 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             $image = $this->imageService->getImage(
                 $src,
                 $this->arguments['image'],
-                $this->arguments['treatIdAsReference']
+                (bool) $this->arguments['treatIdAsReference']
             );
 
             // Determine cropping settings
@@ -132,7 +139,11 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
 
             $cropVariant = $this->arguments['cropVariant'] ?: 'default';
             $cropArea = $cropVariantCollection->getCropArea($cropVariant);
-            $focusArea = $cropVariantCollection->getFocusArea($cropVariant);
+
+            $focusArea = null;
+            if (!$this->tag->hasAttribute('data-focus-area')) {
+                $focusArea = $cropVariantCollection->getFocusArea($cropVariant);
+            }
 
             // Generate fallback image
             $processingInstructions = [
@@ -149,10 +160,10 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
             if (!is_null($this->arguments['maxWidth'])) {
                 $processingInstructions['maxWidth'] = $this->arguments['maxWidth'];
             }
-            $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
 
             if ($this->arguments['breakpoints']) {
                 // Generate picture tag
+                $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
                 $this->tag = $this->responsiveImagesUtility->createPictureTag(
                     $image,
                     $fallbackImage,
@@ -164,12 +175,13 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
-                    $this->arguments['placeholderSize'],
+                    (int) $this->arguments['placeholderSize'],
                     $this->arguments['placeholderInline'],
                     $this->arguments['fileExtension']
                 );
-            } else {
+            } elseif ($this->arguments['srcset']) {
                 // Generate img tag with srcset
+                $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
                 $this->tag = $this->responsiveImagesUtility->createImageTagWithSrcset(
                     $image,
                     $fallbackImage,
@@ -181,19 +193,44 @@ class ImageViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
                     $this->arguments['ignoreFileExtensions'],
-                    $this->arguments['placeholderSize'],
+                    (int) $this->arguments['placeholderSize'],
+                    $this->arguments['placeholderInline'],
+                    $this->arguments['fileExtension']
+                );
+            } else {
+                // For simple images, height calculation is not a problem and is done the same way
+                // the core does it
+                $processingInstructions = array_merge($processingInstructions, [
+                    'height' => $this->arguments['height'],
+                    'minHeight' => $this->arguments['minHeight'],
+                    'maxHeight' => $this->arguments['maxHeight']
+                ]);
+                $fallbackImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
+
+                $this->tag = $this->responsiveImagesUtility->createSimpleImageTag(
+                    $fallbackImage,
+                    null,
+                    $this->tag,
+                    $focusArea,
+                    $this->arguments['absolute'],
+                    $this->arguments['lazyload'],
+                    (int) $this->arguments['placeholderSize'],
                     $this->arguments['placeholderInline'],
                     $this->arguments['fileExtension']
                 );
             }
         } catch (ResourceDoesNotExistException $e) {
             // thrown if file does not exist
+            throw new Exception($e->getMessage(), 1678270145, $e); // Original code: 1509741911
         } catch (\UnexpectedValueException $e) {
             // thrown if a file has been replaced with a folder
+            throw new Exception($e->getMessage(), 1678270146, $e); // Original code: 1509741912
         } catch (\RuntimeException $e) {
             // RuntimeException thrown if a file is outside of a storage
+            throw new Exception($e->getMessage(), 1678270147, $e); // Original code: 1509741913
         } catch (\InvalidArgumentException $e) {
             // thrown if file storage does not exist
+            throw new Exception($e->getMessage(), 1678270148, $e); // Original code: 1509741914
         }
 
         return $this->tag->render();

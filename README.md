@@ -1,7 +1,5 @@
 # SMS Responsive Images
 
-[![Build Status](https://travis-ci.org/sitegeist/sms-responsive-images.svg?branch=master)](https://travis-ci.org/sitegeist/sms-responsive-images)
-
 ## Responsive Images for TYPO3
 
 This TYPO3 extension provides ViewHelpers and configuration to render valid
@@ -26,6 +24,15 @@ Alternatively, you can install the extension from TYPO3 TER:
 [TYPO3 TER: sms_responsive_images](https://extensions.typo3.org/extension/sms_responsive_images)
 
 For further instructions, please take a look at the full documentation.
+
+## Updating from 2.x
+
+* Support for TYPO3 9.5 and PHP < 7.4 is gone.
+* If you still include `constants.ts` and `setup.ts` manually in your TypoScript configuration, these
+files have now been renamed to `constants.typoscript` and `setup.typoscript`.
+* Since TYPO3 v12
+[has declared all ViewHelper classes as `final`](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/11.5/Important-95298-FluidViewhelpersWillBeDeclaredFinalInV12.html),
+this has been applied to the responsive images ViewHelpers as well.
 
 ## Updating from 1.x
 
