@@ -188,7 +188,7 @@ final class ImageViewHelper extends AbstractTagBasedViewHelper
                     $this->arguments['srcset'],
                     $cropArea,
                     $focusArea,
-                    $this->arguments['sizes'],
+                    (string) $this->arguments['sizes'],
                     $this->tag,
                     $this->arguments['absolute'],
                     $this->arguments['lazyload'],
