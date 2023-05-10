@@ -271,7 +271,7 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
             $this->arguments['srcset'],
             $cropArea,
             $focusArea,
-            $this->arguments['sizes'],
+            (string) $this->arguments['sizes'],
             $this->tag,
             false,
             $this->arguments['lazyload'],
