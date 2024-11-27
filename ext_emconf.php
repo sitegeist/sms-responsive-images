@@ -12,7 +12,7 @@ $EM_CONF['sms_responsive_images'] = [
     'version' => '3.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-12.9.99',
+            'typo3' => '10.4.0-13.9.99',
         ],
         'conflicts' => [
         ],
