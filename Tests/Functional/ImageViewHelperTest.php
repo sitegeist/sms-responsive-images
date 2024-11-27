@@ -78,11 +78,12 @@ class ImageViewHelperTest extends ViewHelperTestCase
             150
         ];
         // would be 200x150, but image will be stretched (why!?) up to have a width of 250
+        // @todo remove multiple possible heights when dropping support for versions before TYPO3 13
         yield 'min width' => [
             '<sms:image src="EXT:sms_responsive_images/Tests/Functional/Fixtures/ImageViewHelperTest.png" height="150" minWidth="250" />',
-            '@^<img src="(typo3temp/assets/_processed_/4/5/csm_ImageViewHelperTest_.*\.png)" width="250" height="150" alt="" />$@',
+            '@^<img src="(typo3temp/assets/_processed_/4/5/csm_ImageViewHelperTest_.*\.png)" width="250" height="(188|150)" alt="" />$@',
             250,
-            150
+            [188, 150]
         ];
         // would be 200x150, but image will be scaled down to have a width of 100
         yield 'max width' => [
@@ -92,9 +93,11 @@ class ImageViewHelperTest extends ViewHelperTestCase
             75
         ];
         // would be 200x150, but image will be stretched (why!?) up to have a height of 200
+        // @todo remove multiple possible widths when dropping support for versions before TYPO3 13
         yield 'min height' => [
             '<sms:image src="EXT:sms_responsive_images/Tests/Functional/Fixtures/ImageViewHelperTest.png" width="200" minHeight="200" />',
-            '@^<img src="(typo3temp/assets/_processed_/4/5/csm_ImageViewHelperTest_.*\.png)" width="200" height="200" alt="" />$@',
+            '@^<img src="(typo3temp/assets/_processed_/4/5/csm_ImageViewHelperTest_.*\.png)" width="(267|200)" height="200" alt="" />$@',
+            [267, 200],
             200,
             200
         ];
@@ -108,10 +111,14 @@ class ImageViewHelperTest extends ViewHelperTestCase
     }
 
     /**
+     * @TODO convert parameters to `int` only when dropping support for versions before TYPO3 13
+     * @param int|int[] $expectedWidth
+     * @param int|int[] $expectedHeight
+     *
      * @test
      * @dataProvider basicScalingCroppingDataProvider
      */
-    public function basicScalingCropping(string $template, string $expected, int $expectedWidth, int $expectedHeight): void
+    public function basicScalingCropping(string $template, string $expected, $expectedWidth, $expectedHeight): void
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplateSource('<html
@@ -133,8 +140,8 @@ class ImageViewHelperTest extends ViewHelperTestCase
         $matches = [];
         preg_match($expected, $result, $matches);
         list($width, $height) = getimagesize($this->instancePath . '/' . $matches[1]);
-        self::assertEquals($expectedWidth, $width, 'width of generated image does not match expected width');
-        self::assertEquals($expectedHeight, $height, 'height of generated image does not match expected height');
+        self::assertContains($width, is_array($expectedWidth) ? $expectedWidth : [$expectedWidth], 'width of generated image does not match expected width');
+        self::assertContains($height, is_array($expectedHeight) ? $expectedHeight : [$expectedHeight], 'height of generated image does not match expected height');
     }
 
     public static function cropVariantCollectionDataProvider(): \Generator
