@@ -66,6 +66,7 @@
         "test:unit": "phpunit -c Build/Testing/UnitTests.xml",
         "test:functional": "phpunit -c Build/Testing/FunctionalTests.xml",
         "prepare-release": [
+            "sed -i'' -e \"s/'version' => ''/'version' => '$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//')'/\" ext_emconf.php",
             "rm -r .github .ecrc .editorconfig .gitattributes Tests"
         ],
         "render-documentation": "docker-compose -f Build/Documentation/docker-compose.yml run --rm t3docmake",
