@@ -63,10 +63,10 @@ class ResponsiveImagesUtility implements SingletonInterface
         FileInterface $originalImage,
         FileInterface $fallbackImage,
         $srcset,
-        Area $cropArea = null,
-        Area $focusArea = null,
-        string $sizesQuery = null,
-        TagBuilder $tag = null,
+        ?Area $cropArea = null,
+        ?Area $focusArea = null,
+        ?string $sizesQuery = null,
+        ?TagBuilder $tag = null,
         bool $absoluteUri = false,
         bool $lazyload = false,
         $ignoreFileExtensions = 'svg, gif',
@@ -177,9 +177,9 @@ class ResponsiveImagesUtility implements SingletonInterface
         FileInterface $fallbackImage,
         array $breakpoints,
         CropVariantCollection $cropVariantCollection,
-        Area $focusArea = null,
-        TagBuilder $tag = null,
-        TagBuilder $fallbackTag = null,
+        ?Area $focusArea = null,
+        ?TagBuilder $tag = null,
+        ?TagBuilder $fallbackTag = null,
         bool $absoluteUri = false,
         bool $lazyload = false,
         $ignoreFileExtensions = 'svg, gif',
@@ -288,7 +288,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         $srcset,
         string $mediaQuery = '',
         string $sizesQuery = '',
-        Area $cropArea = null,
+        ?Area $cropArea = null,
         bool $absoluteUri = false,
         bool $lazyload = false,
         ?string $fileExtension = null
@@ -338,9 +338,9 @@ class ResponsiveImagesUtility implements SingletonInterface
      */
     public function createSimpleImageTag(
         FileInterface $originalImage,
-        FileInterface $fallbackImage = null,
-        TagBuilder $tag = null,
-        Area $focusArea = null,
+        ?FileInterface $fallbackImage = null,
+        ?TagBuilder $tag = null,
+        ?Area $focusArea = null,
         bool $absoluteUri = false,
         bool $lazyload = false,
         int $placeholderSize = 0,
@@ -406,7 +406,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         TagBuilder $tag,
         FileInterface $originalImage,
         FileInterface $fallbackImage,
-        Area $focusArea = null
+        ?Area $focusArea = null
     ) {
         $focusArea = $focusArea ?: Area::createEmpty();
 
@@ -451,7 +451,7 @@ class ResponsiveImagesUtility implements SingletonInterface
         FileInterface $image,
         int $defaultWidth,
         $srcset,
-        Area $cropArea = null,
+        ?Area $cropArea = null,
         bool $absoluteUri = false,
         ?string $fileExtension = null
     ): array {
@@ -519,7 +519,7 @@ class ResponsiveImagesUtility implements SingletonInterface
     public function generatePlaceholderImage(
         FileInterface $image,
         int $width = 20,
-        Area $cropArea = null,
+        ?Area $cropArea = null,
         bool $inline = false,
         bool $absoluteUri = false,
         ?string $fileExtension = null

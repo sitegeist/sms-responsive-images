@@ -89,9 +89,9 @@ final class MediaViewHelper extends AbstractTagBasedViewHelper
     public function render(): string
     {
         $file = $this->arguments['file'];
-        $additionalConfig = (array)$this->arguments['additionalConfig'];
-        $width = $this->arguments['width'];
-        $height = $this->arguments['height'];
+        $additionalConfig = (array)($this->arguments['additionalConfig'] ?? []);
+        $width = $this->arguments['width'] ?? '';
+        $height = $this->arguments['height'] ?? '';
 
         // get Resource Object (non ExtBase version)
         if (is_callable([$file, 'getOriginalResource'])) {
